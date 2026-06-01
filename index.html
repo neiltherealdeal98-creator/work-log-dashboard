@@ -1,0 +1,2694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>WorkTrack Pro</title>
+
+  <style>
+    :root {
+      --bg-1: #080b14;
+      --bg-2: #12172a;
+      --text: #f8fbff;
+      --muted: #a9b4c4;
+      --soft: rgba(255, 255, 255, 0.1);
+      --soft-2: rgba(255, 255, 255, 0.16);
+      --line: rgba(255, 255, 255, 0.13);
+      --blue: #3b82f6;
+      --cyan: #22d3ee;
+      --green: #22c55e;
+      --lime: #a3e635;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --orange: #f97316;
+      --yellow: #facc15;
+      --red: #fb7185;
+      --card-radius: 28px;
+      --tile-radius: 22px;
+      --shadow: 0 22px 60px rgba(0, 0, 0, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(34, 211, 238, 0.42), transparent 30%),
+        radial-gradient(circle at 90% 8%, rgba(236, 72, 153, 0.36), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(34, 197, 94, 0.28), transparent 32%),
+        linear-gradient(145deg, var(--bg-1), var(--bg-2));
+      background-attachment: fixed;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    input,
+    textarea,
+    label {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page {
+      width: min(100%, 520px);
+      margin: 0 auto;
+      padding: 14px;
+      padding-bottom: 34px;
+    }
+
+    .app {
+      position: relative;
+      overflow: hidden;
+      min-height: calc(100vh - 28px);
+      border-radius: 36px;
+      padding: 15px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.045)),
+        rgba(10, 14, 27, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(26px);
+    }
+
+    .app::before {
+      content: "";
+      position: absolute;
+      top: -90px;
+      right: -80px;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.35), rgba(139, 92, 246, 0.18));
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .hero {
+      position: relative;
+      padding: 16px 5px 10px;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow,
+    .section-kicker {
+      margin: 0 0 6px;
+      color: var(--cyan);
+      font-size: 0.72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.28rem;
+      line-height: 0.95;
+      letter-spacing: -0.065em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.18rem;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+    }
+
+    .subtitle {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+      font-weight: 700;
+    }
+
+    .app-icon {
+      width: 58px;
+      height: 58px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.34), rgba(255,255,255,0.08)),
+        linear-gradient(135deg, var(--blue), var(--purple));
+      border: 1px solid rgba(255,255,255,0.26);
+      box-shadow: 0 14px 32px rgba(59, 130, 246, 0.32);
+      font-size: 1.7rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .stat-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 106px;
+      padding: 13px 11px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.26);
+    }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      right: -26px;
+      bottom: -30px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+    }
+
+    .stat-card.blue {
+      background: linear-gradient(145deg, #2563eb, #22d3ee);
+    }
+
+    .stat-card.green {
+      background: linear-gradient(145deg, #16a34a, #a3e635);
+    }
+
+    .stat-card.purple {
+      background: linear-gradient(145deg, #7c3aed, #ec4899);
+    }
+
+    .stat-card span,
+    .stat-card small {
+      display: block;
+      color: rgba(255,255,255,0.87);
+      font-size: 0.68rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat-card strong {
+      display: block;
+      margin: 9px 0 5px;
+      font-size: 1.28rem;
+      letter-spacing: -0.055em;
+    }
+
+    .panel {
+      position: relative;
+      margin-top: 14px;
+      padding: 15px;
+      border-radius: var(--card-radius);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06)),
+        rgba(13, 18, 32, 0.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.28);
+      backdrop-filter: blur(22px);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .input-card {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+      padding: 12px;
+      border-radius: var(--tile-radius);
+      background: rgba(5, 9, 20, 0.55);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .input-card span {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-wrap b {
+      color: var(--green);
+      font-size: 1rem;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      min-height: 44px;
+      border: 0;
+      outline: none;
+      color: var(--text);
+      background: transparent;
+      font-weight: 850;
+    }
+
+    input::placeholder {
+      color: rgba(169, 180, 196, 0.58);
+    }
+
+    input[type="date"],
+    input[type="time"] {
+      color-scheme: dark;
+    }
+
+    .input-card:focus-within {
+      border-color: rgba(34, 211, 238, 0.6);
+      box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
+    }
+
+    .status-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 6px;
+      border-radius: 22px;
+      background: rgba(5, 9, 20, 0.55);
+      border: 1px solid rgba(255,255,255,0.11);
+    }
+
+    .status-selector label {
+      cursor: pointer;
+    }
+
+    .status-selector input {
+      display: none;
+    }
+
+    .status-selector span {
+      display: grid;
+      place-items: center;
+      min-height: 44px;
+      border-radius: 17px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 950;
+      transition: 0.18s ease;
+    }
+
+    .status-selector input:checked + span {
+      color: #07101d;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      box-shadow: 0 10px 26px rgba(59, 130, 246, 0.35);
+    }
+
+    .calculation-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 13px 0;
+    }
+
+    .calculation-strip div {
+      padding: 14px;
+      border-radius: var(--tile-radius);
+      background:
+        linear-gradient(145deg, rgba(34, 211, 238, 0.14), rgba(139, 92, 246, 0.11)),
+        rgba(5, 9, 20, 0.58);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .calculation-strip span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .calculation-strip strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 1.42rem;
+      letter-spacing: -0.05em;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .soft-btn,
+    .danger-btn,
+    .small-btn {
+      border: 0;
+      cursor: pointer;
+      font-weight: 950;
+    }
+
+    .primary-btn {
+      width: 100%;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 22px;
+      color: white;
+      background: linear-gradient(135deg, #2563eb, #22d3ee 48%, #7c3aed);
+      box-shadow: 0 16px 34px rgba(37, 99, 235, 0.36);
+    }
+
+    .primary-btn b {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      color: #10131f;
+      background: white;
+    }
+
+    .secondary-btn {
+      border-radius: 20px;
+      color: var(--text);
+      background: rgba(255,255,255,0.11);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .soft-btn {
+      min-height: 40px;
+      padding: 0 13px;
+      border-radius: 999px;
+      color: var(--cyan);
+      background: rgba(34, 211, 238, 0.12);
+      border: 1px solid rgba(34, 211, 238, 0.26);
+    }
+
+    .danger-btn {
+      min-height: 40px;
+      padding: 0 13px;
+      border-radius: 999px;
+      color: #fecdd3;
+      background: rgba(251, 113, 133, 0.13);
+      border: 1px solid rgba(251, 113, 133, 0.3);
+    }
+
+    .entries-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .entry {
+      position: relative;
+      overflow: hidden;
+      padding: 14px;
+      border-radius: 24px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.095), rgba(255,255,255,0.045)),
+        rgba(5, 9, 20, 0.62);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .entry::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: rgba(255,255,255,0.22);
+    }
+
+    .entry.worked::before {
+      background: linear-gradient(180deg, var(--green), var(--cyan));
+    }
+
+    .entry.off::before {
+      background: linear-gradient(180deg, #94a3b8, #e2e8f0);
+    }
+
+    .entry.canceled::before {
+      background: linear-gradient(180deg, var(--yellow), var(--orange));
+    }
+
+    .entry-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .entry-title {
+      font-size: 1rem;
+      font-weight: 950;
+      letter-spacing: -0.025em;
+    }
+
+    .entry-date {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .status-pill {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .status-worked {
+      color: #081811;
+      background: linear-gradient(135deg, var(--green), var(--lime));
+    }
+
+    .status-off {
+      color: #10131f;
+      background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+    }
+
+    .status-canceled {
+      color: #211300;
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+    }
+
+    .status-missing {
+      color: var(--muted);
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .entry-details {
+      margin-top: 11px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      font-weight: 650;
+    }
+
+    .entry-details strong {
+      color: var(--text);
+    }
+
+    .entry-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .small-btn {
+      flex: 1;
+      min-height: 39px;
+      border-radius: 15px;
+      color: var(--text);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .small-btn.delete {
+      color: #fecdd3;
+      background: rgba(251, 113, 133, 0.11);
+    }
+
+    .report-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mini {
+      min-height: 48px;
+      border-radius: 19px;
+    }
+
+    textarea {
+      margin-top: 12px;
+      min-height: 330px;
+      resize: vertical;
+      padding: 16px;
+      line-height: 1.48;
+      border-radius: 24px;
+      background: rgba(5, 9, 20, 0.76);
+      border: 1px solid rgba(255,255,255,0.13);
+      color: #eaf2ff;
+      font-size: 0.94rem;
+      font-weight: 650;
+    }
+
+    .footer-note {
+      padding: 18px 8px 6px;
+      text-align: center;
+      color: rgba(169, 180, 196, 0.82);
+      font-size: 0.78rem;
+      font-weight: 750;
+    }
+
+    @media (max-width: 430px) {
+      .page {
+        padding: 10px;
+      }
+
+      .app {
+        border-radius: 30px;
+        padding: 13px;
+      }
+
+      h1 {
+        font-size: 2.05rem;
+      }
+
+      .hero-stats {
+        gap: 7px;
+      }
+
+      .stat-card {
+        min-height: 101px;
+        padding: 11px 9px;
+        border-radius: 21px;
+      }
+
+      .stat-card strong {
+        font-size: 1.14rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .status-selector {
+        grid-template-columns: 1fr;
+      }
+
+      .calculation-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .report-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="app">
+      <header class="hero">
+        <div class="hero-top">
+          <div>
+            <p class="eyebrow">WorkTrack Pro</p>
+            <h1>Hours Dashboard</h1>
+            <p class="subtitle">Daily logging + Friday boss report</p>
+          </div>
+
+          <div class="app-icon">⏱</div>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-card blue">
+            <span>This Week</span>
+            <strong id="summaryHours">0.00</strong>
+            <small>Paid Hours</small>
+          </div>
+
+          <div class="stat-card green">
+            <span>Gross Pay</span>
+            <strong id="summaryPay">$0.00</strong>
+            <small>Estimated</small>
+          </div>
+
+          <div class="stat-card purple">
+            <span>Worked</span>
+            <strong id="summaryDays">0</strong>
+            <small>Days</small>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-kicker">Setup</p>
+            <h2>Pay & Report Week</h2>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <label class="input-card">
+            <span>Hourly Rate</span>
+            <div class="input-wrap">
+              <b>$</b>
+              <input id="hourlyRate" type="number" min="0" step="0.01" value="20.00" />
+            </div>
+          </label>
+
+          <label class="input-card">
+            <span>Report Week</span>
+            <input id="weekPicker" type="date" />
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-kicker">Daily Entry</p>
+            <h2>Log Work Day</h2>
+          </div>
+
+          <button id="clearFormBtn" class="soft-btn" type="button">Reset</button>
+        </div>
+
+        <form id="shiftForm">
+          <div class="status-selector">
+            <label>
+              <input type="radio" name="statusRadio" value="worked" checked />
+              <span>Worked</span>
+            </label>
+
+            <label>
+              <input type="radio" name="statusRadio" value="off" />
+              <span>Day Off</span>
+            </label>
+
+            <label>
+              <input type="radio" name="statusRadio" value="canceled" />
+              <span>Rain Day</span>
+            </label>
+          </div>
+
+          <input id="status" type="hidden" value="worked" />
+
+          <div class="form-grid">
+            <label class="input-card">
+              <span>Date</span>
+              <input id="workDate" type="date" required />
+            </label>
+
+            <label class="input-card">
+              <span>Job Site</span>
+              <input id="jobSite" type="text" maxlength="30" placeholder="Lake job" />
+            </label>
+
+            <label class="input-card">
+              <span>Clock In</span>
+              <input id="startTime" type="time" value="08:30" />
+            </label>
+
+            <label class="input-card">
+              <span>Clock Out</span>
+              <input id="endTime" type="time" />
+            </label>
+
+            <label class="input-card full">
+              <span>Unpaid Lunch / Break</span>
+              <input id="breakMinutes" type="number" min="0" step="5" value="30" />
+            </label>
+          </div>
+
+          <div class="calculation-strip">
+            <div>
+              <span>Paid Hours</span>
+              <strong id="liveHours">0.00</strong>
+            </div>
+
+            <div>
+              <span>Estimated Pay</span>
+              <strong id="livePay">$0.00</strong>
+            </div>
+          </div>
+
+          <button class="primary-btn" type="submit">
+            <span>Save Day</span>
+            <b>+</b>
+          </button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-kicker">Week View</p>
+            <h2>Monday–Saturday</h2>
+          </div>
+
+          <button id="deleteWeekBtn" class="danger-btn" type="button">Delete Week</button>
+        </div>
+
+        <div id="entriesList" class="entries-list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-kicker">Copy Ready</p>
+            <h2>Boss Report</h2>
+          </div>
+        </div>
+
+        <div class="report-actions">
+          <button id="copyWeekReportBtn" class="primary-btn mini" type="button">
+            Copy Mon–Fri Report
+          </button>
+
+          <button id="copySaturdayReportBtn" class="secondary-btn mini" type="button">
+            Copy Saturday
+          </button>
+        </div>
+
+        <textarea id="reportOutput" readonly></textarea>
+      </section>
+
+      <footer class="footer-note">
+        Private browser storage · Built for iPhone Safari
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "work_hours_dashboard_final_v1";
+    const SETTINGS_KEY = "work_hours_settings_final_v1";
+
+    const $ = (id) => document.getElementById(id);
+
+    const els = {
+      hourlyRate: $("hourlyRate"),
+      weekPicker: $("weekPicker"),
+      workDate: $("workDate"),
+      status: $("status"),
+      jobSite: $("jobSite"),
+      startTime: $("startTime"),
+      endTime: $("endTime"),
+      breakMinutes: $("breakMinutes"),
+      liveHours: $("liveHours"),
+      livePay: $("livePay"),
+      shiftForm: $("shiftForm"),
+      clearFormBtn: $("clearFormBtn"),
+      entriesList: $("entriesList"),
+      summaryHours: $("summaryHours"),
+      summaryPay: $("summaryPay"),
+      summaryDays: $("summaryDays"),
+      reportOutput: $("reportOutput"),
+      copyWeekReportBtn: $("copyWeekReportBtn"),
+      copySaturdayReportBtn: $("copySaturdayReportBtn"),
+      deleteWeekBtn: $("deleteWeekBtn")
+    };
+
+    let entries = loadEntries();
+    let editingDate = null;
+
+    function loadEntries() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveEntries() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    function loadSettings() {
+      try {
+        return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveSettings() {
+      localStorage.setItem(
+        SETTINGS_KEY,
+        JSON.stringify({
+          hourlyRate: parseFloat(els.hourlyRate.value) || 0
+        })
+      );
+    }
+
+    function pad(num) {
+      return String(num).padStart(2, "0");
+    }
+
+    function toDateInputValue(date) {
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+
+    function parseLocalDate(dateString) {
+      const [year, month, day] = dateString.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    function formatDisplayDate(dateString) {
+      const date = parseLocalDate(dateString);
+      return date.toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function getDayName(dateString) {
+      return parseLocalDate(dateString).toLocaleDateString(undefined, {
+        weekday: "long"
+      });
+    }
+
+    function getMonday(date) {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = day === 0 ? -6 : 1 - day;
+      d.setDate(d.getDate() + diff);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    }
+
+    function addDays(date, amount) {
+      const d = new Date(date);
+      d.setDate(d.getDate() + amount);
+      return d;
+    }
+
+    function getWeekDates() {
+      const selected = parseLocalDate(els.weekPicker.value);
+      const monday = getMonday(selected);
+
+      return {
+        monday,
+        tuesday: addDays(monday, 1),
+        wednesday: addDays(monday, 2),
+        thursday: addDays(monday, 3),
+        friday: addDays(monday, 4),
+        saturday: addDays(monday, 5)
+      };
+    }
+
+    function minutesFromTime(time) {
+      if (!time) return null;
+      const [hours, minutes] = time.split(":").map(Number);
+      return hours * 60 + minutes;
+    }
+
+    function formatTime(time) {
+      if (!time) return "";
+      const [hourRaw, minute] = time.split(":").map(Number);
+      const suffix = hourRaw >= 12 ? "PM" : "AM";
+      const hour = hourRaw % 12 || 12;
+      return `${hour}:${pad(minute)} ${suffix}`;
+    }
+
+    function calculateHours(entry) {
+      if (!entry || entry.status !== "worked") return 0;
+
+      const start = minutesFromTime(entry.startTime);
+      const end = minutesFromTime(entry.endTime);
+      const breakMinutes = Number(entry.breakMinutes) || 0;
+
+      if (start === null || end === null || end <= start) return 0;
+
+      return Math.max(0, end - start - breakMinutes) / 60;
+    }
+
+    function money(amount) {
+      return `$${Number(amount || 0).toFixed(2)}`;
+    }
+
+    function getHourlyRate() {
+      return parseFloat(els.hourlyRate.value) || 0;
+    }
+
+    function calculatePay(hours) {
+      return hours * getHourlyRate();
+    }
+
+    function statusLabel(status) {
+      if (status === "worked") return "Worked";
+      if (status === "off") return "Day off";
+      if (status === "canceled") return "Canceled / rain day";
+      return "Not logged";
+    }
+
+    function resetForm() {
+      editingDate = null;
+      els.workDate.value = toDateInputValue(new Date());
+      els.status.value = "worked";
+
+      document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
+        radio.checked = radio.value === "worked";
+      });
+
+      els.jobSite.value = "";
+      els.startTime.value = "08:30";
+      els.endTime.value = "";
+      els.breakMinutes.value = "30";
+
+      updateFormState();
+      updateLiveResult();
+    }
+
+    function updateFormState() {
+      const isWorked = els.status.value === "worked";
+
+      els.jobSite.disabled = !isWorked;
+      els.startTime.disabled = !isWorked;
+      els.endTime.disabled = !isWorked;
+      els.breakMinutes.disabled = !isWorked;
+
+      if (!isWorked) {
+        els.jobSite.value = "";
+        els.endTime.value = "";
+        els.breakMinutes.value = "0";
+      } else if (!els.breakMinutes.value || Number(els.breakMinutes.value) === 0) {
+        els.breakMinutes.value = "30";
+      }
+    }
+
+    function getFormEntry() {
+      const status = els.status.value;
+
+      return {
+        date: els.workDate.value,
+        day: getDayName(els.workDate.value),
+        status,
+        jobSite: status === "worked" ? els.jobSite.value.trim() : "",
+        startTime: status === "worked" ? els.startTime.value : "",
+        endTime: status === "worked" ? els.endTime.value : "",
+        breakMinutes: status === "worked" ? Number(els.breakMinutes.value || 0) : 0,
+        savedAt: new Date().toISOString()
+      };
+    }
+
+    function updateLiveResult() {
+      if (!els.workDate.value) return;
+
+      const entry = getFormEntry();
+      const hours = calculateHours(entry);
+      const pay = calculatePay(hours);
+
+      els.liveHours.textContent = hours.toFixed(2);
+      els.livePay.textContent = money(pay);
+    }
+
+    function saveFormEntry(event) {
+      event.preventDefault();
+
+      const entry = getFormEntry();
+
+      if (!entry.date) {
+        alert("Choose a date first.");
+        return;
+      }
+
+      if (entry.status === "worked") {
+        if (!entry.endTime) {
+          alert("Enter a clock-out time before saving a worked day.");
+          return;
+        }
+
+        if (calculateHours(entry) <= 0) {
+          alert("Check the start time, end time, and break deduction.");
+          return;
+        }
+      }
+
+      if (editingDate && editingDate !== entry.date) {
+        delete entries[editingDate];
+      }
+
+      entries[entry.date] = entry;
+      saveEntries();
+      saveSettings();
+
+      els.weekPicker.value = entry.date;
+      resetForm();
+      render();
+    }
+
+    function editEntry(dateString) {
+      const entry = entries[dateString];
+      if (!entry) return;
+
+      editingDate = dateString;
+
+      els.workDate.value = entry.date;
+      els.status.value = entry.status;
+
+      document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
+        radio.checked = radio.value === entry.status;
+      });
+
+      els.jobSite.value = entry.jobSite || "";
+      els.startTime.value = entry.startTime || "08:30";
+      els.endTime.value = entry.endTime || "";
+      els.breakMinutes.value = String(entry.breakMinutes ?? 30);
+
+      updateFormState();
+      updateLiveResult();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function deleteEntry(dateString) {
+      const ok = confirm(`Delete the entry for ${formatDisplayDate(dateString)}?`);
+      if (!ok) return;
+
+      delete entries[dateString];
+      saveEntries();
+      render();
+    }
+
+    function getWeekdayEntries() {
+      const dates = getWeekDates();
+
+      return [
+        dates.monday,
+        dates.tuesday,
+        dates.wednesday,
+        dates.thursday,
+        dates.friday
+      ].map((date) => {
+        const key = toDateInputValue(date);
+        return {
+          date,
+          key,
+          entry: entries[key] || null
+        };
+      });
+    }
+
+    function getSaturdayEntry() {
+      const dates = getWeekDates();
+      const key = toDateInputValue(dates.saturday);
+
+      return {
+        date: dates.saturday,
+        key,
+        entry: entries[key] || null
+      };
+    }
+
+    function renderEntriesList() {
+      const dates = getWeekDates();
+      const allDates = [];
+
+      for (let i = 0; i <= 5; i++) {
+        allDates.push(toDateInputValue(addDays(dates.monday, i)));
+      }
+
+      els.entriesList.innerHTML = "";
+
+      allDates.forEach((dateString) => {
+        const entry = entries[dateString];
+        const row = document.createElement("div");
+
+        if (!entry) {
+          row.className = "entry";
+          row.innerHTML = `
+            <div class="entry-top">
+              <div>
+                <div class="entry-title">${getDayName(dateString)}</div>
+                <div class="entry-date">${formatDisplayDate(dateString)}</div>
+              </div>
+              <span class="status-pill status-missing">Not logged</span>
+            </div>
+            <div class="entry-details">No entry saved for this day.</div>
+          `;
+          els.entriesList.appendChild(row);
+          return;
+        }
+
+        const hours = calculateHours(entry);
+        const pay = calculatePay(hours);
+
+        row.className = `entry ${entry.status}`;
+
+        row.innerHTML = `
+          <div class="entry-top">
+            <div>
+              <div class="entry-title">${entry.day}</div>
+              <div class="entry-date">${formatDisplayDate(entry.date)}</div>
+            </div>
+
+            <span class="status-pill status-${entry.status}">
+              ${statusLabel(entry.status)}
+            </span>
+          </div>
+
+          <div class="entry-details">
+            ${
+              entry.status === "worked"
+                ? `
+                  <strong>${entry.jobSite || "No job site"}</strong><br>
+                  ${formatTime(entry.startTime)} – ${formatTime(entry.endTime)}
+                  · Lunch: ${entry.breakMinutes} min<br>
+                  Paid hours: <strong>${hours.toFixed(2)}</strong>
+                  · Pay: <strong>${money(pay)}</strong>
+                `
+                : `${statusLabel(entry.status)} · 0.00 paid hours · $0.00`
+            }
+          </div>
+
+          <div class="entry-actions">
+            <button class="small-btn" type="button" data-edit="${entry.date}">Edit</button>
+            <button class="small-btn delete" type="button" data-delete="${entry.date}">Delete</button>
+          </div>
+        `;
+
+        els.entriesList.appendChild(row);
+      });
+
+      document.querySelectorAll("[data-edit]").forEach((btn) => {
+        btn.addEventListener("click", () => editEntry(btn.dataset.edit));
+      });
+
+      document.querySelectorAll("[data-delete]").forEach((btn) => {
+        btn.addEventListener("click", () => deleteEntry(btn.dataset.delete));
+      });
+    }
+
+    function buildWeekReport() {
+      const rows = getWeekdayEntries();
+
+      let totalHours = 0;
+      let workedDays = 0;
+      let totalPay = 0;
+
+      const dates = getWeekDates();
+      const weekStart = formatDisplayDate(toDateInputValue(dates.monday));
+      const weekEnd = formatDisplayDate(toDateInputValue(dates.friday));
+
+      let report = `Work Hours Report\n`;
+      report += `Week: ${weekStart} through ${weekEnd}\n\n`;
+
+      rows.forEach(({ key, entry }) => {
+        const day = getDayName(key);
+
+        if (!entry) {
+          report += `${day} (${formatDisplayDate(key)}): Not logged\n\n`;
+          return;
+        }
+
+        const hours = calculateHours(entry);
+        const pay = calculatePay(hours);
+
+        if (entry.status === "worked") {
+          workedDays += 1;
+          totalHours += hours;
+          totalPay += pay;
+
+          report += `${day} (${formatDisplayDate(key)})\n`;
+          report += `Job site: ${entry.jobSite || "Not entered"}\n`;
+          report += `Time: ${formatTime(entry.startTime)} to ${formatTime(entry.endTime)}\n`;
+          report += `Unpaid lunch/break: ${entry.breakMinutes} minutes\n`;
+          report += `Paid hours: ${hours.toFixed(2)}\n`;
+          report += `Estimated gross pay: ${money(pay)}\n\n`;
+        } else {
+          report += `${day} (${formatDisplayDate(key)})\n`;
+          report += `Status: ${statusLabel(entry.status)}\n`;
+          report += `Paid hours: 0.00\n`;
+          report += `Estimated gross pay: $0.00\n\n`;
+        }
+      });
+
+      const average = workedDays > 0 ? totalHours / workedDays : 0;
+
+      report += `Weekly Totals\n`;
+      report += `Total paid hours: ${totalHours.toFixed(2)}\n`;
+      report += `Average paid hours per worked day: ${average.toFixed(2)}\n`;
+      report += `Total estimated gross pay: ${money(totalPay)}`;
+
+      return report;
+    }
+
+    function buildSaturdayReport() {
+      const { key, entry } = getSaturdayEntry();
+
+      let report = `Saturday Work Report\n`;
+      report += `Date: ${formatDisplayDate(key)}\n\n`;
+
+      if (!entry) {
+        report += `Saturday: Not logged`;
+        return report;
+      }
+
+      const hours = calculateHours(entry);
+      const pay = calculatePay(hours);
+
+      if (entry.status === "worked") {
+        report += `Job site: ${entry.jobSite || "Not entered"}\n`;
+        report += `Time: ${formatTime(entry.startTime)} to ${formatTime(entry.endTime)}\n`;
+        report += `Unpaid lunch/break: ${entry.breakMinutes} minutes\n`;
+        report += `Paid hours: ${hours.toFixed(2)}\n`;
+        report += `Estimated gross pay: ${money(pay)}`;
+      } else {
+        report += `Status: ${statusLabel(entry.status)}\n`;
+        report += `Paid hours: 0.00\n`;
+        report += `Estimated gross pay: $0.00`;
+      }
+
+      return report;
+    }
+
+    function renderSummary() {
+      const rows = getWeekdayEntries();
+
+      let totalHours = 0;
+      let totalPay = 0;
+      let workedDays = 0;
+
+      rows.forEach(({ entry }) => {
+        if (!entry || entry.status !== "worked") return;
+
+        const hours = calculateHours(entry);
+        workedDays += 1;
+        totalHours += hours;
+        totalPay += calculatePay(hours);
+      });
+
+      els.summaryHours.textContent = totalHours.toFixed(2);
+      els.summaryPay.textContent = money(totalPay);
+      els.summaryDays.textContent = String(workedDays);
+    }
+
+    function renderReport() {
+      els.reportOutput.value = buildWeekReport();
+    }
+
+    function render() {
+      renderEntriesList();
+      renderSummary();
+      renderReport();
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        alert("Report copied.");
+      } catch {
+        els.reportOutput.value = text;
+        els.reportOutput.focus();
+        els.reportOutput.select();
+        alert("The report is selected. Copy it manually.");
+      }
+    }
+
+    function deleteCurrentWeek() {
+      const ok = confirm("Delete all Monday–Saturday entries for the selected week?");
+      if (!ok) return;
+
+      const dates = getWeekDates();
+
+      for (let i = 0; i <= 5; i++) {
+        const key = toDateInputValue(addDays(dates.monday, i));
+        delete entries[key];
+      }
+
+      saveEntries();
+      render();
+    }
+
+    function initStatusButtons() {
+      document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
+        radio.addEventListener("change", () => {
+          if (radio.checked) {
+            els.status.value = radio.value;
+            updateFormState();
+            updateLiveResult();
+          }
+        });
+      });
+    }
+
+    function init() {
+      const settings = loadSettings();
+
+      els.hourlyRate.value = settings.hourlyRate ?? "20.00";
+      els.weekPicker.value = toDateInputValue(new Date());
+
+      initStatusButtons();
+      resetForm();
+      render();
+
+      els.shiftForm.addEventListener("submit", saveFormEntry);
+
+      [
+        els.workDate,
+        els.jobSite,
+        els.startTime,
+        els.endTime,
+        els.breakMinutes,
+        els.hourlyRate
+      ].forEach((el) => {
+        el.addEventListener("input", () => {
+          updateLiveResult();
+          saveSettings();
+          renderSummary();
+          renderReport();
+        });
+      });
+
+      els.weekPicker.addEventListener("change", render);
+
+      els.clearFormBtn.addEventListener("click", resetForm);
+
+      els.copyWeekReportBtn.addEventListener("click", () => {
+        const report = buildWeekReport();
+        els.reportOutput.value = report;
+        copyText(report);
+      });
+
+      els.copySaturdayReportBtn.addEventListener("click", () => {
+        const report = buildSaturdayReport();
+        els.reportOutput.value = report;
+        copyText(report);
+      });
+
+      els.deleteWeekBtn.addEventListener("click", deleteCurrentWeek);
+    }
+
+    init();
+  </script>
+</body>
+</html>
+:root {
+  --bg-1: #080b14;
+  --bg-2: #12172a;
+  --text: #f8fbff;
+  --muted: #a9b4c4;
+  --soft: rgba(255, 255, 255, 0.1);
+  --soft-2: rgba(255, 255, 255, 0.16);
+  --line: rgba(255, 255, 255, 0.13);
+  --blue: #3b82f6;
+  --cyan: #22d3ee;
+  --green: #22c55e;
+  --lime: #a3e635;
+  --purple: #8b5cf6;
+  --pink: #ec4899;
+  --orange: #f97316;
+  --yellow: #facc15;
+  --red: #fb7185;
+  --card-radius: 28px;
+  --tile-radius: 22px;
+  --shadow: 0 22px 60px rgba(0, 0, 0, 0.42);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(34, 211, 238, 0.42), transparent 30%),
+    radial-gradient(circle at 90% 8%, rgba(236, 72, 153, 0.36), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgba(34, 197, 94, 0.28), transparent 32%),
+    linear-gradient(145deg, var(--bg-1), var(--bg-2));
+  background-attachment: fixed;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button,
+input,
+textarea,
+label {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.page {
+  width: min(100%, 520px);
+  margin: 0 auto;
+  padding: 14px;
+  padding-bottom: 34px;
+}
+
+.app {
+  position: relative;
+  overflow: hidden;
+  min-height: calc(100vh - 28px);
+  border-radius: 36px;
+  padding: 15px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.045)),
+    rgba(10, 14, 27, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(26px);
+}
+
+.app::before {
+  content: "";
+  position: absolute;
+  top: -90px;
+  right: -80px;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.35), rgba(139, 92, 246, 0.18));
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+.hero {
+  position: relative;
+  padding: 16px 5px 10px;
+}
+
+.hero-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.eyebrow,
+.section-kicker {
+  margin: 0 0 6px;
+  color: var(--cyan);
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.28rem;
+  line-height: 0.95;
+  letter-spacing: -0.065em;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.18rem;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+.subtitle {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.app-icon {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.34), rgba(255,255,255,0.08)),
+    linear-gradient(135deg, var(--blue), var(--purple));
+  border: 1px solid rgba(255,255,255,0.26);
+  box-shadow: 0 14px 32px rgba(59, 130, 246, 0.32);
+  font-size: 1.7rem;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
+
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 106px;
+  padding: 13px 11px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 16px 34px rgba(0,0,0,0.26);
+}
+
+.stat-card::after {
+  content: "";
+  position: absolute;
+  right: -26px;
+  bottom: -30px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+}
+
+.stat-card.blue {
+  background: linear-gradient(145deg, #2563eb, #22d3ee);
+}
+
+.stat-card.green {
+  background: linear-gradient(145deg, #16a34a, #a3e635);
+}
+
+.stat-card.purple {
+  background: linear-gradient(145deg, #7c3aed, #ec4899);
+}
+
+.stat-card span,
+.stat-card small {
+  display: block;
+  color: rgba(255,255,255,0.87);
+  font-size: 0.68rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat-card strong {
+  display: block;
+  margin: 9px 0 5px;
+  font-size: 1.28rem;
+  letter-spacing: -0.055em;
+}
+
+.panel {
+  position: relative;
+  margin-top: 14px;
+  padding: 15px;
+  border-radius: var(--card-radius);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06)),
+    rgba(13, 18, 32, 0.76);
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.28);
+  backdrop-filter: blur(22px);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.input-card {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px;
+  border-radius: var(--tile-radius);
+  background: rgba(5, 9, 20, 0.55);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.input-card span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.input-wrap b {
+  color: var(--green);
+  font-size: 1rem;
+}
+
+input,
+textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  outline: none;
+  color: var(--text);
+  background: transparent;
+  font-weight: 850;
+}
+
+input::placeholder {
+  color: rgba(169, 180, 196, 0.58);
+}
+
+input[type="date"],
+input[type="time"] {
+  color-scheme: dark;
+}
+
+.input-card:focus-within {
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
+}
+
+.status-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 6px;
+  border-radius: 22px;
+  background: rgba(5, 9, 20, 0.55);
+  border: 1px solid rgba(255,255,255,0.11);
+}
+
+.status-selector label {
+  cursor: pointer;
+}
+
+.status-selector input {
+  display: none;
+}
+
+.status-selector span {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  border-radius: 17px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 950;
+  transition: 0.18s ease;
+}
+
+.status-selector input:checked + span {
+  color: #07101d;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  box-shadow: 0 10px 26px rgba(59, 130, 246, 0.35);
+}
+
+.calculation-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 13px 0;
+}
+
+.calculation-strip div {
+  padding: 14px;
+  border-radius: var(--tile-radius);
+  background:
+    linear-gradient(145deg, rgba(34, 211, 238, 0.14), rgba(139, 92, 246, 0.11)),
+    rgba(5, 9, 20, 0.58);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.calculation-strip span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.calculation-strip strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.42rem;
+  letter-spacing: -0.05em;
+}
+
+.primary-btn,
+.secondary-btn,
+.soft-btn,
+.danger-btn,
+.small-btn {
+  border: 0;
+  cursor: pointer;
+  font-weight: 950;
+}
+
+.primary-btn {
+  width: 100%;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 22px;
+  color: white;
+  background: linear-gradient(135deg, #2563eb, #22d3ee 48%, #7c3aed);
+  box-shadow: 0 16px 34px rgba(37, 99, 235, 0.36);
+}
+
+.primary-btn b {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  color: #10131f;
+  background: white;
+}
+
+.secondary-btn {
+  border-radius: 20px;
+  color: var(--text);
+  background: rgba(255,255,255,0.11);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.soft-btn {
+  min-height: 40px;
+  padding: 0 13px;
+  border-radius: 999px;
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.26);
+}
+
+.danger-btn {
+  min-height: 40px;
+  padding: 0 13px;
+  border-radius: 999px;
+  color: #fecdd3;
+  background: rgba(251, 113, 133, 0.13);
+  border: 1px solid rgba(251, 113, 133, 0.3);
+}
+
+.entries-list {
+  display: grid;
+  gap: 10px;
+}
+
+.entry {
+  position: relative;
+  overflow: hidden;
+  padding: 14px;
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.095), rgba(255,255,255,0.045)),
+    rgba(5, 9, 20, 0.62);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.entry::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: rgba(255,255,255,0.22);
+}
+
+.entry.worked::before {
+  background: linear-gradient(180deg, var(--green), var(--cyan));
+}
+
+.entry.off::before {
+  background: linear-gradient(180deg, #94a3b8, #e2e8f0);
+}
+
+.entry.canceled::before {
+  background: linear-gradient(180deg, var(--yellow), var(--orange));
+}
+
+.entry-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.entry-title {
+  font-size: 1rem;
+  font-weight: 950;
+  letter-spacing: -0.025em;
+}
+
+.entry-date {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.status-pill {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.status-worked {
+  color: #081811;
+  background: linear-gradient(135deg, var(--green), var(--lime));
+}
+
+.status-off {
+  color: #10131f;
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+}
+
+.status-canceled {
+  color: #211300;
+  background: linear-gradient(135deg, var(--yellow), var(--orange));
+}
+
+.status-missing {
+  color: var(--muted);
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.entry-details {
+  margin-top: 11px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-weight: 650;
+}
+
+.entry-details strong {
+  color: var(--text);
+}
+
+.entry-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.small-btn {
+  flex: 1;
+  min-height: 39px;
+  border-radius: 15px;
+  color: var(--text);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.small-btn.delete {
+  color: #fecdd3;
+  background: rgba(251, 113, 133, 0.11);
+}
+
+.report-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.mini {
+  min-height: 48px;
+  border-radius: 19px;
+}
+
+textarea {
+  margin-top: 12px;
+  min-height: 330px;
+  resize: vertical;
+  padding: 16px;
+  line-height: 1.48;
+  border-radius: 24px;
+  background: rgba(5, 9, 20, 0.76);
+  border: 1px solid rgba(255,255,255,0.13);
+  color: #eaf2ff;
+  font-size: 0.94rem;
+  font-weight: 650;
+}
+
+.footer-note {
+  padding: 18px 8px 6px;
+  text-align: center;
+  color: rgba(169, 180, 196, 0.82);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+@media (max-width: 430px) {
+  .page {
+    padding: 10px;
+  }
+
+  .app {
+    border-radius: 30px;
+    padding: 13px;
+  }
+
+  h1 {
+    font-size: 2.05rem;
+  }
+
+  .hero-stats {
+    gap: 7px;
+  }
+
+  .stat-card {
+    min-height: 101px;
+    padding: 11px 9px;
+    border-radius: 21px;
+  }
+
+  .stat-card strong {
+    font-size: 1.14rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .calculation-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .report-actions {
+    grid-template-columns: 1fr;
+  }
+const STORAGE_KEY = "work_hours_dashboard_final_v1";
+const SETTINGS_KEY = "work_hours_settings_final_v1";
+
+const $ = (id) => document.getElementById(id);
+
+const els = {
+  hourlyRate: $("hourlyRate"),
+  weekPicker: $("weekPicker"),
+  workDate: $("workDate"),
+  status: $("status"),
+  jobSite: $("jobSite"),
+  startTime: $("startTime"),
+  endTime: $("endTime"),
+  breakMinutes: $("breakMinutes"),
+  liveHours: $("liveHours"),
+  livePay: $("livePay"),
+  shiftForm: $("shiftForm"),
+  clearFormBtn: $("clearFormBtn"),
+  entriesList: $("entriesList"),
+  summaryHours: $("summaryHours"),
+  summaryPay: $("summaryPay"),
+  summaryDays: $("summaryDays"),
+  reportOutput: $("reportOutput"),
+  copyWeekReportBtn: $("copyWeekReportBtn"),
+  copySaturdayReportBtn: $("copySaturdayReportBtn"),
+  deleteWeekBtn: $("deleteWeekBtn")
+};
+
+let entries = loadEntries();
+let editingDate = null;
+
+function storageAvailable() {
+  try {
+    const testKey = "__work_hours_storage_test__";
+    localStorage.setItem(testKey, "test");
+    localStorage.removeItem(testKey);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function safeReadJSON(key, fallback) {
+  if (!storageAvailable()) return fallback;
+
+  try {
+    const saved = localStorage.getItem(key);
+    if (!saved) return fallback;
+
+    const parsed = JSON.parse(saved);
+    return parsed && typeof parsed === "object" ? parsed : fallback;
+  } catch (error) {
+    console.error(`Could not read ${key} from localStorage:`, error);
+    return fallback;
+  }
+}
+
+function safeWriteJSON(key, value) {
+  if (!storageAvailable()) {
+    alert(
+      "Your browser is not allowing this app to save data. Turn off Private Browsing and use the same Safari/CodePen page each time."
+    );
+    return false;
+  }
+
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    console.error(`Could not save ${key} to localStorage:`, error);
+    alert(
+      "The app could not save your data. Safari or CodePen may be blocking storage, or your browser storage may be full."
+    );
+    return false;
+  }
+}
+
+function loadEntries() {
+  return safeReadJSON(STORAGE_KEY, {});
+}
+
+function saveEntries() {
+  return safeWriteJSON(STORAGE_KEY, entries);
+}
+
+function loadSettings() {
+  return safeReadJSON(SETTINGS_KEY, {});
+}
+
+function saveSettings() {
+  return safeWriteJSON(SETTINGS_KEY, {
+    hourlyRate: parseFloat(els.hourlyRate.value) || 0
+  });
+}
+
+function pad(num) {
+  return String(num).padStart(2, "0");
+}
+
+function toDateInputValue(date) {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+function parseLocalDate(dateString) {
+  const [year, month, day] = dateString.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function formatDisplayDate(dateString) {
+  const date = parseLocalDate(dateString);
+  return date.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+}
+
+function getDayName(dateString) {
+  return parseLocalDate(dateString).toLocaleDateString(undefined, {
+    weekday: "long"
+  });
+}
+
+function getMonday(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function addDays(date, amount) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + amount);
+  return d;
+}
+
+function getWeekDates() {
+  const selected = parseLocalDate(els.weekPicker.value);
+  const monday = getMonday(selected);
+
+  return {
+    monday,
+    tuesday: addDays(monday, 1),
+    wednesday: addDays(monday, 2),
+    thursday: addDays(monday, 3),
+    friday: addDays(monday, 4),
+    saturday: addDays(monday, 5)
+  };
+}
+
+function minutesFromTime(time) {
+  if (!time) return null;
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+function formatTime(time) {
+  if (!time) return "";
+  const [hourRaw, minute] = time.split(":").map(Number);
+  const suffix = hourRaw >= 12 ? "PM" : "AM";
+  const hour = hourRaw % 12 || 12;
+  return `${hour}:${pad(minute)} ${suffix}`;
+}
+
+function calculateHours(entry) {
+  if (!entry || entry.status !== "worked") return 0;
+
+  const start = minutesFromTime(entry.startTime);
+  const end = minutesFromTime(entry.endTime);
+  const breakMinutes = Number(entry.breakMinutes) || 0;
+
+  if (start === null || end === null || end <= start) return 0;
+
+  return Math.max(0, end - start - breakMinutes) / 60;
+}
+
+function money(amount) {
+  return `$${Number(amount || 0).toFixed(2)}`;
+}
+
+function getHourlyRate() {
+  return parseFloat(els.hourlyRate.value) || 0;
+}
+
+function calculatePay(hours) {
+  return hours * getHourlyRate();
+}
+
+function statusLabel(status) {
+  if (status === "worked") return "Worked";
+  if (status === "off") return "Day off";
+  if (status === "canceled") return "Canceled / rain day";
+  return "Not logged";
+}
+
+function resetForm() {
+  editingDate = null;
+  els.workDate.value = toDateInputValue(new Date());
+  els.status.value = "worked";
+
+  document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
+    radio.checked = radio.value === "worked";
+  });
+
+  els.jobSite.value = "";
+  els.startTime.value = "08:30";
+  els.endTime.value = "";
+  els.breakMinutes.value = "30";
+
+  updateFormState();
+  updateLiveResult();
+}
+
+function updateFormState() {
+  const isWorked = els.status.value === "worked";
+
+  els.jobSite.disabled = !isWorked;
+  els.startTime.disabled = !isWorked;
+  els.endTime.disabled = !isWorked;
+  els.breakMinutes.disabled = !isWorked;
+
+  if (!isWorked) {
+    els.jobSite.value = "";
+    els.endTime.value = "";
+    els.breakMinutes.value = "0";
+  } else if (!els.breakMinutes.value || Number(els.breakMinutes.value) === 0) {
+    els.breakMinutes.value = "30";
+  }
+}
+
+function getFormEntry() {
+  const status = els.status.value;
+
+  return {
+    date: els.workDate.value,
+    day: getDayName(els.workDate.value),
+    status,
+    jobSite: status === "worked" ? els.jobSite.value.trim() : "",
+    startTime: status === "worked" ? els.startTime.value : "",
+    endTime: status === "worked" ? els.endTime.value : "",
+    breakMinutes: status === "worked" ? Number(els.breakMinutes.value || 0) : 0,
+    savedAt: new Date().toISOString()
+  };
+}
+
+function updateLiveResult() {
+  if (!els.workDate.value) return;
+
+  const entry = getFormEntry();
+  const hours = calculateHours(entry);
+  const pay = calculatePay(hours);
+
+  els.liveHours.textContent = hours.toFixed(2);
+  els.livePay.textContent = money(pay);
+}
+
+function saveFormEntry(event) {
+  event.preventDefault();
+
+  const entry = getFormEntry();
+
+  if (!entry.date) {
+    alert("Choose a date first.");
+    return;
+  }
+
+  if (entry.status === "worked") {
+    if (!entry.endTime) {
+      alert("Enter a clock-out time before saving a worked day.");
+      return;
+    }
+
+    if (calculateHours(entry) <= 0) {
+      alert("Check the start time, end time, and break deduction.");
+      return;
+    }
+  }
+
+  if (editingDate && editingDate !== entry.date) {
+    delete entries[editingDate];
+  }
+
+  entries[entry.date] = entry;
+
+  const saved = saveEntries();
+  saveSettings();
+
+  if (!saved) return;
+
+  els.weekPicker.value = entry.date;
+  resetForm();
+  render();
+}
+
+function editEntry(dateString) {
+  const entry = entries[dateString];
+  if (!entry) return;
+
+  editingDate = dateString;
+
+  els.workDate.value = entry.date;
+  els.status.value = entry.status;
+
+  document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
+    radio.checked = radio.value === entry.status;
+  });
+
+  els.jobSite.value = entry.jobSite || "";
+  els.startTime.value = entry.startTime || "08:30";
+  els.endTime.value = entry.endTime || "";
+  els.breakMinutes.value = String(entry.breakMinutes ?? 30);
+
+  updateFormState();
+  updateLiveResult();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+function deleteEntry(dateString) {
+  const ok = confirm(`Delete the entry for ${formatDisplayDate(dateString)}?`);
+  if (!ok) return;
+
+  delete entries[dateString];
+  saveEntries();
+  render();
+}
+
+function getWeekdayEntries() {
+  const dates = getWeekDates();
+
+  return [
+    dates.monday,
+    dates.tuesday,
+    dates.wednesday,
+    dates.thursday,
+    dates.friday
+  ].map((date) => {
+    const key = toDateInputValue(date);
+    return {
+      date,
+      key,
+      entry: entries[key] || null
+    };
+  });
+}
+
+function getSaturdayEntry() {
+  const dates = getWeekDates();
+  const key = toDateInputValue(dates.saturday);
+
+  return {
+    date: dates.saturday,
+    key,
+    entry: entries[key] || null
+  };
+}
+
+function renderEntriesList() {
+  const dates = getWeekDates();
+  const allDates = [];
+
+  for (let i = 0; i <= 5; i++) {
+    allDates.push(toDateInputValue(addDays(dates.monday, i)));
+  }
+
+  els.entriesList.innerHTML = "";
+
+  allDates.forEach((dateString) => {
+    const entry = entries[dateString];
+    const row = document.createElement("div");
+
+    if (!entry) {
+      row.className = "entry";
+      row.innerHTML = `
+        <div class="entry-top">
+          <div>
+            <div class="entry-title">${getDayName(dateString)}</div>
+            <div class="entry-date">${formatDisplayDate(dateString)}</div>
+          </div>
+          <span class="status-pill status-missing">Not logged</span>
+        </div>
+        <div class="entry-details">No entry saved for this day.</div>
+      `;
+      els.entriesList.appendChild(row);
+      return;
+    }
+
+    const hours = calculateHours(entry);
+    const pay = calculatePay(hours);
+
+    row.className = `entry ${entry.status}`;
+
+    row.innerHTML = `
+      <div class="entry-top">
+        <div>
+          <div class="entry-title">${entry.day}</div>
+          <div class="entry-date">${formatDisplayDate(entry.date)}</div>
+        </div>
+
+        <span class="status-pill status-${entry.status}">
+          ${statusLabel(entry.status)}
+        </span>
+      </div>
+
+      <div class="entry-details">
+        ${
+          entry.status === "worked"
+            ? `
+              <strong>${entry.jobSite || "No job site"}</strong><br>
+              ${formatTime(entry.startTime)} – ${formatTime(entry.endTime)}
+              · Lunch: ${entry.breakMinutes} min<br>
+              Paid hours: <strong>${hours.toFixed(2)}</strong>
+              · Pay: <strong>${money(pay)}</strong>
+            `
+            : `${statusLabel(entry.status)} · 0.00 paid hours · $0.00`
+        }
+      </div>
+
+      <div class="entry-actions">
+        <button class="small-btn" type="button" data-edit="${entry.date}">Edit</button>
+        <button class="small-btn delete" type="button" data-delete="${entry.date}">Delete</button>
+      </div>
+    `;
+
+    els.entriesList.appendChild(row);
+  });
+
+  document.querySelectorAll("[data-edit]").forEach((btn) => {
+    btn.addEventListener("click", () => editEntry(btn.dataset.edit));
+  });
+
+  document.querySelectorAll("[data-delete]").forEach((btn) => {
+    btn.addEventListener("click", () => deleteEntry(btn.dataset.delete));
+  });
+}
+
+function buildWeekReport() {
+  const rows = getWeekdayEntries();
+
+  let totalHours = 0;
+  let workedDays = 0;
+  let totalPay = 0;
+
+  const dates = getWeekDates();
+  const weekStart = formatDisplayDate(toDateInputValue(dates.monday));
+  const weekEnd = formatDisplayDate(toDateInputValue(dates.friday));
+
+  let report = `Work Hours Report\n`;
+  report += `Week: ${weekStart} through ${weekEnd}\n\n`;
+
+  rows.forEach(({ key, entry }) => {
+    const day = getDayName(key);
+
+    if (!entry) {
+      report += `${day} (${formatDisplayDate(key)}): Not logged\n\n`;
+      return;
+    }
+
+    const hours = calculateHours(entry);
+    const pay = calculatePay(hours);
+
+    if (entry.status === "worked") {
+      workedDays += 1;
+      totalHours += hours;
+      totalPay += pay;
+
+      report += `${day} (${formatDisplayDate(key)})\n`;
+      report += `Job site: ${entry.jobSite || "Not entered"}\n`;
+      report += `Time: ${formatTime(entry.startTime)} to ${formatTime(entry.endTime)}\n`;
+      report += `Unpaid lunch/break: ${entry.breakMinutes} minutes\n`;
+      report += `Paid hours: ${hours.toFixed(2)}\n`;
+      report += `Estimated gross pay: ${money(pay)}\n\n`;
+    } else {
+      report += `${day} (${formatDisplayDate(key)})\n`;
+      report += `Status: ${statusLabel(entry.status)}\n`;
+      report += `Paid hours: 0.00\n`;
+      report += `Estimated gross pay: $0.00\n\n`;
+    }
+  });
+
+  const average = workedDays > 0 ? totalHours / workedDays : 0;
+
+  report += `Weekly Totals\n`;
+  report += `Total paid hours: ${totalHours.toFixed(2)}\n`;
+  report += `Average paid hours per worked day: ${average.toFixed(2)}\n`;
+  report += `Total estimated gross pay: ${money(totalPay)}`;
+
+  return report;
+}
+
+function buildSaturdayReport() {
+  const { key, entry } = getSaturdayEntry();
+
+  let report = `Saturday Work Report\n`;
+  report += `Date: ${formatDisplayDate(key)}\n\n`;
+
+  if (!entry) {
+    report += `Saturday: Not logged`;
+    return report;
+  }
+
+  const hours = calculateHours(entry);
+  const pay = calculatePay(hours);
+
+  if (entry.status === "worked") {
+    report += `Job site: ${entry.jobSite || "Not entered"}\n`;
+    report += `Time: ${formatTime(entry.startTime)} to ${formatTime(entry.endTime)}\n`;
+    report += `Unpaid lunch/break: ${entry.breakMinutes} minutes\n`;
+    report += `Paid hours: ${hours.toFixed(2)}\n`;
+    report += `Estimated gross pay: ${money(pay)}`;
+  } else {
+    report += `Status: ${statusLabel(entry.status)}\n`;
+    report += `Paid hours: 0.00\n`;
+    report += `Estimated gross pay: $0.00`;
+  }
+
+  return report;
+}
+
+function renderSummary() {
+  const rows = getWeekdayEntries();
+
+  let totalHours = 0;
+  let totalPay = 0;
+  let workedDays = 0;
+
+  rows.forEach(({ entry }) => {
+    if (!entry || entry.status !== "worked") return;
+
+    const hours = calculateHours(entry);
+    workedDays += 1;
+    totalHours += hours;
+    totalPay += calculatePay(hours);
+  });
+
+  els.summaryHours.textContent = totalHours.toFixed(2);
+  els.summaryPay.textContent = money(totalPay);
+  els.summaryDays.textContent = String(workedDays);
+}
+
+function renderReport() {
+  els.reportOutput.value = buildWeekReport();
+}
+
+function render() {
+  renderEntriesList();
+  renderSummary();
+  renderReport();
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    alert("Report copied.");
+  } catch {
+    els.reportOutput.value = text;
+    els.reportOutput.focus();
+    els.reportOutput.select();
+    alert("The report is selected. Copy it manually.");
+  }
+}
+
+function deleteCurrentWeek() {
+  const ok = confirm("Delete all Monday–Saturday entries for the selected week?");
+  if (!ok) return;
+
+  const dates = getWeekDates();
+
+  for (let i = 0; i <= 5; i++) {
+    const key = toDateInputValue(addDays(dates.monday, i));
+    delete entries[key];
+  }
+
+  saveEntries();
+  render();
+}
+
+function refreshEntriesFromStorage() {
+  entries = loadEntries();
+  render();
+}
+
+function initStatusButtons() {
+  document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (radio.checked) {
+        els.status.value = radio.value;
+        updateFormState();
+        updateLiveResult();
+      }
+    });
+  });
+}
+
+function init() {
+  const settings = loadSettings();
+
+  if (!storageAvailable()) {
+    alert(
+      "Storage is blocked. Your entries may not save after you close the app. Use normal Safari, not Private Browsing, and keep using the same CodePen link."
+    );
+  }
+
+  els.hourlyRate.value = settings.hourlyRate ?? "20.00";
+  els.weekPicker.value = toDateInputValue(new Date());
+
+  initStatusButtons();
+  resetForm();
+  render();
+
+  els.shiftForm.addEventListener("submit", saveFormEntry);
+
+  [
+    els.workDate,
+    els.jobSite,
+    els.startTime,
+    els.endTime,
+    els.breakMinutes,
+    els.hourlyRate
+  ].forEach((el) => {
+    el.addEventListener("input", () => {
+      updateLiveResult();
+      saveSettings();
+      renderSummary();
+      renderReport();
+    });
+  });
+
+  els.weekPicker.addEventListener("change", render);
+
+  els.clearFormBtn.addEventListener("click", resetForm);
+
+  els.copyWeekReportBtn.addEventListener("click", () => {
+    const report = buildWeekReport();
+    els.reportOutput.value = report;
+    copyText(report);
+  });
+
+  els.copySaturdayReportBtn.addEventListener("click", () => {
+    const report = buildSaturdayReport();
+    els.reportOutput.value = report;
+    copyText(report);
+  });
+
+  els.deleteWeekBtn.addEventListener("click", deleteCurrentWeek);
+
+  window.addEventListener("beforeunload", () => {
+    saveEntries();
+    saveSettings();
+  });
+
+  window.addEventListener("pagehide", () => {
+    saveEntries();
+    saveSettings();
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      saveEntries();
+      saveSettings();
+    }
+
+    if (document.visibilityState === "visible") {
+      refreshEntriesFromStorage();
+    }
+  });
+}
+
+init();
+
