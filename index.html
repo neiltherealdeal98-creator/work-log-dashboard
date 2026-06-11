@@ -402,9 +402,7 @@
       gap: 10px;
     }
 
-    #reportOutput {
-      display: block;
-      width: 100%;
+    textarea {
       margin-top: 12px;
       min-height: 290px;
       padding: 15px;
@@ -434,97 +432,6 @@
       font-weight: 750;
     }
 
-    /* ── Toast notifications ── */
-    #toastContainer {
-      position: fixed;
-      bottom: max(28px, env(safe-area-inset-bottom));
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      pointer-events: none;
-    }
-    .toast {
-      padding: 11px 20px;
-      border-radius: 999px;
-      font-size: 0.84rem;
-      font-weight: 900;
-      white-space: nowrap;
-      backdrop-filter: blur(18px);
-      pointer-events: none;
-      animation: toastIn 0.22s ease, toastOut 0.3s ease 2s forwards;
-    }
-    .toast.ok  { color: #d1fae5; background: rgba(16,185,129,0.22); border: 1px solid rgba(16,185,129,0.38); }
-    .toast.err { color: #fecdd3; background: rgba(251,113,133,0.22); border: 1px solid rgba(251,113,133,0.38); }
-    @keyframes toastIn  { from { opacity:0; transform:translateY(10px) scale(0.94); } to { opacity:1; transform:translateY(0) scale(1); } }
-    @keyframes toastOut { to   { opacity:0; transform:translateY(6px)  scale(0.94); } }
-
-    /* ── Weekly progress bar ── */
-    .progress-wrap {
-      margin-top: 13px;
-      padding: 12px 14px;
-      border-radius: 20px;
-      background: rgba(2,6,23,0.45);
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-    .progress-labels {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .progress-labels span { color: var(--muted); font-size: 0.70rem; font-weight: 950; text-transform: uppercase; letter-spacing: 0.08em; }
-    .progress-labels strong { color: var(--text); font-size: 0.82rem; }
-    .progress-track { height: 8px; border-radius: 999px; background: rgba(255,255,255,0.09); overflow: hidden; }
-    .progress-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #2563eb, #22d3ee 60%, #a78bfa);
-      transition: width 0.45s cubic-bezier(0.34,1.56,0.64,1);
-    }
-
-    /* ── Notes textarea ── */
-    .notes-input {
-      width: 100%;
-      min-height: 44px;
-      max-height: 100px;
-      resize: none;
-      border: 0;
-      outline: 0;
-      color: var(--text);
-      background: transparent;
-      font-weight: 750;
-      font-size: 0.93rem;
-      line-height: 1.4;
-    }
-    .entry-notes {
-      margin-top: 7px;
-      padding: 6px 10px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.05);
-      color: var(--muted);
-      font-size: 0.82rem;
-      font-style: italic;
-      line-height: 1.4;
-    }
-
-    /* ── Editing banner ── */
-    .editing-banner {
-      display: none;
-      margin-bottom: 10px;
-      padding: 8px 12px;
-      border-radius: 14px;
-      background: rgba(167,139,250,0.14);
-      border: 1px solid rgba(167,139,250,0.30);
-      color: #ddd6fe;
-      font-size: 0.80rem;
-      font-weight: 900;
-    }
-    .editing-banner.visible { display: block; }
-
     @media (max-width: 430px) {
       .page { padding-left: 10px; padding-right: 10px; }
       .app { border-radius: 30px; padding: 13px; }
@@ -553,7 +460,7 @@
         <div id="saveStatus" class="save-status">Saving is ready</div>
         <div class="stats">
           <div class="stat blue">
-            <span>Mon–Sat</span>
+            <span>Mon–Fri</span>
             <strong id="summaryHours">0.00</strong>
             <small>Paid Hours</small>
           </div>
@@ -568,17 +475,7 @@
             <small>Days</small>
           </div>
         </div>
-        <div class="progress-wrap">
-          <div class="progress-labels">
-            <span>Weekly Pay Goal</span>
-            <strong id="progressLabel">Set a goal below</strong>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="progressFill" style="width:0%"></div>
-          </div>
-        </div>
       </header>
-      <div id="toastContainer"></div>
 
       <section class="panel">
         <div class="panel-head">
@@ -593,10 +490,6 @@
             <div class="money-field"><b>$</b><input id="hourlyRate" type="number" min="0" step="0.01" value="20.00" /></div>
           </label>
           <label class="field">
-            <span>Weekly Pay Goal</span>
-            <div class="money-field"><b>$</b><input id="weeklyGoal" type="number" min="0" step="10" placeholder="e.g. 800" /></div>
-          </label>
-          <label class="field full">
             <span>Report Week</span>
             <input id="weekPicker" type="date" />
           </label>
@@ -612,7 +505,6 @@
           <button id="resetBtn" class="soft" type="button">Reset</button>
         </div>
 
-        <div id="editingBanner" class="editing-banner">✏️ Editing saved entry — Save Day will overwrite it</div>
         <form id="entryForm">
           <div class="segmented">
             <label><input type="radio" name="statusRadio" value="worked" checked /><span>Worked</span></label>
@@ -641,10 +533,6 @@
             <label class="field full">
               <span>Unpaid Lunch / Break Minutes</span>
               <input id="breakMinutes" type="number" min="0" step="5" value="30" />
-            </label>
-            <label class="field full" id="notesWrap">
-              <span>Notes (optional)</span>
-              <textarea id="entryNotes" class="notes-input" maxlength="200" placeholder="e.g. Finished deck boards, waiting on trim"></textarea>
             </label>
           </div>
 
@@ -709,7 +597,6 @@
     const els = {
       saveStatus: $("saveStatus"),
       hourlyRate: $("hourlyRate"),
-      weeklyGoal: $("weeklyGoal"),
       weekPicker: $("weekPicker"),
       workDate: $("workDate"),
       status: $("status"),
@@ -717,9 +604,6 @@
       startTime: $("startTime"),
       endTime: $("endTime"),
       breakMinutes: $("breakMinutes"),
-      entryNotes: $("entryNotes"),
-      notesWrap: $("notesWrap"),
-      editingBanner: $("editingBanner"),
       liveHours: $("liveHours"),
       livePay: $("livePay"),
       entryForm: $("entryForm"),
@@ -728,16 +612,13 @@
       summaryHours: $("summaryHours"),
       summaryPay: $("summaryPay"),
       summaryDays: $("summaryDays"),
-      progressFill: $("progressFill"),
-      progressLabel: $("progressLabel"),
       reportOutput: $("reportOutput"),
       copyWeekBtn: $("copyWeekBtn"),
       copySatBtn: $("copySatBtn"),
       deleteWeekBtn: $("deleteWeekBtn"),
       exportBtn: $("exportBtn"),
       importBtn: $("importBtn"),
-      backupFile: $("backupFile"),
-      toastContainer: $("toastContainer")
+      backupFile: $("backupFile")
     };
 
     let entries = {};
@@ -792,7 +673,6 @@
     function saveSettings() {
       return writeJSON(SETTINGS_KEY, {
         hourlyRate: Number(els.hourlyRate.value) || 0,
-        weeklyGoal: Number(els.weeklyGoal.value) || 0,
         lastWeek: els.weekPicker.value || todayValue()
       });
     }
@@ -879,42 +759,24 @@
       return "Not logged";
     }
 
-    function esc(str) {
-      return String(str || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
+    function updateFormState() {
       const worked = els.status.value === "worked";
       els.jobSite.disabled = !worked;
       els.startTime.disabled = !worked;
       els.endTime.disabled = !worked;
       els.breakMinutes.disabled = !worked;
-      els.entryNotes.disabled = !worked;
-      els.notesWrap.style.display = worked ? "" : "none";
       if (!worked) {
         els.jobSite.value = "";
         els.endTime.value = "";
         els.breakMinutes.value = "0";
-        els.entryNotes.value = "";
       } else if (!els.breakMinutes.value || Number(els.breakMinutes.value) === 0) {
         els.breakMinutes.value = "30";
       }
     }
 
-    function smartDefaultDate() {
-      // Find the first unlogged weekday in the current week view
-      const keys = selectedWeekKeys();
-      for (const key of keys) {
-        if (!entries[key]) return key;
-      }
-      return todayValue();
-    }
-
     function resetForm() {
       editingDate = null;
-      els.workDate.value = smartDefaultDate();
+      els.workDate.value = todayValue();
       els.status.value = "worked";
       document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
         radio.checked = radio.value === "worked";
@@ -923,8 +785,6 @@
       els.startTime.value = "08:30";
       els.endTime.value = "";
       els.breakMinutes.value = "30";
-      els.entryNotes.value = "";
-      els.editingBanner.classList.remove("visible");
       updateFormState();
       updateLivePreview();
     }
@@ -939,7 +799,6 @@
         startTime: status === "worked" ? els.startTime.value : "",
         endTime: status === "worked" ? els.endTime.value : "",
         breakMinutes: status === "worked" ? Number(els.breakMinutes.value || 0) : 0,
-        notes: status === "worked" ? els.entryNotes.value.trim() : "",
         savedAt: new Date().toISOString()
       };
     }
@@ -956,16 +815,16 @@
       event.preventDefault();
       const entry = formEntry();
       if (!entry.date) {
-        showToast("Choose a date first.", "err");
+        alert("Choose a date first.");
         return;
       }
       if (entry.status === "worked") {
         if (!entry.endTime) {
-          showToast("Enter a clock-out time first.", "err");
+          alert("Enter a clock-out time before saving a worked day.");
           return;
         }
         if (calculateHours(entry) <= 0) {
-          showToast("Check clock-in, clock-out, and break minutes.", "err");
+          alert("Check the clock-in time, clock-out time, and break minutes.");
           return;
         }
       }
@@ -975,7 +834,6 @@
       saveSettings();
       if (!saved) return;
       els.weekPicker.value = entry.date;
-      showToast("Day saved ✓");
       resetForm();
       render();
     }
@@ -993,8 +851,6 @@
       els.startTime.value = entry.startTime || "08:30";
       els.endTime.value = entry.endTime || "";
       els.breakMinutes.value = String(entry.breakMinutes ?? 30);
-      els.entryNotes.value = entry.notes || "";
-      els.editingBanner.classList.add("visible");
       updateFormState();
       updateLivePreview();
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1004,7 +860,6 @@
       if (!confirm(`Delete the entry for ${formatDisplayDate(dateKey)}?`)) return;
       delete entries[dateKey];
       saveEntries();
-      showToast("Entry deleted");
       render();
     }
 
@@ -1035,18 +890,17 @@
         row.className = `entry ${entry.status}`;
         row.innerHTML = `
           <div class="entry-top">
-            <div><div class="entry-title">${esc(entry.day)}</div><div class="entry-date">${formatDisplayDate(entry.date)}</div></div>
+            <div><div class="entry-title">${entry.day}</div><div class="entry-date">${formatDisplayDate(entry.date)}</div></div>
             <span class="pill ${entry.status}">${statusLabel(entry.status)}</span>
           </div>
           <div class="entry-details">
             ${entry.status === "worked"
-              ? `<strong>${esc(entry.jobSite) || "No job site"}</strong><br>${formatTime(entry.startTime)} – ${formatTime(entry.endTime)} · Lunch: ${Number(entry.breakMinutes) || 0} min<br>Paid hours: <strong>${hours.toFixed(2)}</strong> · Pay: <strong>${money(pay)}</strong>`
+              ? `<strong>${entry.jobSite || "No job site"}</strong><br>${formatTime(entry.startTime)} – ${formatTime(entry.endTime)} · Lunch: ${entry.breakMinutes} min<br>Paid hours: <strong>${hours.toFixed(2)}</strong> · Pay: <strong>${money(pay)}</strong>`
               : `${statusLabel(entry.status)} · 0.00 paid hours · $0.00`}
           </div>
-          ${entry.notes ? `<div class="entry-notes">${esc(entry.notes)}</div>` : ""}
           <div class="entry-actions">
-            <button class="small" type="button" data-edit="${esc(entry.date)}">Edit</button>
-            <button class="small delete" type="button" data-delete="${esc(entry.date)}">Delete</button>
+            <button class="small" type="button" data-edit="${entry.date}">Edit</button>
+            <button class="small delete" type="button" data-delete="${entry.date}">Delete</button>
           </div>
         `;
         els.entriesList.appendChild(row);
@@ -1054,6 +908,10 @@
 
       document.querySelectorAll("[data-edit]").forEach((btn) => btn.addEventListener("click", () => editEntry(btn.dataset.edit)));
       document.querySelectorAll("[data-delete]").forEach((btn) => btn.addEventListener("click", () => deleteEntry(btn.dataset.delete)));
+    }
+
+    function weekdayRows() {
+      return selectedWeekKeys().slice(0, 5).map((key) => ({ key, entry: entries[key] || null }));
     }
 
     function saturdayRow() {
@@ -1122,9 +980,7 @@
       let totalHours = 0;
       let totalPay = 0;
       let workedDays = 0;
-      // Include all 6 days (Mon–Sat)
-      selectedWeekKeys().forEach((key) => {
-        const entry = entries[key];
+      weekdayRows().forEach(({ entry }) => {
         if (!entry || entry.status !== "worked") return;
         const hours = calculateHours(entry);
         workedDays += 1;
@@ -1134,17 +990,6 @@
       els.summaryHours.textContent = totalHours.toFixed(2);
       els.summaryPay.textContent = money(totalPay);
       els.summaryDays.textContent = String(workedDays);
-
-      // Progress bar
-      const goal = Number(els.weeklyGoal.value) || 0;
-      if (goal > 0) {
-        const pct = Math.min(100, (totalPay / goal) * 100).toFixed(1);
-        els.progressFill.style.width = pct + "%";
-        els.progressLabel.textContent = `${money(totalPay)} / ${money(goal)}`;
-      } else {
-        els.progressFill.style.width = "0%";
-        els.progressLabel.textContent = "Set a goal below";
-      }
     }
 
     function renderReport() { els.reportOutput.value = buildWeekReport(); }
@@ -1155,23 +1000,15 @@
       renderReport();
     }
 
-    function showToast(msg, type = "ok") {
-      const t = document.createElement("div");
-      t.className = `toast ${type}`;
-      t.textContent = msg;
-      els.toastContainer.appendChild(t);
-      setTimeout(() => t.remove(), 2400);
-    }
-
     async function copyText(text) {
       try {
         await navigator.clipboard.writeText(text);
-        showToast("Report copied to clipboard ✓");
+        alert("Report copied.");
       } catch {
         els.reportOutput.value = text;
         els.reportOutput.focus();
         els.reportOutput.select();
-        showToast("Select & copy the text manually", "err");
+        alert("The report is selected. Copy it manually.");
       }
     }
 
@@ -1179,7 +1016,6 @@
       if (!confirm("Delete all Monday–Saturday entries for this selected week?")) return;
       selectedWeekKeys().forEach((key) => delete entries[key]);
       saveEntries();
-      showToast("Week cleared");
       render();
     }
 
@@ -1213,9 +1049,9 @@
           entries = { ...entries, ...importedEntries };
           saveEntries();
           render();
-          showToast("Backup imported ✓");
+          alert("Backup imported.");
         } catch {
-          showToast("That file could not be imported.", "err");
+          alert("That backup file could not be imported.");
         }
       };
       reader.readAsText(file);
@@ -1242,7 +1078,6 @@
       }
 
       els.hourlyRate.value = settings.hourlyRate ?? "20.00";
-      els.weeklyGoal.value = settings.weeklyGoal || "";
       els.weekPicker.value = settings.lastWeek || todayValue();
       initStatusRadios();
       resetForm();
@@ -1251,7 +1086,7 @@
       els.entryForm.addEventListener("submit", saveForm);
       els.resetBtn.addEventListener("click", resetForm);
       els.weekPicker.addEventListener("change", () => { saveSettings(); render(); });
-      [els.workDate, els.jobSite, els.startTime, els.endTime, els.breakMinutes, els.hourlyRate, els.weeklyGoal].forEach((el) => {
+      [els.workDate, els.jobSite, els.startTime, els.endTime, els.breakMinutes, els.hourlyRate].forEach((el) => {
         el.addEventListener("input", () => {
           updateLivePreview();
           saveSettings();
@@ -1293,4 +1128,3 @@
   </script>
 </body>
 </html>
-
