@@ -24,7 +24,6 @@
     }
 
     * { box-sizing: border-box; }
-
     html { -webkit-text-size-adjust: 100%; }
 
     body {
@@ -381,6 +380,18 @@
 
     .entry-details strong { color: var(--text); }
 
+    .entry-note {
+      margin-top: 6px;
+      padding: 7px 10px;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      color: var(--blue);
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-style: italic;
+    }
+
     .entry-actions {
       display: flex;
       gap: 8px;
@@ -398,7 +409,7 @@
 
     .actions-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 10px;
     }
 
@@ -487,7 +498,7 @@
         <div class="grid">
           <label class="field">
             <span>Hourly Rate</span>
-            <div class="money-field"><b>$</b><input id="hourlyRate" type="number" min="0" step="0.01" value="20.00" /></div>
+            <div class="money-field"><b>$</b><input id="hourlyRate" type="number" min="0" step="0.01" value="18.00" /></div>
           </label>
           <label class="field">
             <span>Report Week</span>
@@ -505,51 +516,57 @@
           <button id="resetBtn" class="soft" type="button">Reset</button>
         </div>
 
-        <form id="entryForm">
-          <div class="segmented">
-            <label><input type="radio" name="statusRadio" value="worked" checked /><span>Worked</span></label>
-            <label><input type="radio" name="statusRadio" value="off" /><span>Day Off</span></label>
-            <label><input type="radio" name="statusRadio" value="canceled" /><span>Rain Day</span></label>
-          </div>
-          <input id="status" type="hidden" value="worked" />
+        <div class="segmented">
+          <label><input type="radio" name="statusRadio" value="worked" checked /><span>Worked</span></label>
+          <label><input type="radio" name="statusRadio" value="off" /><span>Day Off</span></label>
+          <label><input type="radio" name="statusRadio" value="canceled" /><span>Rain Day</span></label>
+        </div>
+        <input id="status" type="hidden" value="worked" />
 
-          <div class="grid">
-            <label class="field">
-              <span>Date</span>
-              <input id="workDate" type="date" required />
-            </label>
-            <label class="field">
-              <span>Job Site</span>
-              <input id="jobSite" type="text" maxlength="40" placeholder="Lake job" />
-            </label>
-            <label class="field">
-              <span>Clock In</span>
-              <input id="startTime" type="time" value="08:30" />
-            </label>
-            <label class="field">
-              <span>Clock Out</span>
-              <input id="endTime" type="time" />
-            </label>
-            <label class="field full">
-              <span>Unpaid Lunch / Break Minutes</span>
-              <input id="breakMinutes" type="number" min="0" step="5" value="30" />
-            </label>
-          </div>
+        <div class="grid">
+          <label class="field">
+            <span>Date</span>
+            <input id="workDate" type="date" required />
+          </label>
+          <label class="field">
+            <span>Job Site</span>
+            <input id="jobSite" type="text" maxlength="40" placeholder="Lake job" />
+          </label>
+          <label class="field">
+            <span>Clock In</span>
+            <input id="startTime" type="time" value="08:00" />
+          </label>
+          <label class="field">
+            <span>Clock Out</span>
+            <input id="endTime" type="time" />
+          </label>
+          <label class="field full">
+            <span>Unpaid Lunch / Break Minutes</span>
+            <input id="breakMinutes" type="number" min="0" step="5" value="30" />
+          </label>
+          <label class="field full">
+            <span>Miles Driven Today</span>
+            <input id="milesInput" type="number" min="0" step="1" placeholder="0" />
+          </label>
+          <label class="field full">
+            <span>Day Note (optional)</span>
+            <input id="dayNote" type="text" maxlength="60" placeholder="Short note about today..." />
+          </label>
+        </div>
 
-          <div class="calc">
-            <div><span>Paid Hours</span><strong id="liveHours">0.00</strong></div>
-            <div><span>Estimated Pay</span><strong id="livePay">$0.00</strong></div>
-          </div>
+        <div class="calc">
+          <div><span>Paid Hours</span><strong id="liveHours">0.00</strong></div>
+          <div><span>Estimated Pay</span><strong id="livePay">$0.00</strong></div>
+        </div>
 
-          <button class="primary" type="submit">Save Day</button>
-        </form>
+        <button class="primary" id="saveBtn" type="button">Save Day</button>
       </section>
 
       <section class="panel">
         <div class="panel-head">
           <div>
             <p class="kicker">Week View</p>
-            <h2>Monday–Saturday</h2>
+            <h2>Monday–Friday</h2>
           </div>
           <button id="deleteWeekBtn" class="danger" type="button">Delete Week</button>
         </div>
@@ -560,12 +577,11 @@
         <div class="panel-head">
           <div>
             <p class="kicker">Copy Ready</p>
-            <h2>Boss Report</h2>
+            <h2>Friday Report for Dean</h2>
           </div>
         </div>
         <div class="actions-grid">
-          <button id="copyWeekBtn" class="primary" type="button">Copy Mon–Fri Report</button>
-          <button id="copySatBtn" class="secondary" type="button">Copy Saturday</button>
+          <button id="copyWeekBtn" class="primary" type="button">Copy Weekly Report</button>
         </div>
         <textarea id="reportOutput" readonly></textarea>
       </section>
@@ -604,9 +620,11 @@
       startTime: $("startTime"),
       endTime: $("endTime"),
       breakMinutes: $("breakMinutes"),
+      milesInput: $("milesInput"),
+      dayNote: $("dayNote"),
       liveHours: $("liveHours"),
       livePay: $("livePay"),
-      entryForm: $("entryForm"),
+      saveBtn: $("saveBtn"),
       resetBtn: $("resetBtn"),
       entriesList: $("entriesList"),
       summaryHours: $("summaryHours"),
@@ -614,7 +632,6 @@
       summaryDays: $("summaryDays"),
       reportOutput: $("reportOutput"),
       copyWeekBtn: $("copyWeekBtn"),
-      copySatBtn: $("copySatBtn"),
       deleteWeekBtn: $("deleteWeekBtn"),
       exportBtn: $("exportBtn"),
       importBtn: $("importBtn"),
@@ -624,15 +641,14 @@
     let entries = {};
     let editingDate = null;
 
+    // ── Storage helpers ──────────────────────────────────────────
     function storageAvailable() {
       try {
         const key = "__work_log_storage_test__";
         localStorage.setItem(key, "1");
         localStorage.removeItem(key);
         return true;
-      } catch {
-        return false;
-      }
+      } catch { return false; }
     }
 
     function setSaveStatus(ok, text) {
@@ -647,9 +663,7 @@
         if (!raw) return fallback;
         const parsed = JSON.parse(raw);
         return parsed && typeof parsed === "object" ? parsed : fallback;
-      } catch {
-        return fallback;
-      }
+      } catch { return fallback; }
     }
 
     function writeJSON(key, value) {
@@ -679,6 +693,7 @@
 
     function loadSettings() { return readJSON(SETTINGS_KEY, {}); }
 
+    // ── Date helpers ─────────────────────────────────────────────
     function pad(n) { return String(n).padStart(2, "0"); }
 
     function todayValue() {
@@ -718,10 +733,11 @@
       return d;
     }
 
+    // Returns Mon–Fri only (5 days)
     function weekDates() {
       const selected = parseLocalDate(els.weekPicker.value || todayValue());
       const monday = getMonday(selected);
-      return Array.from({ length: 6 }, (_, i) => addDays(monday, i));
+      return Array.from({ length: 5 }, (_, i) => addDays(monday, i));
     }
 
     function minutesFromTime(value) {
@@ -741,6 +757,7 @@
     function money(value) { return `$${Number(value || 0).toFixed(2)}`; }
     function hourlyRate() { return Number(els.hourlyRate.value) || 0; }
 
+    // ── Calculations ─────────────────────────────────────────────
     function calculateHours(entry) {
       if (!entry || entry.status !== "worked") return 0;
       const start = minutesFromTime(entry.startTime);
@@ -759,16 +776,21 @@
       return "Not logged";
     }
 
+    // ── Form helpers ─────────────────────────────────────────────
     function updateFormState() {
       const worked = els.status.value === "worked";
       els.jobSite.disabled = !worked;
       els.startTime.disabled = !worked;
       els.endTime.disabled = !worked;
       els.breakMinutes.disabled = !worked;
+      els.milesInput.disabled = !worked;
+      els.dayNote.disabled = !worked;
       if (!worked) {
         els.jobSite.value = "";
         els.endTime.value = "";
         els.breakMinutes.value = "0";
+        els.milesInput.value = "";
+        els.dayNote.value = "";
       } else if (!els.breakMinutes.value || Number(els.breakMinutes.value) === 0) {
         els.breakMinutes.value = "30";
       }
@@ -782,15 +804,18 @@
         radio.checked = radio.value === "worked";
       });
       els.jobSite.value = "";
-      els.startTime.value = "08:30";
+      els.startTime.value = "08:00";
       els.endTime.value = "";
       els.breakMinutes.value = "30";
+      els.milesInput.value = "";
+      els.dayNote.value = "";
       updateFormState();
       updateLivePreview();
     }
 
     function formEntry() {
       const status = els.status.value;
+      const miles = els.milesInput.value.trim();
       return {
         date: els.workDate.value,
         day: dayName(els.workDate.value),
@@ -799,6 +824,8 @@
         startTime: status === "worked" ? els.startTime.value : "",
         endTime: status === "worked" ? els.endTime.value : "",
         breakMinutes: status === "worked" ? Number(els.breakMinutes.value || 0) : 0,
+        miles: status === "worked" ? (miles === "" ? null : Number(miles)) : null,
+        note: status === "worked" ? els.dayNote.value.trim() : "",
         savedAt: new Date().toISOString()
       };
     }
@@ -811,22 +838,13 @@
       els.livePay.textContent = money(calculatePay(hours));
     }
 
-    function saveForm(event) {
-      event.preventDefault();
+    // ── Save ─────────────────────────────────────────────────────
+    function saveForm() {
       const entry = formEntry();
-      if (!entry.date) {
-        alert("Choose a date first.");
-        return;
-      }
+      if (!entry.date) { alert("Choose a date first."); return; }
       if (entry.status === "worked") {
-        if (!entry.endTime) {
-          alert("Enter a clock-out time before saving a worked day.");
-          return;
-        }
-        if (calculateHours(entry) <= 0) {
-          alert("Check the clock-in time, clock-out time, and break minutes.");
-          return;
-        }
+        if (!entry.endTime) { alert("Enter a clock-out time before saving a worked day."); return; }
+        if (calculateHours(entry) <= 0) { alert("Check the clock-in time, clock-out time, and break minutes."); return; }
       }
       if (editingDate && editingDate !== entry.date) delete entries[editingDate];
       entries[entry.date] = entry;
@@ -838,6 +856,7 @@
       render();
     }
 
+    // ── Edit / Delete ────────────────────────────────────────────
     function editEntry(dateKey) {
       const entry = entries[dateKey];
       if (!entry) return;
@@ -848,9 +867,11 @@
         radio.checked = radio.value === entry.status;
       });
       els.jobSite.value = entry.jobSite || "";
-      els.startTime.value = entry.startTime || "08:30";
+      els.startTime.value = entry.startTime || "08:00";
       els.endTime.value = entry.endTime || "";
       els.breakMinutes.value = String(entry.breakMinutes ?? 30);
+      els.milesInput.value = entry.miles !== null && entry.miles !== undefined ? String(entry.miles) : "";
+      els.dayNote.value = entry.note || "";
       updateFormState();
       updateLivePreview();
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -867,6 +888,7 @@
       return weekDates().map(toDateInputValue);
     }
 
+    // ── Render entries ───────────────────────────────────────────
     function renderEntries() {
       els.entriesList.innerHTML = "";
       selectedWeekKeys().forEach((dateKey) => {
@@ -887,6 +909,11 @@
 
         const hours = calculateHours(entry);
         const pay = calculatePay(hours);
+        const milesText = entry.miles !== null && entry.miles !== undefined
+          ? `Miles driven: <strong>${entry.miles}</strong>`
+          : "";
+        const noteHtml = entry.note ? `<div class="entry-note">📝 ${entry.note}</div>` : "";
+
         row.className = `entry ${entry.status}`;
         row.innerHTML = `
           <div class="entry-top">
@@ -895,9 +922,13 @@
           </div>
           <div class="entry-details">
             ${entry.status === "worked"
-              ? `<strong>${entry.jobSite || "No job site"}</strong><br>${formatTime(entry.startTime)} – ${formatTime(entry.endTime)} · Lunch: ${entry.breakMinutes} min<br>Paid hours: <strong>${hours.toFixed(2)}</strong> · Pay: <strong>${money(pay)}</strong>`
+              ? `<strong>${entry.jobSite || "No job site"}</strong><br>
+                 ${formatTime(entry.startTime)} – ${formatTime(entry.endTime)} · Lunch: ${entry.breakMinutes} min<br>
+                 Paid hours: <strong>${hours.toFixed(2)}</strong> · Pay: <strong>${money(pay)}</strong><br>
+                 ${milesText}`
               : `${statusLabel(entry.status)} · 0.00 paid hours · $0.00`}
           </div>
+          ${noteHtml}
           <div class="entry-actions">
             <button class="small" type="button" data-edit="${entry.date}">Edit</button>
             <button class="small delete" type="button" data-delete="${entry.date}">Delete</button>
@@ -910,77 +941,13 @@
       document.querySelectorAll("[data-delete]").forEach((btn) => btn.addEventListener("click", () => deleteEntry(btn.dataset.delete)));
     }
 
-    function weekdayRows() {
-      return selectedWeekKeys().slice(0, 5).map((key) => ({ key, entry: entries[key] || null }));
-    }
-
-    function saturdayRow() {
-      const key = selectedWeekKeys()[5];
-      return { key, entry: entries[key] || null };
-    }
-
-    function buildWeekReport() {
-      const rows = weekdayRows();
-      const weekStart = formatDisplayDate(rows[0].key);
-      const weekEnd = formatDisplayDate(rows[4].key);
-      let totalHours = 0;
-      let totalPay = 0;
-      let workedDays = 0;
-      let report = `Work Hours Report\nWeek: ${weekStart} through ${weekEnd}\n\n`;
-
-      rows.forEach(({ key, entry }) => {
-        if (!entry) {
-          report += `${dayName(key)} (${formatDisplayDate(key)}): Not logged\n\n`;
-          return;
-        }
-        const hours = calculateHours(entry);
-        const pay = calculatePay(hours);
-        report += `${dayName(key)} (${formatDisplayDate(key)})\n`;
-        if (entry.status === "worked") {
-          workedDays += 1;
-          totalHours += hours;
-          totalPay += pay;
-          report += `Job site: ${entry.jobSite || "Not entered"}\n`;
-          report += `Time: ${formatTime(entry.startTime)} to ${formatTime(entry.endTime)}\n`;
-          report += `Unpaid lunch/break: ${entry.breakMinutes} minutes\n`;
-          report += `Paid hours: ${hours.toFixed(2)}\n`;
-          report += `Estimated gross pay: ${money(pay)}\n\n`;
-        } else {
-          report += `Status: ${statusLabel(entry.status)}\nPaid hours: 0.00\nEstimated gross pay: $0.00\n\n`;
-        }
-      });
-
-      const average = workedDays ? totalHours / workedDays : 0;
-      report += `Weekly Totals\n`;
-      report += `Total paid hours: ${totalHours.toFixed(2)}\n`;
-      report += `Average paid hours per worked day: ${average.toFixed(2)}\n`;
-      report += `Total estimated gross pay: ${money(totalPay)}`;
-      return report;
-    }
-
-    function buildSaturdayReport() {
-      const { key, entry } = saturdayRow();
-      let report = `Saturday Work Report\nDate: ${formatDisplayDate(key)}\n\n`;
-      if (!entry) return report + "Saturday: Not logged";
-      const hours = calculateHours(entry);
-      const pay = calculatePay(hours);
-      if (entry.status === "worked") {
-        report += `Job site: ${entry.jobSite || "Not entered"}\n`;
-        report += `Time: ${formatTime(entry.startTime)} to ${formatTime(entry.endTime)}\n`;
-        report += `Unpaid lunch/break: ${entry.breakMinutes} minutes\n`;
-        report += `Paid hours: ${hours.toFixed(2)}\n`;
-        report += `Estimated gross pay: ${money(pay)}`;
-      } else {
-        report += `Status: ${statusLabel(entry.status)}\nPaid hours: 0.00\nEstimated gross pay: $0.00`;
-      }
-      return report;
-    }
-
+    // ── Summary ──────────────────────────────────────────────────
     function renderSummary() {
       let totalHours = 0;
       let totalPay = 0;
       let workedDays = 0;
-      weekdayRows().forEach(({ entry }) => {
+      selectedWeekKeys().forEach((key) => {
+        const entry = entries[key];
         if (!entry || entry.status !== "worked") return;
         const hours = calculateHours(entry);
         workedDays += 1;
@@ -992,6 +959,59 @@
       els.summaryDays.textContent = String(workedDays);
     }
 
+    // ── Report builder ───────────────────────────────────────────
+    function buildWeekReport() {
+      const keys = selectedWeekKeys();
+      const weekStart = formatDisplayDate(keys[0]);
+      const weekEnd = formatDisplayDate(keys[4]);
+      let totalHours = 0;
+      let totalPay = 0;
+      let totalMiles = 0;
+      let workedDays = 0;
+      let report = `Work Hours Report — Dean\nWeek: ${weekStart} through ${weekEnd}\n\n`;
+
+      keys.forEach((key) => {
+        const entry = entries[key];
+        if (!entry) {
+          report += `${dayName(key)} (${formatDisplayDate(key)}): Not logged\n\n`;
+          return;
+        }
+        const hours = calculateHours(entry);
+        const pay = calculatePay(hours);
+        report += `${dayName(key)} (${formatDisplayDate(key)})\n`;
+        if (entry.status === "worked") {
+          workedDays += 1;
+          totalHours += hours;
+          totalPay += pay;
+          report += `  Job site: ${entry.jobSite || "Not entered"}\n`;
+          report += `  Time: ${formatTime(entry.startTime)} to ${formatTime(entry.endTime)}\n`;
+          report += `  Unpaid lunch/break: ${entry.breakMinutes} min\n`;
+          report += `  Paid hours: ${hours.toFixed(2)}\n`;
+          report += `  Estimated gross pay: ${money(pay)}\n`;
+          if (entry.miles !== null && entry.miles !== undefined) {
+            report += `  Miles driven: ${entry.miles}\n`;
+            totalMiles += Number(entry.miles) || 0;
+          }
+          if (entry.note) {
+            report += `  Note: ${entry.note}\n`;
+          }
+          report += "\n";
+        } else {
+          report += `  Status: ${statusLabel(entry.status)}\n  Paid hours: 0.00\n\n`;
+        }
+      });
+
+      const average = workedDays ? totalHours / workedDays : 0;
+      report += `──────────────────────────\n`;
+      report += `Weekly Totals\n`;
+      report += `  Days worked: ${workedDays}\n`;
+      report += `  Total paid hours: ${totalHours.toFixed(2)}\n`;
+      report += `  Avg hours/day: ${average.toFixed(2)}\n`;
+      report += `  Total estimated gross pay: ${money(totalPay)}\n`;
+      report += `  Total miles driven: ${totalMiles}`;
+      return report;
+    }
+
     function renderReport() { els.reportOutput.value = buildWeekReport(); }
 
     function render() {
@@ -1000,25 +1020,27 @@
       renderReport();
     }
 
+    // ── Copy ─────────────────────────────────────────────────────
     async function copyText(text) {
       try {
         await navigator.clipboard.writeText(text);
-        alert("Report copied.");
+        alert("Report copied to clipboard.");
       } catch {
-        els.reportOutput.value = text;
         els.reportOutput.focus();
         els.reportOutput.select();
-        alert("The report is selected. Copy it manually.");
+        alert("The report is selected — copy it manually.");
       }
     }
 
+    // ── Delete week ──────────────────────────────────────────────
     function deleteCurrentWeek() {
-      if (!confirm("Delete all Monday–Saturday entries for this selected week?")) return;
+      if (!confirm("Delete all Monday–Friday entries for this selected week?")) return;
       selectedWeekKeys().forEach((key) => delete entries[key]);
       saveEntries();
       render();
     }
 
+    // ── Backup ───────────────────────────────────────────────────
     function exportBackup() {
       const backup = {
         app: "work-log-dashboard",
@@ -1050,13 +1072,12 @@
           saveEntries();
           render();
           alert("Backup imported.");
-        } catch {
-          alert("That backup file could not be imported.");
-        }
+        } catch { alert("That backup file could not be imported."); }
       };
       reader.readAsText(file);
     }
 
+    // ── Radio buttons ────────────────────────────────────────────
     function initStatusRadios() {
       document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
         radio.addEventListener("change", () => {
@@ -1068,31 +1089,32 @@
       });
     }
 
+    // ── Init ─────────────────────────────────────────────────────
     function init() {
       entries = loadEntries();
       const settings = loadSettings();
+
       if (!storageAvailable()) {
         setSaveStatus(false, "Saving blocked: use normal Safari, not Private Browsing");
       } else {
         setSaveStatus(true, "Saving is ready");
       }
 
-      els.hourlyRate.value = settings.hourlyRate ?? "20.00";
+      els.hourlyRate.value = settings.hourlyRate || "18.00";
       els.weekPicker.value = settings.lastWeek || todayValue();
+
       initStatusRadios();
       resetForm();
       render();
 
-      els.entryForm.addEventListener("submit", saveForm);
+      // Event listeners
+      els.saveBtn.addEventListener("click", saveForm);
       els.resetBtn.addEventListener("click", resetForm);
       els.weekPicker.addEventListener("change", () => { saveSettings(); render(); });
-      [els.workDate, els.jobSite, els.startTime, els.endTime, els.breakMinutes, els.hourlyRate].forEach((el) => {
-        el.addEventListener("input", () => {
-          updateLivePreview();
-          saveSettings();
-          renderSummary();
-          renderReport();
-        });
+      els.hourlyRate.addEventListener("input", () => { saveSettings(); updateLivePreview(); renderSummary(); renderReport(); });
+
+      [els.workDate, els.jobSite, els.startTime, els.endTime, els.breakMinutes, els.milesInput, els.dayNote].forEach((el) => {
+        el.addEventListener("input", updateLivePreview);
       });
 
       els.copyWeekBtn.addEventListener("click", () => {
@@ -1100,11 +1122,7 @@
         els.reportOutput.value = report;
         copyText(report);
       });
-      els.copySatBtn.addEventListener("click", () => {
-        const report = buildSaturdayReport();
-        els.reportOutput.value = report;
-        copyText(report);
-      });
+
       els.deleteWeekBtn.addEventListener("click", deleteCurrentWeek);
       els.exportBtn.addEventListener("click", exportBackup);
       els.importBtn.addEventListener("click", () => els.backupFile.click());
@@ -1117,10 +1135,7 @@
       window.addEventListener("pagehide", () => { saveEntries(); saveSettings(); });
       window.addEventListener("beforeunload", () => { saveEntries(); saveSettings(); });
       document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") {
-          saveEntries();
-          saveSettings();
-        }
+        if (document.visibilityState === "hidden") { saveEntries(); saveSettings(); }
       });
     }
 
