@@ -11,8 +11,8 @@
       --bg1: #070b14;
       --bg2: #111827;
       --card: rgba(15, 23, 42, 0.78);
-      --card2: rgba(255, 255, 255, 0.08);
-      --line: rgba(255, 255, 255, 0.14);
+      --card2: rgba(255,255,255,0.08);
+      --line: rgba(255,255,255,0.14);
       --text: #f8fafc;
       --muted: #a7b2c3;
       --blue: #38bdf8;
@@ -20,25 +20,22 @@
       --purple: #a78bfa;
       --yellow: #facc15;
       --red: #fb7185;
-      --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+      --shadow: 0 24px 70px rgba(0,0,0,0.42);
     }
-
     * { box-sizing: border-box; }
     html { -webkit-text-size-adjust: 100%; }
-
     body {
       margin: 0;
       min-height: 100vh;
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
       background:
-        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.34), transparent 32%),
-        radial-gradient(circle at 100% 5%, rgba(167, 139, 250, 0.30), transparent 32%),
-        radial-gradient(circle at 50% 100%, rgba(34, 197, 94, 0.23), transparent 36%),
+        radial-gradient(circle at 0% 0%, rgba(56,189,248,0.34), transparent 32%),
+        radial-gradient(circle at 100% 5%, rgba(167,139,250,0.30), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(34,197,94,0.23), transparent 36%),
         linear-gradient(145deg, var(--bg1), var(--bg2));
       background-attachment: fixed;
     }
-
     button, input, textarea, select { font: inherit; }
     button, input, textarea, select, label { -webkit-tap-highlight-color: transparent; }
 
@@ -47,28 +44,26 @@
       margin: 0 auto;
       padding: max(12px, env(safe-area-inset-top)) 12px 32px;
     }
-
     .app {
       min-height: calc(100vh - 24px);
       padding: 14px;
       border-radius: 34px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.04)), rgba(6, 10, 22, 0.82);
+      background: linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.04)), rgba(6,10,22,0.82);
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
       backdrop-filter: blur(24px);
       overflow: hidden;
     }
 
+    /* ── Hero ── */
     .hero { padding: 14px 5px 12px; }
-
     .hero-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 14px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
-
     .eyebrow, .kicker {
       margin: 0 0 6px;
       color: var(--blue);
@@ -77,61 +72,115 @@
       text-transform: uppercase;
       letter-spacing: 0.14em;
     }
-
     h1, h2 { margin: 0; letter-spacing: -0.05em; }
     h1 { font-size: 2.2rem; line-height: 0.96; }
     h2 { font-size: 1.18rem; line-height: 1.1; }
-
     .subtitle {
       margin: 8px 0 0;
       color: var(--muted);
       font-size: 0.93rem;
       font-weight: 700;
     }
-
     .app-icon {
-      width: 58px;
-      height: 58px;
+      width: 58px; height: 58px;
       flex: 0 0 auto;
-      display: grid;
-      place-items: center;
+      display: grid; place-items: center;
       border-radius: 19px;
       background: linear-gradient(135deg, #2563eb, #22d3ee 52%, #7c3aed);
-      box-shadow: 0 16px 36px rgba(37, 99, 235, 0.34);
+      box-shadow: 0 16px 36px rgba(37,99,235,0.34);
       border: 1px solid rgba(255,255,255,0.28);
       font-size: 1.7rem;
     }
 
-    .save-status {
+    /* ── Week nav bar ── */
+    .week-nav {
       display: flex;
       align-items: center;
-      gap: 8px;
-      width: fit-content;
-      max-width: 100%;
-      padding: 8px 11px;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 10px 0 4px;
+      padding: 9px 12px;
+      border-radius: 18px;
+      background: rgba(56,189,248,0.08);
+      border: 1px solid rgba(56,189,248,0.2);
+    }
+    .week-nav-label {
+      flex: 1;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 950;
+      color: var(--blue);
+      letter-spacing: -0.01em;
+    }
+    .week-nav button {
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      background: rgba(56,189,248,0.14);
+      border: 1px solid rgba(56,189,248,0.28);
+      color: var(--blue);
+      font-size: 1.1rem;
+      display: grid; place-items: center;
+      flex: 0 0 auto;
+    }
+    .week-nav button:active { background: rgba(56,189,248,0.28); }
+    .week-nav .now-btn {
+      padding: 0 10px;
+      width: auto;
+      font-size: 0.72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Pay progress bar ── */
+    .pay-progress {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 20px;
+      background: rgba(2,6,23,0.52);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .pay-progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .pay-progress-top span {
+      font-size: 0.70rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .pay-progress-top strong {
+      font-size: 0.88rem;
+      font-weight: 950;
+      color: var(--green);
+    }
+    .progress-track {
+      height: 8px;
       border-radius: 999px;
-      color: #dcfce7;
-      background: rgba(34, 197, 94, 0.13);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      font-size: 0.78rem;
-      font-weight: 900;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #16a34a, #22d3ee);
+      transition: width 0.4s ease;
+      min-width: 0;
     }
 
-    .save-status.bad {
-      color: #fecdd3;
-      background: rgba(251, 113, 133, 0.13);
-      border-color: rgba(251, 113, 133, 0.3);
-    }
-
+    /* ── Stats ── */
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 9px;
-      margin-top: 14px;
+      margin-top: 12px;
     }
-
     .stat {
-      min-height: 100px;
+      min-height: 96px;
       padding: 12px 10px;
       border-radius: 24px;
       border: 1px solid rgba(255,255,255,0.20);
@@ -139,27 +188,25 @@
       background: var(--card2);
       box-shadow: 0 14px 32px rgba(0,0,0,0.24);
     }
-
-    .stat.blue { background: linear-gradient(145deg, #2563eb, #22d3ee); }
+    .stat.blue  { background: linear-gradient(145deg, #2563eb, #22d3ee); }
     .stat.green { background: linear-gradient(145deg, #16a34a, #a3e635); }
-    .stat.purple { background: linear-gradient(145deg, #7c3aed, #ec4899); }
-
+    .stat.amber { background: linear-gradient(145deg, #b45309, #facc15); }
     .stat span, .stat small {
       display: block;
       color: rgba(255,255,255,0.88);
-      font-size: 0.66rem;
+      font-size: 0.63rem;
       font-weight: 950;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-
     .stat strong {
       display: block;
-      margin: 9px 0 5px;
-      font-size: 1.22rem;
+      margin: 8px 0 4px;
+      font-size: 1.15rem;
       letter-spacing: -0.05em;
     }
 
+    /* ── Panel ── */
     .panel {
       margin-top: 14px;
       padding: 15px;
@@ -168,7 +215,6 @@
       border: 1px solid var(--line);
       box-shadow: 0 16px 42px rgba(0,0,0,0.25);
     }
-
     .panel-head {
       display: flex;
       align-items: center;
@@ -177,24 +223,54 @@
       margin-bottom: 13px;
     }
 
+    /* ── Rate field (inline in hero) ── */
+    .rate-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .rate-row label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 14px;
+      background: rgba(2,6,23,0.52);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.82rem;
+      font-weight: 850;
+      color: var(--muted);
+    }
+    .rate-row label b { color: var(--green); }
+    .rate-row input {
+      width: 64px;
+      min-height: unset;
+      padding: 0;
+      color: var(--text);
+      font-weight: 950;
+      font-size: 0.9rem;
+      background: transparent;
+      border: 0;
+      outline: 0;
+    }
+
+    /* ── Form grid ── */
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-
     .full { grid-column: 1 / -1; }
-
     .field {
       display: grid;
       gap: 7px;
       min-width: 0;
       padding: 12px;
       border-radius: 22px;
-      background: rgba(2, 6, 23, 0.52);
+      background: rgba(2,6,23,0.52);
       border: 1px solid rgba(255,255,255,0.12);
     }
-
     .field span {
       color: var(--muted);
       font-size: 0.70rem;
@@ -202,11 +278,14 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-
+    .field.disabled-field { opacity: 0.38; pointer-events: none; }
     .money-field { display: flex; align-items: center; gap: 7px; }
     .money-field b { color: var(--green); }
 
-    input, textarea, select {
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"] {
       width: 100%;
       min-height: 44px;
       border: 0;
@@ -215,57 +294,55 @@
       background: transparent;
       font-weight: 850;
     }
-
-    input::placeholder { color: rgba(167, 178, 195, 0.58); }
+    input::placeholder { color: rgba(167,178,195,0.58); }
     input[type="date"], input[type="time"] { color-scheme: dark; }
-
     .field:focus-within {
-      border-color: rgba(56, 189, 248, 0.62);
-      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+      border-color: rgba(56,189,248,0.62);
+      box-shadow: 0 0 0 4px rgba(56,189,248,0.12);
     }
 
+    /* ── Segmented control — always horizontal ── */
     .segmented {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 7px;
-      padding: 6px;
+      gap: 6px;
+      padding: 5px;
       margin-bottom: 11px;
-      border-radius: 22px;
-      background: rgba(2, 6, 23, 0.52);
+      border-radius: 20px;
+      background: rgba(2,6,23,0.52);
       border: 1px solid rgba(255,255,255,0.11);
     }
-
     .segmented input { display: none; }
     .segmented span {
       display: grid;
       place-items: center;
-      min-height: 44px;
-      border-radius: 17px;
+      min-height: 42px;
+      border-radius: 15px;
       color: var(--muted);
-      font-size: 0.81rem;
+      font-size: 0.80rem;
       font-weight: 950;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
     }
-
     .segmented input:checked + span {
       color: #06101d;
       background: linear-gradient(135deg, #22d3ee, #3b82f6);
-      box-shadow: 0 10px 24px rgba(59, 130, 246, 0.35);
+      box-shadow: 0 8px 20px rgba(59,130,246,0.35);
     }
 
+    /* ── Live calc ── */
     .calc {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin: 12px 0;
+      margin: 10px 0 12px;
     }
-
     .calc > div {
       padding: 13px;
       border-radius: 22px;
-      background: rgba(2, 6, 23, 0.52);
+      background: rgba(2,6,23,0.52);
       border: 1px solid rgba(255,255,255,0.12);
     }
-
     .calc span {
       display: block;
       color: var(--muted);
@@ -274,65 +351,58 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-
     .calc strong {
       display: block;
       margin-top: 6px;
       font-size: 1.35rem;
       letter-spacing: -0.05em;
     }
+    .calc-hidden { display: none; }
 
-    button {
-      border: 0;
-      cursor: pointer;
-      font-weight: 950;
-    }
-
-    .primary, .secondary, .soft, .danger, .small {
-      min-height: 46px;
-      border-radius: 18px;
-    }
-
+    /* ── Buttons ── */
+    button { border: 0; cursor: pointer; font-weight: 950; }
+    .primary, .secondary, .soft, .danger, .small { min-height: 46px; border-radius: 18px; }
     .primary {
       width: 100%;
+      min-height: 52px;
       color: white;
       background: linear-gradient(135deg, #2563eb, #22d3ee 48%, #7c3aed);
-      box-shadow: 0 15px 32px rgba(37, 99, 235, 0.34);
+      box-shadow: 0 15px 32px rgba(37,99,235,0.34);
+      font-size: 1rem;
+      transition: transform 0.1s, box-shadow 0.1s;
     }
-
+    .primary:active { transform: scale(0.97); box-shadow: 0 8px 18px rgba(37,99,235,0.28); }
     .secondary {
+      width: 100%;
       color: var(--text);
       background: rgba(255,255,255,0.11);
       border: 1px solid rgba(255,255,255,0.14);
     }
-
     .soft {
       padding: 0 13px;
       color: var(--blue);
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.26);
+      background: rgba(56,189,248,0.12);
+      border: 1px solid rgba(56,189,248,0.26);
       white-space: nowrap;
     }
-
     .danger {
       padding: 0 13px;
       color: #fecdd3;
-      background: rgba(251, 113, 133, 0.13);
-      border: 1px solid rgba(251, 113, 133, 0.30);
+      background: rgba(251,113,133,0.13);
+      border: 1px solid rgba(251,113,133,0.30);
       white-space: nowrap;
     }
 
+    /* ── Entries ── */
     .entries { display: grid; gap: 10px; }
-
     .entry {
       position: relative;
       overflow: hidden;
-      padding: 14px;
+      padding: 14px 14px 14px 19px;
       border-radius: 23px;
-      background: rgba(2, 6, 23, 0.52);
+      background: rgba(2,6,23,0.52);
       border: 1px solid rgba(255,255,255,0.12);
     }
-
     .entry::before {
       content: "";
       position: absolute;
@@ -340,21 +410,31 @@
       width: 5px;
       background: rgba(255,255,255,0.18);
     }
-
-    .entry.worked::before { background: linear-gradient(180deg, var(--green), var(--blue)); }
-    .entry.off::before { background: linear-gradient(180deg, #cbd5e1, #64748b); }
+    .entry.worked::before   { background: linear-gradient(180deg, var(--green), var(--blue)); }
+    .entry.off::before      { background: linear-gradient(180deg, #cbd5e1, #64748b); }
     .entry.canceled::before { background: linear-gradient(180deg, var(--yellow), #f97316); }
-
     .entry-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 10px;
     }
-
     .entry-title { font-size: 1rem; font-weight: 950; letter-spacing: -0.025em; }
-    .entry-date { margin-top: 3px; color: var(--muted); font-size: 0.82rem; font-weight: 750; }
-
+    .entry-date  { margin-top: 3px; color: var(--muted); font-size: 0.82rem; font-weight: 750; }
+    .payday-tag {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(34,197,94,0.18);
+      border: 1px solid rgba(34,197,94,0.35);
+      color: var(--green);
+      font-size: 0.62rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
+    }
     .pill {
       flex: 0 0 auto;
       padding: 7px 10px;
@@ -364,782 +444,856 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-
-    .pill.worked { color: #04130c; background: linear-gradient(135deg, #22c55e, #a3e635); }
-    .pill.off { color: #0f172a; background: linear-gradient(135deg, #e2e8f0, #94a3b8); }
-    .pill.canceled { color: #221300; background: linear-gradient(135deg, #facc15, #f97316); }
+    .pill.worked  { color: #04130c; background: linear-gradient(135deg, #22c55e, #a3e635); }
+    .pill.off     { color: #0f172a; background: linear-gradient(135deg, #e2e8f0, #94a3b8); }
+    .pill.canceled{ color: #221300; background: linear-gradient(135deg, #facc15, #f97316); }
     .pill.missing { color: var(--muted); background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.12); }
-
     .entry-details {
       margin-top: 10px;
       color: var(--muted);
       font-size: 0.89rem;
-      line-height: 1.48;
+      line-height: 1.5;
       font-weight: 650;
     }
-
     .entry-details strong { color: var(--text); }
-
     .entry-note {
-      margin-top: 6px;
+      margin-top: 7px;
       padding: 7px 10px;
       border-radius: 12px;
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.18);
+      background: rgba(56,189,248,0.08);
+      border: 1px solid rgba(56,189,248,0.18);
       color: var(--blue);
       font-size: 0.82rem;
       font-weight: 700;
       font-style: italic;
     }
-
     .entry-actions {
       display: flex;
       gap: 8px;
       margin-top: 12px;
     }
-
     .small {
       flex: 1;
       color: var(--text);
       background: rgba(255,255,255,0.10);
       border: 1px solid rgba(255,255,255,0.12);
     }
+    .small.delete { color: #fecdd3; background: rgba(251,113,133,0.11); }
 
-    .small.delete { color: #fecdd3; background: rgba(251, 113, 133, 0.11); }
-
-    .actions-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-
+    /* ── Report textarea ── */
     textarea {
       margin-top: 12px;
+      width: 100%;
       min-height: 290px;
       padding: 15px;
-      resize: vertical;
+      resize: none;
       border-radius: 22px;
       line-height: 1.46;
-      background: rgba(2, 6, 23, 0.70);
+      background: rgba(2,6,23,0.70);
       border: 1px solid rgba(255,255,255,0.13);
       color: #eaf2ff;
       font-size: 0.92rem;
       font-weight: 650;
     }
 
+    /* ── Backup ── */
+    .actions-grid { display: grid; gap: 10px; }
     .backup-note {
       margin: 10px 0 0;
       color: var(--muted);
       font-size: 0.78rem;
-      line-height: 1.35;
+      line-height: 1.4;
       font-weight: 700;
     }
 
+    /* ── Footer ── */
     .footer {
       padding: 16px 8px 4px;
       text-align: center;
-      color: rgba(167, 178, 195, 0.82);
-      font-size: 0.77rem;
+      color: rgba(167,178,195,0.6);
+      font-size: 0.72rem;
       font-weight: 750;
     }
 
+    /* ── Mobile tweaks ── */
     @media (max-width: 430px) {
       .page { padding-left: 10px; padding-right: 10px; }
-      .app { border-radius: 30px; padding: 13px; }
-      h1 { font-size: 2.02rem; }
+      .app  { border-radius: 30px; padding: 13px; }
+      h1    { font-size: 2rem; }
       .stats { gap: 7px; }
-      .stat { min-height: 96px; padding: 10px 8px; border-radius: 21px; }
-      .stat strong { font-size: 1.08rem; }
+      .stat  { min-height: 90px; padding: 10px 8px; border-radius: 21px; }
+      .stat strong { font-size: 1.05rem; }
       .grid { grid-template-columns: 1fr; }
-      .segmented { grid-template-columns: 1fr; }
-      .actions-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <main class="page">
-    <div class="app">
-      <header class="hero">
-        <div class="hero-top">
-          <div>
-            <p class="eyebrow">Work Log</p>
-            <h1>Hours Dashboard</h1>
-            <p class="subtitle">Daily work entries, weekly totals, and boss reports.</p>
-          </div>
-          <div class="app-icon">⏱</div>
+<main class="page">
+  <div class="app">
+
+    <!-- ── Hero ── -->
+    <header class="hero">
+      <div class="hero-top">
+        <div>
+          <p class="eyebrow">Work Log</p>
+          <h1>Hours Dashboard</h1>
+          <p class="subtitle">Daily entries · Weekly totals · Boss report</p>
         </div>
-        <div id="saveStatus" class="save-status">Saving is ready</div>
-        <div class="stats">
-          <div class="stat blue">
-            <span>Mon–Fri</span>
-            <strong id="summaryHours">0.00</strong>
-            <small>Paid Hours</small>
-          </div>
-          <div class="stat green">
-            <span>Gross Pay</span>
-            <strong id="summaryPay">$0.00</strong>
-            <small>Estimated</small>
-          </div>
-          <div class="stat purple">
-            <span>Worked</span>
-            <strong id="summaryDays">0</strong>
-            <small>Days</small>
-          </div>
+        <div class="app-icon">⏱</div>
+      </div>
+
+      <!-- Hourly rate inline -->
+      <div class="rate-row">
+        <label>
+          <b>$</b>
+          <input id="hourlyRate" type="number" min="0" step="0.01" value="18.00" />
+          <span>/ hr</span>
+        </label>
+        <div id="saveStatus" style="font-size:0.75rem;font-weight:900;color:var(--green);padding:8px 10px;border-radius:12px;background:rgba(34,197,94,0.10);border:1px solid rgba(34,197,94,0.25);">Saved</div>
+      </div>
+
+      <!-- Week nav -->
+      <div class="week-nav">
+        <button id="prevWeekBtn" type="button" aria-label="Previous week">‹</button>
+        <div class="week-nav-label" id="weekLabel">This week</div>
+        <button id="nowWeekBtn" class="now-btn" type="button">Today</button>
+        <button id="nextWeekBtn" type="button" aria-label="Next week">›</button>
+      </div>
+
+      <!-- Pay progress -->
+      <div class="pay-progress">
+        <div class="pay-progress-top">
+          <span>Weekly Pay Progress</span>
+          <strong id="payProgressLabel">$0.00 of $720.00</strong>
         </div>
-      </header>
-
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <p class="kicker">Setup</p>
-            <h2>Pay & Report Week</h2>
-          </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="payProgressFill" style="width:0%"></div>
         </div>
-        <div class="grid">
-          <label class="field">
-            <span>Hourly Rate</span>
-            <div class="money-field"><b>$</b><input id="hourlyRate" type="number" min="0" step="0.01" value="18.00" /></div>
-          </label>
-          <label class="field">
-            <span>Report Week</span>
-            <input id="weekPicker" type="date" />
-          </label>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat blue">
+          <span>Paid Hrs</span>
+          <strong id="summaryHours">0.00</strong>
+          <small>This Week</small>
         </div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <p class="kicker">Daily Entry</p>
-            <h2>Log Work Day</h2>
-          </div>
-          <button id="resetBtn" class="soft" type="button">Reset</button>
+        <div class="stat green">
+          <span>Gross Pay</span>
+          <strong id="summaryPay">$0.00</strong>
+          <small>Estimated</small>
         </div>
-
-        <div class="segmented">
-          <label><input type="radio" name="statusRadio" value="worked" checked /><span>Worked</span></label>
-          <label><input type="radio" name="statusRadio" value="off" /><span>Day Off</span></label>
-          <label><input type="radio" name="statusRadio" value="canceled" /><span>Rain Day</span></label>
+        <div class="stat amber">
+          <span>Miles</span>
+          <strong id="summaryMiles">0</strong>
+          <small>This Week</small>
         </div>
-        <input id="status" type="hidden" value="worked" />
+      </div>
+    </header>
 
-        <div class="grid">
-          <label class="field">
-            <span>Date</span>
-            <input id="workDate" type="date" required />
-          </label>
-          <label class="field">
-            <span>Job Site</span>
-            <input id="jobSite" type="text" maxlength="40" placeholder="Lake job" />
-          </label>
-          <label class="field">
-            <span>Clock In</span>
-            <input id="startTime" type="time" value="08:00" />
-          </label>
-          <label class="field">
-            <span>Clock Out</span>
-            <input id="endTime" type="time" />
-          </label>
-          <label class="field full">
-            <span>Unpaid Lunch / Break Minutes</span>
-            <input id="breakMinutes" type="number" min="0" step="5" value="30" />
-          </label>
-          <label class="field full">
-            <span>Miles Driven Today</span>
-            <input id="milesInput" type="number" min="0" step="1" placeholder="0" />
-          </label>
-          <label class="field full">
-            <span>Day Note (optional)</span>
-            <input id="dayNote" type="text" maxlength="60" placeholder="Short note about today..." />
-          </label>
+    <!-- ── Daily Entry ── -->
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="kicker">Daily Entry</p>
+          <h2>Log Work Day</h2>
         </div>
+        <button id="resetBtn" class="soft" type="button">Reset</button>
+      </div>
 
-        <div class="calc">
-          <div><span>Paid Hours</span><strong id="liveHours">0.00</strong></div>
-          <div><span>Estimated Pay</span><strong id="livePay">$0.00</strong></div>
+      <!-- Status selector -->
+      <div class="segmented">
+        <label><input type="radio" name="statusRadio" value="worked" checked /><span>Worked</span></label>
+        <label><input type="radio" name="statusRadio" value="off" /><span>Day Off</span></label>
+        <label><input type="radio" name="statusRadio" value="canceled" /><span>Rain Day</span></label>
+      </div>
+      <input id="status" type="hidden" value="worked" />
+
+      <div class="grid">
+        <!-- Date display (not a full date picker — just today's date, tappable to change) -->
+        <label class="field full">
+          <span>Date</span>
+          <input id="workDate" type="date" required />
+        </label>
+        <label class="field full" id="jobSiteField">
+          <span>Job Site</span>
+          <input id="jobSite" type="text" maxlength="40" placeholder="e.g. Lake job" />
+        </label>
+        <label class="field" id="startTimeField">
+          <span>Clock In</span>
+          <input id="startTime" type="time" value="08:00" />
+        </label>
+        <label class="field" id="endTimeField">
+          <span>Clock Out</span>
+          <input id="endTime" type="time" />
+        </label>
+        <label class="field full" id="breakField">
+          <span>Unpaid Break (minutes)</span>
+          <input id="breakMinutes" type="number" min="0" step="5" value="30" />
+        </label>
+        <label class="field full" id="milesField">
+          <span>Miles Driven Today</span>
+          <input id="milesInput" type="number" min="0" step="1" placeholder="0" />
+        </label>
+        <label class="field full" id="noteField">
+          <span>Day Note (optional)</span>
+          <input id="dayNote" type="text" maxlength="60" placeholder="Short note about today..." />
+        </label>
+      </div>
+
+      <div class="calc" id="calcRow">
+        <div><span>Paid Hours</span><strong id="liveHours">—</strong></div>
+        <div><span>Today's Pay</span><strong id="livePay">—</strong></div>
+      </div>
+
+      <button class="primary" id="saveBtn" type="button">Save Day</button>
+    </section>
+
+    <!-- ── Week View ── -->
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="kicker">Week View</p>
+          <h2 id="weekViewTitle">Monday–Friday</h2>
         </div>
+        <button id="deleteWeekBtn" class="danger" type="button">Delete Week</button>
+      </div>
+      <div id="entriesList" class="entries"></div>
+    </section>
 
-        <button class="primary" id="saveBtn" type="button">Save Day</button>
-      </section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <p class="kicker">Week View</p>
-            <h2>Monday–Friday</h2>
-          </div>
-          <button id="deleteWeekBtn" class="danger" type="button">Delete Week</button>
+    <!-- ── Friday Report ── -->
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="kicker">Copy Ready</p>
+          <h2>Friday Report for Dean</h2>
         </div>
-        <div id="entriesList" class="entries"></div>
-      </section>
+      </div>
+      <button id="copyWeekBtn" class="primary" type="button">📋 Copy Weekly Report</button>
+      <textarea id="reportOutput" readonly></textarea>
+    </section>
 
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <p class="kicker">Copy Ready</p>
-            <h2>Friday Report for Dean</h2>
-          </div>
+    <!-- ── Backup ── -->
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="kicker">Backup</p>
+          <h2>Protect Your Logs</h2>
         </div>
-        <div class="actions-grid">
-          <button id="copyWeekBtn" class="primary" type="button">Copy Weekly Report</button>
-        </div>
-        <textarea id="reportOutput" readonly></textarea>
-      </section>
+      </div>
+      <div class="actions-grid">
+        <button id="exportBtn" class="secondary" type="button">Export Backup</button>
+        <button id="importBtn" class="secondary" type="button">Import Backup</button>
+      </div>
+      <input id="backupFile" type="file" accept="application/json,.json" hidden />
+      <p class="backup-note">Data saves privately on this device only. Tap Export Backup every Friday after sending Dean your report — just in case Safari storage ever gets cleared.</p>
+    </section>
 
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <p class="kicker">Backup</p>
-            <h2>Protect Saved Logs</h2>
-          </div>
-        </div>
-        <div class="actions-grid">
-          <button id="exportBtn" class="secondary" type="button">Export Backup</button>
-          <button id="importBtn" class="secondary" type="button">Import Backup</button>
-        </div>
-        <input id="backupFile" type="file" accept="application/json,.json" hidden />
-        <p class="backup-note">Entries save on this browser/device. Export a backup occasionally so you can restore your logs if Safari storage gets cleared.</p>
-      </section>
+    <footer class="footer">Private · Local storage only · Built for iPhone Safari</footer>
+  </div>
+</main>
 
-      <footer class="footer">Private local browser storage · GitHub Pages ready · Built for iPhone Safari</footer>
-    </div>
-  </main>
+<script>
+  const STORAGE_KEY  = "work_log_dashboard_entries_v2";
+  const SETTINGS_KEY = "work_log_dashboard_settings_v2";
+  const FULL_WEEK_PAY = 40; // hours for a full week
+  const $ = id => document.getElementById(id);
 
-  <script>
-    const STORAGE_KEY = "work_log_dashboard_entries_v2";
-    const SETTINGS_KEY = "work_log_dashboard_settings_v2";
-    const $ = (id) => document.getElementById(id);
+  const els = {
+    saveStatus:      $("saveStatus"),
+    hourlyRate:      $("hourlyRate"),
+    weekLabel:       $("weekLabel"),
+    weekViewTitle:   $("weekViewTitle"),
+    prevWeekBtn:     $("prevWeekBtn"),
+    nextWeekBtn:     $("nextWeekBtn"),
+    nowWeekBtn:      $("nowWeekBtn"),
+    payProgressFill: $("payProgressFill"),
+    payProgressLabel:$("payProgressLabel"),
+    summaryHours:    $("summaryHours"),
+    summaryPay:      $("summaryPay"),
+    summaryMiles:    $("summaryMiles"),
+    workDate:        $("workDate"),
+    status:          $("status"),
+    jobSite:         $("jobSite"),
+    jobSiteField:    $("jobSiteField"),
+    startTime:       $("startTime"),
+    startTimeField:  $("startTimeField"),
+    endTime:         $("endTime"),
+    endTimeField:    $("endTimeField"),
+    breakMinutes:    $("breakMinutes"),
+    breakField:      $("breakField"),
+    milesInput:      $("milesInput"),
+    milesField:      $("milesField"),
+    dayNote:         $("dayNote"),
+    noteField:       $("noteField"),
+    calcRow:         $("calcRow"),
+    liveHours:       $("liveHours"),
+    livePay:         $("livePay"),
+    saveBtn:         $("saveBtn"),
+    resetBtn:        $("resetBtn"),
+    entriesList:     $("entriesList"),
+    reportOutput:    $("reportOutput"),
+    copyWeekBtn:     $("copyWeekBtn"),
+    deleteWeekBtn:   $("deleteWeekBtn"),
+    exportBtn:       $("exportBtn"),
+    importBtn:       $("importBtn"),
+    backupFile:      $("backupFile")
+  };
 
-    const els = {
-      saveStatus: $("saveStatus"),
-      hourlyRate: $("hourlyRate"),
-      weekPicker: $("weekPicker"),
-      workDate: $("workDate"),
-      status: $("status"),
-      jobSite: $("jobSite"),
-      startTime: $("startTime"),
-      endTime: $("endTime"),
-      breakMinutes: $("breakMinutes"),
-      milesInput: $("milesInput"),
-      dayNote: $("dayNote"),
-      liveHours: $("liveHours"),
-      livePay: $("livePay"),
-      saveBtn: $("saveBtn"),
-      resetBtn: $("resetBtn"),
-      entriesList: $("entriesList"),
-      summaryHours: $("summaryHours"),
-      summaryPay: $("summaryPay"),
-      summaryDays: $("summaryDays"),
-      reportOutput: $("reportOutput"),
-      copyWeekBtn: $("copyWeekBtn"),
-      deleteWeekBtn: $("deleteWeekBtn"),
-      exportBtn: $("exportBtn"),
-      importBtn: $("importBtn"),
-      backupFile: $("backupFile")
-    };
+  let entries = {};
+  let editingDate = null;
+  // viewOffset: 0 = current week, -1 = last week, etc.
+  let viewOffset = 0;
 
-    let entries = {};
-    let editingDate = null;
+  // ── Storage ──────────────────────────────────────────────────
+  function storageOK() {
+    try {
+      localStorage.setItem("__t__","1");
+      localStorage.removeItem("__t__");
+      return true;
+    } catch { return false; }
+  }
 
-    // ── Storage helpers ──────────────────────────────────────────
-    function storageAvailable() {
-      try {
-        const key = "__work_log_storage_test__";
-        localStorage.setItem(key, "1");
-        localStorage.removeItem(key);
-        return true;
-      } catch { return false; }
+  function setSaveStatus(ok, text) {
+    els.saveStatus.textContent = text || (ok ? "Saved" : "Save failed");
+    els.saveStatus.style.color = ok ? "var(--green)" : "var(--red)";
+    els.saveStatus.style.background = ok ? "rgba(34,197,94,0.10)" : "rgba(251,113,133,0.10)";
+    els.saveStatus.style.borderColor = ok ? "rgba(34,197,94,0.25)" : "rgba(251,113,133,0.25)";
+  }
+
+  function readJSON(key, fallback) {
+    if (!storageOK()) return fallback;
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const p = JSON.parse(raw);
+      return (p && typeof p === "object") ? p : fallback;
+    } catch { return fallback; }
+  }
+
+  function writeJSON(key, value) {
+    if (!storageOK()) {
+      setSaveStatus(false, "Blocked — use normal Safari");
+      return false;
     }
-
-    function setSaveStatus(ok, text) {
-      els.saveStatus.textContent = text;
-      els.saveStatus.classList.toggle("bad", !ok);
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch {
+      setSaveStatus(false, "Storage full");
+      return false;
     }
+  }
 
-    function readJSON(key, fallback) {
-      if (!storageAvailable()) return fallback;
-      try {
-        const raw = localStorage.getItem(key);
-        if (!raw) return fallback;
-        const parsed = JSON.parse(raw);
-        return parsed && typeof parsed === "object" ? parsed : fallback;
-      } catch { return fallback; }
-    }
+  function saveEntries() {
+    const ok = writeJSON(STORAGE_KEY, entries);
+    if (ok) setSaveStatus(true);
+    return ok;
+  }
 
-    function writeJSON(key, value) {
-      if (!storageAvailable()) {
-        setSaveStatus(false, "Saving blocked: use normal Safari, not Private Browsing");
-        return false;
-      }
-      try {
-        localStorage.setItem(key, JSON.stringify(value));
-        setSaveStatus(true, "Saved on this device");
-        return true;
-      } catch {
-        setSaveStatus(false, "Save failed: browser storage may be full or blocked");
-        return false;
-      }
-    }
+  function saveSettings() {
+    writeJSON(SETTINGS_KEY, {
+      hourlyRate: parseFloat(els.hourlyRate.value) || 18
+    });
+  }
 
-    function saveEntries() { return writeJSON(STORAGE_KEY, entries); }
-    function loadEntries() { return readJSON(STORAGE_KEY, {}); }
+  // ── Date helpers ─────────────────────────────────────────────
+  function pad(n) { return String(n).padStart(2,"0"); }
 
-    function saveSettings() {
-      return writeJSON(SETTINGS_KEY, {
-        hourlyRate: Number(els.hourlyRate.value) || 0,
-        lastWeek: els.weekPicker.value || todayValue()
-      });
-    }
+  function todayValue() {
+    const d = new Date();
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
 
-    function loadSettings() { return readJSON(SETTINGS_KEY, {}); }
+  function toKey(date) {
+    return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+  }
 
-    // ── Date helpers ─────────────────────────────────────────────
-    function pad(n) { return String(n).padStart(2, "0"); }
+  function parseLocal(val) {
+    const [y,m,d] = String(val).split("-").map(Number);
+    return new Date(y, m-1, d);
+  }
 
-    function todayValue() {
-      const d = new Date();
-      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-    }
+  function displayDate(val) {
+    return parseLocal(val).toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" });
+  }
 
-    function toDateInputValue(date) {
-      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-    }
+  function dayName(val) {
+    return parseLocal(val).toLocaleDateString(undefined, { weekday:"long" });
+  }
 
-    function parseLocalDate(value) {
-      const [y, m, d] = String(value).split("-").map(Number);
-      return new Date(y, m - 1, d);
-    }
+  function isFriday(val) {
+    return parseLocal(val).getDay() === 5;
+  }
 
-    function formatDisplayDate(value) {
-      return parseLocalDate(value).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-    }
+  // Get Monday of the current viewing week (offset from today's week)
+  function getViewMonday() {
+    const today = new Date();
+    const dow = today.getDay();
+    const diff = dow === 0 ? -6 : 1 - dow;
+    const monday = new Date(today);
+    monday.setDate(today.getDate() + diff + (viewOffset * 7));
+    monday.setHours(0,0,0,0);
+    return monday;
+  }
 
-    function dayName(value) {
-      return parseLocalDate(value).toLocaleDateString(undefined, { weekday: "long" });
-    }
-
-    function getMonday(date) {
-      const d = new Date(date);
-      const day = d.getDay();
-      const diff = day === 0 ? -6 : 1 - day;
-      d.setDate(d.getDate() + diff);
-      d.setHours(0, 0, 0, 0);
+  function weekDates() {
+    const monday = getViewMonday();
+    return Array.from({length:5}, (_,i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
       return d;
+    });
+  }
+
+  function weekKeys() {
+    return weekDates().map(toKey);
+  }
+
+  function minutesFrom(val) {
+    if (!val) return null;
+    const [h,m] = val.split(":").map(Number);
+    return h*60 + m;
+  }
+
+  function fmtTime(val) {
+    if (!val) return "";
+    const [hRaw, m] = val.split(":").map(Number);
+    const suffix = hRaw >= 12 ? "PM" : "AM";
+    const h = hRaw % 12 || 12;
+    return `${h}:${pad(m)} ${suffix}`;
+  }
+
+  function money(v) { return `$${Number(v||0).toFixed(2)}`; }
+
+  function getRate() { return parseFloat(els.hourlyRate.value) || 0; }
+
+  // ── Calculations ─────────────────────────────────────────────
+  function calcHours(entry) {
+    if (!entry || entry.status !== "worked") return 0;
+    const start = minutesFrom(entry.startTime);
+    const end   = minutesFrom(entry.endTime);
+    const brk   = Number(entry.breakMinutes) || 0;
+    if (start === null || end === null || end <= start) return 0;
+    return Math.max(0, end - start - brk) / 60;
+  }
+
+  function statusLabel(s) {
+    if (s === "worked")   return "Worked";
+    if (s === "off")      return "Day Off";
+    if (s === "canceled") return "Rain Day";
+    return "Not logged";
+  }
+
+  // ── Week label ───────────────────────────────────────────────
+  function updateWeekLabel() {
+    const keys = weekKeys();
+    const start = displayDate(keys[0]);
+    const end   = displayDate(keys[4]);
+    if (viewOffset === 0) {
+      els.weekLabel.textContent = `This week · ${start} – ${end}`;
+    } else if (viewOffset === -1) {
+      els.weekLabel.textContent = `Last week · ${start} – ${end}`;
+    } else if (viewOffset < 0) {
+      els.weekLabel.textContent = `${Math.abs(viewOffset)} weeks ago · ${start} – ${end}`;
+    } else {
+      els.weekLabel.textContent = `${start} – ${end}`;
     }
+    els.weekViewTitle.textContent = `${start} – ${end}`;
+    // Dim next button if at current week
+    els.nextWeekBtn.style.opacity = viewOffset >= 0 ? "0.35" : "1";
+    els.nextWeekBtn.disabled = viewOffset >= 0;
+  }
 
-    function addDays(date, amount) {
-      const d = new Date(date);
-      d.setDate(d.getDate() + amount);
-      return d;
+  // ── Form state ───────────────────────────────────────────────
+  function setFieldDisabled(fieldEl, disabled) {
+    if (disabled) {
+      fieldEl.classList.add("disabled-field");
+    } else {
+      fieldEl.classList.remove("disabled-field");
     }
+    const inp = fieldEl.querySelector("input");
+    if (inp) inp.disabled = disabled;
+  }
 
-    // Returns Mon–Fri only (5 days)
-    function weekDates() {
-      const selected = parseLocalDate(els.weekPicker.value || todayValue());
-      const monday = getMonday(selected);
-      return Array.from({ length: 5 }, (_, i) => addDays(monday, i));
-    }
-
-    function minutesFromTime(value) {
-      if (!value) return null;
-      const [h, m] = value.split(":").map(Number);
-      return h * 60 + m;
-    }
-
-    function formatTime(value) {
-      if (!value) return "";
-      const [hourRaw, minute] = value.split(":").map(Number);
-      const suffix = hourRaw >= 12 ? "PM" : "AM";
-      const hour = hourRaw % 12 || 12;
-      return `${hour}:${pad(minute)} ${suffix}`;
-    }
-
-    function money(value) { return `$${Number(value || 0).toFixed(2)}`; }
-    function hourlyRate() { return Number(els.hourlyRate.value) || 0; }
-
-    // ── Calculations ─────────────────────────────────────────────
-    function calculateHours(entry) {
-      if (!entry || entry.status !== "worked") return 0;
-      const start = minutesFromTime(entry.startTime);
-      const end = minutesFromTime(entry.endTime);
-      const unpaid = Number(entry.breakMinutes) || 0;
-      if (start === null || end === null || end <= start) return 0;
-      return Math.max(0, end - start - unpaid) / 60;
-    }
-
-    function calculatePay(hours) { return hours * hourlyRate(); }
-
-    function statusLabel(status) {
-      if (status === "worked") return "Worked";
-      if (status === "off") return "Day off";
-      if (status === "canceled") return "Canceled / rain day";
-      return "Not logged";
-    }
-
-    // ── Form helpers ─────────────────────────────────────────────
-    function updateFormState() {
-      const worked = els.status.value === "worked";
-      els.jobSite.disabled = !worked;
-      els.startTime.disabled = !worked;
-      els.endTime.disabled = !worked;
-      els.breakMinutes.disabled = !worked;
-      els.milesInput.disabled = !worked;
-      els.dayNote.disabled = !worked;
-      if (!worked) {
-        els.jobSite.value = "";
-        els.endTime.value = "";
-        els.breakMinutes.value = "0";
-        els.milesInput.value = "";
-        els.dayNote.value = "";
-      } else if (!els.breakMinutes.value || Number(els.breakMinutes.value) === 0) {
+  function updateFormState() {
+    const worked = els.status.value === "worked";
+    setFieldDisabled(els.jobSiteField,   !worked);
+    setFieldDisabled(els.startTimeField, !worked);
+    setFieldDisabled(els.endTimeField,   !worked);
+    setFieldDisabled(els.breakField,     !worked);
+    setFieldDisabled(els.milesField,     !worked);
+    setFieldDisabled(els.noteField,      !worked);
+    if (!worked) {
+      els.jobSite.value = "";
+      els.endTime.value = "";
+      els.breakMinutes.value = "0";
+      els.milesInput.value = "";
+      els.dayNote.value = "";
+    } else {
+      // Always restore break to 30 when switching back to Worked
+      if (!els.breakMinutes.value || Number(els.breakMinutes.value) === 0) {
         els.breakMinutes.value = "30";
       }
     }
+    updateLivePreview();
+  }
 
-    function resetForm() {
-      editingDate = null;
-      els.workDate.value = todayValue();
-      els.status.value = "worked";
-      document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
-        radio.checked = radio.value === "worked";
-      });
-      els.jobSite.value = "";
-      els.startTime.value = "08:00";
-      els.endTime.value = "";
-      els.breakMinutes.value = "30";
-      els.milesInput.value = "";
-      els.dayNote.value = "";
-      updateFormState();
-      updateLivePreview();
+  function resetForm() {
+    editingDate = null;
+    els.workDate.value = todayValue();
+    els.status.value = "worked";
+    document.querySelectorAll("input[name='statusRadio']").forEach(r => {
+      r.checked = r.value === "worked";
+    });
+    els.jobSite.value = "";
+    els.startTime.value = "08:00";
+    els.endTime.value = "";
+    els.breakMinutes.value = "30";
+    els.milesInput.value = "";
+    els.dayNote.value = "";
+    updateFormState();
+  }
+
+  function formEntry() {
+    const status = els.status.value;
+    const miles  = els.milesInput.value.trim();
+    return {
+      date:         els.workDate.value,
+      day:          dayName(els.workDate.value),
+      status,
+      jobSite:      status === "worked" ? els.jobSite.value.trim() : "",
+      startTime:    status === "worked" ? els.startTime.value : "",
+      endTime:      status === "worked" ? els.endTime.value : "",
+      breakMinutes: status === "worked" ? Number(els.breakMinutes.value || 0) : 0,
+      miles:        status === "worked" ? (miles === "" ? null : Number(miles)) : null,
+      note:         status === "worked" ? els.dayNote.value.trim() : "",
+      savedAt:      new Date().toISOString()
+    };
+  }
+
+  function updateLivePreview() {
+    if (!els.workDate.value || els.status.value !== "worked") {
+      els.liveHours.textContent = "—";
+      els.livePay.textContent   = "—";
+      return;
     }
-
-    function formEntry() {
-      const status = els.status.value;
-      const miles = els.milesInput.value.trim();
-      return {
-        date: els.workDate.value,
-        day: dayName(els.workDate.value),
-        status,
-        jobSite: status === "worked" ? els.jobSite.value.trim() : "",
-        startTime: status === "worked" ? els.startTime.value : "",
-        endTime: status === "worked" ? els.endTime.value : "",
-        breakMinutes: status === "worked" ? Number(els.breakMinutes.value || 0) : 0,
-        miles: status === "worked" ? (miles === "" ? null : Number(miles)) : null,
-        note: status === "worked" ? els.dayNote.value.trim() : "",
-        savedAt: new Date().toISOString()
-      };
+    const entry = formEntry();
+    const hours = calcHours(entry);
+    if (!entry.endTime || hours <= 0) {
+      els.liveHours.textContent = "—";
+      els.livePay.textContent   = "—";
+      return;
     }
+    els.liveHours.textContent = hours.toFixed(2);
+    els.livePay.textContent   = money(hours * getRate());
+  }
 
-    function updateLivePreview() {
-      if (!els.workDate.value) return;
-      const entry = formEntry();
-      const hours = calculateHours(entry);
-      els.liveHours.textContent = hours.toFixed(2);
-      els.livePay.textContent = money(calculatePay(hours));
+  // ── Save ─────────────────────────────────────────────────────
+  function saveForm() {
+    const entry = formEntry();
+    if (!entry.date) { alert("Choose a date first."); return; }
+    if (entry.status === "worked") {
+      if (!entry.endTime) { alert("Enter a clock-out time before saving."); return; }
+      if (calcHours(entry) <= 0) { alert("Check clock-in, clock-out, and break minutes — hours came out to zero."); return; }
     }
+    if (editingDate && editingDate !== entry.date) delete entries[editingDate];
+    entries[entry.date] = entry;
+    const ok = saveEntries();
+    saveSettings();
+    if (!ok) return;
+    // Jump view to the week of the saved entry
+    const saved = parseLocal(entry.date);
+    const todayMonday = (() => {
+      const t = new Date();
+      const dow = t.getDay();
+      const d = new Date(t);
+      d.setDate(t.getDate() + (dow === 0 ? -6 : 1 - dow));
+      d.setHours(0,0,0,0);
+      return d;
+    })();
+    const savedMonday = new Date(saved);
+    const sdow = saved.getDay();
+    savedMonday.setDate(saved.getDate() + (sdow === 0 ? -6 : 1 - sdow));
+    savedMonday.setHours(0,0,0,0);
+    const diffWeeks = Math.round((savedMonday - todayMonday) / (7*24*3600*1000));
+    viewOffset = diffWeeks;
+    resetForm();
+    render();
+  }
 
-    // ── Save ─────────────────────────────────────────────────────
-    function saveForm() {
-      const entry = formEntry();
-      if (!entry.date) { alert("Choose a date first."); return; }
-      if (entry.status === "worked") {
-        if (!entry.endTime) { alert("Enter a clock-out time before saving a worked day."); return; }
-        if (calculateHours(entry) <= 0) { alert("Check the clock-in time, clock-out time, and break minutes."); return; }
-      }
-      if (editingDate && editingDate !== entry.date) delete entries[editingDate];
-      entries[entry.date] = entry;
-      const saved = saveEntries();
-      saveSettings();
-      if (!saved) return;
-      els.weekPicker.value = entry.date;
-      resetForm();
-      render();
-    }
+  // ── Edit / Delete ────────────────────────────────────────────
+  function editEntry(dateKey) {
+    const entry = entries[dateKey];
+    if (!entry) return;
+    editingDate = dateKey;
+    els.workDate.value    = entry.date;
+    els.status.value      = entry.status;
+    document.querySelectorAll("input[name='statusRadio']").forEach(r => {
+      r.checked = r.value === entry.status;
+    });
+    els.jobSite.value     = entry.jobSite || "";
+    els.startTime.value   = entry.startTime || "08:00";
+    els.endTime.value     = entry.endTime || "";
+    els.breakMinutes.value= String(entry.breakMinutes ?? 30);
+    els.milesInput.value  = (entry.miles !== null && entry.miles !== undefined) ? String(entry.miles) : "";
+    els.dayNote.value     = entry.note || "";
+    updateFormState();
+    updateLivePreview();
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }
 
-    // ── Edit / Delete ────────────────────────────────────────────
-    function editEntry(dateKey) {
+  function deleteEntry(dateKey) {
+    if (!confirm(`Delete entry for ${displayDate(dateKey)}?`)) return;
+    delete entries[dateKey];
+    saveEntries();
+    render();
+  }
+
+  // ── Render entries ───────────────────────────────────────────
+  function renderEntries() {
+    els.entriesList.innerHTML = "";
+    weekKeys().forEach(dateKey => {
       const entry = entries[dateKey];
-      if (!entry) return;
-      editingDate = dateKey;
-      els.workDate.value = entry.date;
-      els.status.value = entry.status;
-      document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
-        radio.checked = radio.value === entry.status;
-      });
-      els.jobSite.value = entry.jobSite || "";
-      els.startTime.value = entry.startTime || "08:00";
-      els.endTime.value = entry.endTime || "";
-      els.breakMinutes.value = String(entry.breakMinutes ?? 30);
-      els.milesInput.value = entry.miles !== null && entry.miles !== undefined ? String(entry.miles) : "";
-      els.dayNote.value = entry.note || "";
-      updateFormState();
-      updateLivePreview();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+      const row = document.createElement("div");
 
-    function deleteEntry(dateKey) {
-      if (!confirm(`Delete the entry for ${formatDisplayDate(dateKey)}?`)) return;
-      delete entries[dateKey];
-      saveEntries();
-      render();
-    }
-
-    function selectedWeekKeys() {
-      return weekDates().map(toDateInputValue);
-    }
-
-    // ── Render entries ───────────────────────────────────────────
-    function renderEntries() {
-      els.entriesList.innerHTML = "";
-      selectedWeekKeys().forEach((dateKey) => {
-        const entry = entries[dateKey];
-        const row = document.createElement("div");
-        if (!entry) {
-          row.className = "entry";
-          row.innerHTML = `
-            <div class="entry-top">
-              <div><div class="entry-title">${dayName(dateKey)}</div><div class="entry-date">${formatDisplayDate(dateKey)}</div></div>
-              <span class="pill missing">Not logged</span>
-            </div>
-            <div class="entry-details">No entry saved for this day.</div>
-          `;
-          els.entriesList.appendChild(row);
-          return;
-        }
-
-        const hours = calculateHours(entry);
-        const pay = calculatePay(hours);
-        const milesText = entry.miles !== null && entry.miles !== undefined
-          ? `Miles driven: <strong>${entry.miles}</strong>`
-          : "";
-        const noteHtml = entry.note ? `<div class="entry-note">📝 ${entry.note}</div>` : "";
-
-        row.className = `entry ${entry.status}`;
+      if (!entry) {
+        row.className = "entry";
+        const fri = isFriday(dateKey) ? `<span class="payday-tag">💰 Payday</span>` : "";
         row.innerHTML = `
           <div class="entry-top">
-            <div><div class="entry-title">${entry.day}</div><div class="entry-date">${formatDisplayDate(entry.date)}</div></div>
-            <span class="pill ${entry.status}">${statusLabel(entry.status)}</span>
+            <div>
+              <div class="entry-title">${dayName(dateKey)}${fri}</div>
+              <div class="entry-date">${displayDate(dateKey)}</div>
+            </div>
+            <span class="pill missing">Not logged</span>
           </div>
-          <div class="entry-details">
-            ${entry.status === "worked"
-              ? `<strong>${entry.jobSite || "No job site"}</strong><br>
-                 ${formatTime(entry.startTime)} – ${formatTime(entry.endTime)} · Lunch: ${entry.breakMinutes} min<br>
-                 Paid hours: <strong>${hours.toFixed(2)}</strong> · Pay: <strong>${money(pay)}</strong><br>
-                 ${milesText}`
-              : `${statusLabel(entry.status)} · 0.00 paid hours · $0.00`}
-          </div>
-          ${noteHtml}
-          <div class="entry-actions">
-            <button class="small" type="button" data-edit="${entry.date}">Edit</button>
-            <button class="small delete" type="button" data-delete="${entry.date}">Delete</button>
-          </div>
-        `;
+          <div class="entry-details">No entry saved yet.</div>`;
         els.entriesList.appendChild(row);
-      });
+        return;
+      }
 
-      document.querySelectorAll("[data-edit]").forEach((btn) => btn.addEventListener("click", () => editEntry(btn.dataset.edit)));
-      document.querySelectorAll("[data-delete]").forEach((btn) => btn.addEventListener("click", () => deleteEntry(btn.dataset.delete)));
-    }
+      const hours    = calcHours(entry);
+      const pay      = hours * getRate();
+      const hasMiles = entry.miles !== null && entry.miles !== undefined;
+      const fri      = isFriday(dateKey) ? `<span class="payday-tag">💰 Payday</span>` : "";
 
-    // ── Summary ──────────────────────────────────────────────────
-    function renderSummary() {
-      let totalHours = 0;
-      let totalPay = 0;
-      let workedDays = 0;
-      selectedWeekKeys().forEach((key) => {
-        const entry = entries[key];
-        if (!entry || entry.status !== "worked") return;
-        const hours = calculateHours(entry);
-        workedDays += 1;
+      row.className = `entry ${entry.status}`;
+      row.innerHTML = `
+        <div class="entry-top">
+          <div>
+            <div class="entry-title">${entry.day}${fri}</div>
+            <div class="entry-date">${displayDate(entry.date)}</div>
+          </div>
+          <span class="pill ${entry.status}">${statusLabel(entry.status)}</span>
+        </div>
+        <div class="entry-details">
+          ${entry.status === "worked" ? `
+            <strong>${entry.jobSite || "No job site"}</strong><br>
+            ${fmtTime(entry.startTime)} – ${fmtTime(entry.endTime)} · Break: ${entry.breakMinutes} min<br>
+            Paid hours: <strong>${hours.toFixed(2)}</strong> · Pay: <strong>${money(pay)}</strong>
+            ${hasMiles ? `<br>Miles driven: <strong>${entry.miles} mi</strong>` : ""}
+          ` : `${statusLabel(entry.status)} · 0.00 hrs · $0.00`}
+        </div>
+        ${entry.note ? `<div class="entry-note">📝 ${entry.note}</div>` : ""}
+        <div class="entry-actions">
+          <button class="small" type="button" data-edit="${entry.date}">Edit</button>
+          <button class="small delete" type="button" data-delete="${entry.date}">Delete</button>
+        </div>`;
+      els.entriesList.appendChild(row);
+    });
+
+    els.entriesList.querySelectorAll("[data-edit]").forEach(btn =>
+      btn.addEventListener("click", () => editEntry(btn.dataset.edit)));
+    els.entriesList.querySelectorAll("[data-delete]").forEach(btn =>
+      btn.addEventListener("click", () => deleteEntry(btn.dataset.delete)));
+  }
+
+  // ── Summary + progress ───────────────────────────────────────
+  function renderSummary() {
+    let totalHours = 0, totalPay = 0, totalMiles = 0;
+    weekKeys().forEach(key => {
+      const e = entries[key];
+      if (!e || e.status !== "worked") return;
+      const h = calcHours(e);
+      totalHours += h;
+      totalPay   += h * getRate();
+      totalMiles += Number(e.miles) || 0;
+    });
+    els.summaryHours.textContent = totalHours.toFixed(2);
+    els.summaryPay.textContent   = money(totalPay);
+    els.summaryMiles.textContent = totalMiles;
+
+    const fullPay = FULL_WEEK_PAY * getRate();
+    const pct     = Math.min(100, fullPay > 0 ? (totalPay / fullPay) * 100 : 0);
+    els.payProgressFill.style.width  = pct.toFixed(1) + "%";
+    els.payProgressLabel.textContent = `${money(totalPay)} of ${money(fullPay)}`;
+  }
+
+  // ── Report ───────────────────────────────────────────────────
+  function buildReport() {
+    const keys = weekKeys();
+    const weekStart = displayDate(keys[0]);
+    const weekEnd   = displayDate(keys[4]);
+    let totalHours = 0, totalPay = 0, totalMiles = 0, workedDays = 0;
+    let report = `Work Hours Report — Dean\nWeek: ${weekStart} through ${weekEnd}\n\n`;
+
+    keys.forEach(key => {
+      const e = entries[key];
+      if (!e) {
+        report += `${dayName(key)} (${displayDate(key)}): Not logged\n\n`;
+        return;
+      }
+      const hours = calcHours(e);
+      const pay   = hours * getRate();
+      report += `${dayName(key)} (${displayDate(key)})\n`;
+      if (e.status === "worked") {
+        workedDays++;
         totalHours += hours;
-        totalPay += calculatePay(hours);
-      });
-      els.summaryHours.textContent = totalHours.toFixed(2);
-      els.summaryPay.textContent = money(totalPay);
-      els.summaryDays.textContent = String(workedDays);
-    }
-
-    // ── Report builder ───────────────────────────────────────────
-    function buildWeekReport() {
-      const keys = selectedWeekKeys();
-      const weekStart = formatDisplayDate(keys[0]);
-      const weekEnd = formatDisplayDate(keys[4]);
-      let totalHours = 0;
-      let totalPay = 0;
-      let totalMiles = 0;
-      let workedDays = 0;
-      let report = `Work Hours Report — Dean\nWeek: ${weekStart} through ${weekEnd}\n\n`;
-
-      keys.forEach((key) => {
-        const entry = entries[key];
-        if (!entry) {
-          report += `${dayName(key)} (${formatDisplayDate(key)}): Not logged\n\n`;
-          return;
+        totalPay   += pay;
+        report += `  Job site: ${e.jobSite || "Not entered"}\n`;
+        report += `  Time: ${fmtTime(e.startTime)} to ${fmtTime(e.endTime)}\n`;
+        report += `  Unpaid break: ${e.breakMinutes} min\n`;
+        report += `  Paid hours: ${hours.toFixed(2)}\n`;
+        report += `  Estimated pay: ${money(pay)}\n`;
+        if (e.miles !== null && e.miles !== undefined) {
+          report += `  Miles driven: ${e.miles} mi\n`;
+          totalMiles += Number(e.miles) || 0;
         }
-        const hours = calculateHours(entry);
-        const pay = calculatePay(hours);
-        report += `${dayName(key)} (${formatDisplayDate(key)})\n`;
-        if (entry.status === "worked") {
-          workedDays += 1;
-          totalHours += hours;
-          totalPay += pay;
-          report += `  Job site: ${entry.jobSite || "Not entered"}\n`;
-          report += `  Time: ${formatTime(entry.startTime)} to ${formatTime(entry.endTime)}\n`;
-          report += `  Unpaid lunch/break: ${entry.breakMinutes} min\n`;
-          report += `  Paid hours: ${hours.toFixed(2)}\n`;
-          report += `  Estimated gross pay: ${money(pay)}\n`;
-          if (entry.miles !== null && entry.miles !== undefined) {
-            report += `  Miles driven: ${entry.miles}\n`;
-            totalMiles += Number(entry.miles) || 0;
-          }
-          if (entry.note) {
-            report += `  Note: ${entry.note}\n`;
-          }
-          report += "\n";
-        } else {
-          report += `  Status: ${statusLabel(entry.status)}\n  Paid hours: 0.00\n\n`;
-        }
-      });
-
-      const average = workedDays ? totalHours / workedDays : 0;
-      report += `──────────────────────────\n`;
-      report += `Weekly Totals\n`;
-      report += `  Days worked: ${workedDays}\n`;
-      report += `  Total paid hours: ${totalHours.toFixed(2)}\n`;
-      report += `  Avg hours/day: ${average.toFixed(2)}\n`;
-      report += `  Total estimated gross pay: ${money(totalPay)}\n`;
-      report += `  Total miles driven: ${totalMiles}`;
-      return report;
-    }
-
-    function renderReport() { els.reportOutput.value = buildWeekReport(); }
-
-    function render() {
-      renderEntries();
-      renderSummary();
-      renderReport();
-    }
-
-    // ── Copy ─────────────────────────────────────────────────────
-    async function copyText(text) {
-      try {
-        await navigator.clipboard.writeText(text);
-        alert("Report copied to clipboard.");
-      } catch {
-        els.reportOutput.focus();
-        els.reportOutput.select();
-        alert("The report is selected — copy it manually.");
-      }
-    }
-
-    // ── Delete week ──────────────────────────────────────────────
-    function deleteCurrentWeek() {
-      if (!confirm("Delete all Monday–Friday entries for this selected week?")) return;
-      selectedWeekKeys().forEach((key) => delete entries[key]);
-      saveEntries();
-      render();
-    }
-
-    // ── Backup ───────────────────────────────────────────────────
-    function exportBackup() {
-      const backup = {
-        app: "work-log-dashboard",
-        version: 2,
-        exportedAt: new Date().toISOString(),
-        entries,
-        settings: loadSettings()
-      };
-      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `work-log-backup-${todayValue()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function importBackupFile(file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const data = JSON.parse(reader.result);
-          const importedEntries = data.entries && typeof data.entries === "object" ? data.entries : data;
-          if (!importedEntries || typeof importedEntries !== "object") throw new Error("Invalid backup");
-          if (!confirm("Import this backup? It will merge with your current saved entries.")) return;
-          entries = { ...entries, ...importedEntries };
-          saveEntries();
-          render();
-          alert("Backup imported.");
-        } catch { alert("That backup file could not be imported."); }
-      };
-      reader.readAsText(file);
-    }
-
-    // ── Radio buttons ────────────────────────────────────────────
-    function initStatusRadios() {
-      document.querySelectorAll("input[name='statusRadio']").forEach((radio) => {
-        radio.addEventListener("change", () => {
-          if (!radio.checked) return;
-          els.status.value = radio.value;
-          updateFormState();
-          updateLivePreview();
-        });
-      });
-    }
-
-    // ── Init ─────────────────────────────────────────────────────
-    function init() {
-      entries = loadEntries();
-      const settings = loadSettings();
-
-      if (!storageAvailable()) {
-        setSaveStatus(false, "Saving blocked: use normal Safari, not Private Browsing");
+        if (e.note) report += `  Note: ${e.note}\n`;
+        report += "\n";
       } else {
-        setSaveStatus(true, "Saving is ready");
+        report += `  Status: ${statusLabel(e.status)}\n  Hours: 0.00\n\n`;
       }
+    });
 
-      els.hourlyRate.value = settings.hourlyRate || "18.00";
-      els.weekPicker.value = settings.lastWeek || todayValue();
+    const avg = workedDays ? totalHours / workedDays : 0;
+    report += `──────────────────────────\n`;
+    report += `WEEKLY TOTALS\n`;
+    report += `  Days worked: ${workedDays}\n`;
+    report += `  Total paid hours: ${totalHours.toFixed(2)}\n`;
+    report += `  Avg hours/day: ${avg.toFixed(2)}\n`;
+    report += `  Estimated gross pay: ${money(totalPay)}\n`;
+    report += `  Total miles driven: ${totalMiles} mi`;
+    return report;
+  }
 
-      initStatusRadios();
-      resetForm();
-      render();
+  function renderReport() {
+    els.reportOutput.value = buildReport();
+  }
 
-      // Event listeners
-      els.saveBtn.addEventListener("click", saveForm);
-      els.resetBtn.addEventListener("click", resetForm);
-      els.weekPicker.addEventListener("change", () => { saveSettings(); render(); });
-      els.hourlyRate.addEventListener("input", () => { saveSettings(); updateLivePreview(); renderSummary(); renderReport(); });
+  function render() {
+    updateWeekLabel();
+    renderEntries();
+    renderSummary();
+    renderReport();
+  }
 
-      [els.workDate, els.jobSite, els.startTime, els.endTime, els.breakMinutes, els.milesInput, els.dayNote].forEach((el) => {
-        el.addEventListener("input", updateLivePreview);
-      });
+  // ── Copy ─────────────────────────────────────────────────────
+  async function copyReport() {
+    const text = buildReport();
+    els.reportOutput.value = text;
+    try {
+      await navigator.clipboard.writeText(text);
+      els.copyWeekBtn.textContent = "✅ Copied!";
+      setTimeout(() => { els.copyWeekBtn.textContent = "📋 Copy Weekly Report"; }, 2200);
+    } catch {
+      els.reportOutput.focus();
+      els.reportOutput.select();
+      alert("Report selected — copy it manually (press and hold → Copy All).");
+    }
+  }
 
-      els.copyWeekBtn.addEventListener("click", () => {
-        const report = buildWeekReport();
-        els.reportOutput.value = report;
-        copyText(report);
-      });
+  // ── Delete week ──────────────────────────────────────────────
+  function deleteWeek() {
+    if (!confirm("Delete all entries for this week?")) return;
+    weekKeys().forEach(k => delete entries[k]);
+    saveEntries();
+    render();
+  }
 
-      els.deleteWeekBtn.addEventListener("click", deleteCurrentWeek);
-      els.exportBtn.addEventListener("click", exportBackup);
-      els.importBtn.addEventListener("click", () => els.backupFile.click());
-      els.backupFile.addEventListener("change", () => {
-        const file = els.backupFile.files && els.backupFile.files[0];
-        if (file) importBackupFile(file);
-        els.backupFile.value = "";
-      });
+  // ── Backup ───────────────────────────────────────────────────
+  function exportBackup() {
+    const blob = new Blob([JSON.stringify({ app:"work-log-dashboard", version:2, exportedAt:new Date().toISOString(), entries }, null, 2)], { type:"application/json" });
+    const url = URL.createObjectURL(blob);
+    const a   = document.createElement("a");
+    a.href = url;
+    a.download = `work-log-backup-${todayValue()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
 
-      window.addEventListener("pagehide", () => { saveEntries(); saveSettings(); });
-      window.addEventListener("beforeunload", () => { saveEntries(); saveSettings(); });
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") { saveEntries(); saveSettings(); }
-      });
+  function importBackup(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        const imp  = data.entries && typeof data.entries === "object" ? data.entries : data;
+        if (!imp || typeof imp !== "object") throw new Error("bad");
+        if (!confirm("Merge this backup with your current entries?")) return;
+        entries = { ...entries, ...imp };
+        saveEntries();
+        render();
+        alert("Backup imported.");
+      } catch { alert("Could not read that backup file."); }
+    };
+    reader.readAsText(file);
+  }
+
+  // ── Init ─────────────────────────────────────────────────────
+  function init() {
+    entries = readJSON(STORAGE_KEY, {});
+    const settings = readJSON(SETTINGS_KEY, {});
+
+    if (!storageOK()) {
+      setSaveStatus(false, "Use normal Safari (not Private)");
     }
 
-    init();
-  </script>
+    // Use saved hourly rate, fall back to 18
+    els.hourlyRate.value = (settings.hourlyRate != null) ? settings.hourlyRate : "18.00";
+
+    // Radio buttons
+    document.querySelectorAll("input[name='statusRadio']").forEach(r => {
+      r.addEventListener("change", () => {
+        if (!r.checked) return;
+        els.status.value = r.value;
+        updateFormState();
+      });
+    });
+
+    resetForm();
+    render();
+
+    // Listeners
+    els.saveBtn.addEventListener("click", saveForm);
+    els.resetBtn.addEventListener("click", resetForm);
+    els.prevWeekBtn.addEventListener("click", () => { viewOffset--; render(); });
+    els.nextWeekBtn.addEventListener("click", () => { if (viewOffset < 0) { viewOffset++; render(); } });
+    els.nowWeekBtn.addEventListener("click",  () => { viewOffset = 0; render(); });
+    els.hourlyRate.addEventListener("input",  () => { saveSettings(); renderSummary(); renderReport(); updateLivePreview(); });
+    els.copyWeekBtn.addEventListener("click", copyReport);
+    els.deleteWeekBtn.addEventListener("click", deleteWeek);
+    els.exportBtn.addEventListener("click", exportBackup);
+    els.importBtn.addEventListener("click", () => els.backupFile.click());
+    els.backupFile.addEventListener("change", () => {
+      const f = els.backupFile.files && els.backupFile.files[0];
+      if (f) importBackup(f);
+      els.backupFile.value = "";
+    });
+
+    [els.workDate, els.startTime, els.endTime, els.breakMinutes].forEach(el =>
+      el.addEventListener("input", updateLivePreview));
+
+    // Auto-save on leave
+    ["pagehide","beforeunload"].forEach(ev => window.addEventListener(ev, () => { saveEntries(); saveSettings(); }));
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") { saveEntries(); saveSettings(); }
+    });
+  }
+
+  init();
+</script>
 </body>
 </html>
