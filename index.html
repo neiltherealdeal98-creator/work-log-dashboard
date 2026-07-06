@@ -42,6 +42,10 @@
     }
     button, input, textarea, select { font: inherit; }
     button, input, textarea, select, label { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2px solid rgba(56,189,248,0.7);
+      outline-offset: 2px;
+    }
 
     .page {
       width: min(100%, 560px);
@@ -55,7 +59,7 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.04)), rgba(6,10,22,0.82);
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(24px);
+      backdrop-filter: blur(16px);
       overflow: hidden;
     }
 
@@ -195,7 +199,7 @@
     }
     .pay-progress-top span {
       font-size: 0.70rem;
-      font-weight: 950;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
@@ -243,14 +247,14 @@
       display: block;
       color: rgba(255,255,255,0.92);
       font-size: 0.66rem;
-      font-weight: 950;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.08em;
     }
     .stat strong {
       display: block;
       margin: 8px 0 4px;
-      font-size: 1.15rem;
+      font-size: 1.22rem;
       letter-spacing: -0.05em;
     }
 
@@ -332,7 +336,7 @@
     .field span {
       color: var(--muted);
       font-size: 0.70rem;
-      font-weight: 950;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
@@ -358,6 +362,22 @@
       border-color: rgba(56,189,248,0.62);
       box-shadow: 0 0 0 4px rgba(56,189,248,0.12);
     }
+    .time-wrap { display: flex; align-items: center; gap: 6px; }
+    .time-wrap input { flex: 1; min-width: 0; }
+    .now-chip {
+      flex: 0 0 auto;
+      min-height: 44px;
+      padding: 0 11px;
+      border-radius: 12px;
+      color: var(--blue);
+      background: rgba(56,189,248,0.12);
+      border: 1px solid rgba(56,189,248,0.26);
+      font-size: 0.7rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .now-chip:active { background: rgba(56,189,248,0.26); }
 
     /* ── Segmented control — always horizontal ── */
     .segmented {
@@ -405,7 +425,7 @@
       display: block;
       color: var(--muted);
       font-size: 0.70rem;
-      font-weight: 950;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
@@ -467,6 +487,24 @@
       inset: 0 auto 0 0;
       width: 5px;
       background: rgba(255,255,255,0.18);
+    }
+    .entry.today {
+      border-color: rgba(56,189,248,0.5);
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.13);
+    }
+    .today-tag {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(56,189,248,0.16);
+      border: 1px solid rgba(56,189,248,0.4);
+      color: var(--blue);
+      font-size: 0.62rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
     }
     .entry.worked::before   { background: linear-gradient(180deg, var(--green), var(--blue)); }
     .entry.off::before      { background: linear-gradient(180deg, #cbd5e1, #64748b); }
@@ -549,7 +587,7 @@
     textarea {
       margin-top: 12px;
       width: 100%;
-      min-height: 290px;
+      min-height: 230px;
       padding: 15px;
       resize: none;
       border-radius: 22px;
@@ -693,15 +731,22 @@
         </label>
         <label class="field full" id="jobSiteField">
           <span>Job Site</span>
-          <input id="jobSite" type="text" maxlength="40" placeholder="e.g. Lake job" />
+          <input id="jobSite" type="text" list="siteList" maxlength="40" placeholder="e.g. Lake job" />
+          <datalist id="siteList"></datalist>
         </label>
         <label class="field" id="startTimeField">
           <span>Clock In</span>
-          <input id="startTime" type="time" value="08:00" />
+          <div class="time-wrap">
+            <input id="startTime" type="time" value="08:00" />
+            <button type="button" class="now-chip" data-now="startTime">Now</button>
+          </div>
         </label>
         <label class="field" id="endTimeField">
           <span>Clock Out</span>
-          <input id="endTime" type="time" />
+          <div class="time-wrap">
+            <input id="endTime" type="time" />
+            <button type="button" class="now-chip" data-now="endTime">Now</button>
+          </div>
         </label>
         <label class="field full" id="breakField">
           <span>Unpaid Break (minutes)</span>
@@ -817,13 +862,14 @@
     exportBtn:       $("exportBtn"),
     importBtn:       $("importBtn"),
     backupFile:      $("backupFile"),
+    siteList:        $("siteList"),
     backupBanner:    $("backupBanner"),
     bannerExportBtn: $("bannerExportBtn"),
     bannerSnoozeBtn: $("bannerSnoozeBtn")
   };
 
   let entries  = {};
-  let settings = { hourlyRate: 18, lastExportAt: null, bannerSnoozeUntil: 0 };
+  let settings = { hourlyRate: 18, lastExportAt: null, bannerSnoozeUntil: 0, lastJobSite: "", recentSites: [] };
   let editingDate = null;
   let viewOffset  = 0;        // 0 = current week, -1 = last week, etc.
   let formDirty   = false;    // has the user touched the form since last reset/save?
@@ -939,9 +985,10 @@
     if (!idbSettings || typeof idbSettings !== "object") idbSettings = {};
     entries  = mergeEntries(idbEntries, lsEntries);
     settings = Object.assign(
-      { hourlyRate: 18, lastExportAt: null, bannerSnoozeUntil: 0 },
+      { hourlyRate: 18, lastExportAt: null, bannerSnoozeUntil: 0, lastJobSite: "", recentSites: [] },
       idbSettings, lsSettings
     );
+    if (!Array.isArray(settings.recentSites)) settings.recentSites = [];
     await persistAll(); // heal whichever store was missing or behind
   }
 
@@ -951,6 +998,12 @@
   function todayValue() {
     const d = new Date();
     return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+
+  function nowTimeValue() {
+    const d = new Date();
+    d.setMinutes(Math.round(d.getMinutes() / 5) * 5, 0, 0); // round to nearest 5 min
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 
   function toKey(date) {
@@ -1099,7 +1152,7 @@
     document.querySelectorAll("input[name='statusRadio']").forEach(r => {
       r.checked = r.value === "worked";
     });
-    els.jobSite.value = "";
+    els.jobSite.value = settings.lastJobSite || ""; // prefill yesterday's site (judgment call)
     els.startTime.value = "08:00";
     els.endTime.value = "";
     els.breakMinutes.value = "30";
@@ -1155,8 +1208,13 @@
     }
     if (editingDate && editingDate !== entry.date) delete entries[editingDate];
     entries[entry.date] = entry;
+    if (entry.status === "worked" && entry.jobSite) {
+      settings.lastJobSite = entry.jobSite;
+      settings.recentSites = [entry.jobSite, ...settings.recentSites.filter(x => x !== entry.jobSite)].slice(0, 6);
+    }
     const ok = await persistAll();
     if (!ok) return;
+    refreshSiteList();
 
     // Jump the view to the week of the saved entry
     const saved = parseLocal(entry.date);
@@ -1215,12 +1273,14 @@
     displayKeys().forEach(dateKey => {
       const entry = entries[dateKey];
       const row = document.createElement("div");
+      const today = dateKey === todayValue();
       const tags =
+        (today              ? `<span class="today-tag">Today</span>`      : "") +
         (isFriday(dateKey)  ? `<span class="payday-tag">💰 Payday</span>` : "") +
         (isWeekend(dateKey) ? `<span class="weekend-tag">Weekend</span>`  : "");
 
       if (!entry) {
-        row.className = "entry";
+        row.className = "entry" + (today ? " today" : "");
         row.innerHTML = `
           <div class="entry-top">
             <div>
@@ -1238,7 +1298,7 @@
       const pay      = hours * getRate();
       const hasMiles = entry.miles !== null && entry.miles !== undefined;
 
-      row.className = `entry ${entry.status}`;
+      row.className = `entry ${entry.status}` + (today ? " today" : "");
       row.innerHTML = `
         <div class="entry-top">
           <div>
@@ -1263,10 +1323,6 @@
       els.entriesList.appendChild(row);
     });
 
-    els.entriesList.querySelectorAll("[data-edit]").forEach(btn =>
-      btn.addEventListener("click", () => editEntry(btn.dataset.edit)));
-    els.entriesList.querySelectorAll("[data-delete]").forEach(btn =>
-      btn.addEventListener("click", () => deleteEntry(btn.dataset.delete)));
   }
 
   // ── Summary + progress (includes weekend entries) ────────────
@@ -1352,6 +1408,11 @@
     const hasEntries = Object.keys(entries).length > 0;
     const snoozed = Date.now() < (Number(settings.bannerSnoozeUntil) || 0);
     els.backupBanner.hidden = !(hasEntries && backupStale() && !snoozed);
+  }
+
+  function refreshSiteList() {
+    els.siteList.innerHTML = (settings.recentSites || [])
+      .map(x => `<option value="${esc(x)}"></option>`).join("");
   }
 
   function render() {
@@ -1496,11 +1557,29 @@
       });
     });
 
+    refreshSiteList();
     resetForm();
     render();
 
     // Listeners
     els.saveBtn.addEventListener("click", saveForm);
+    els.entriesList.addEventListener("click", e => {
+      const eb = e.target.closest("[data-edit]");
+      if (eb) { editEntry(eb.dataset.edit); return; }
+      const db = e.target.closest("[data-delete]");
+      if (db) deleteEntry(db.dataset.delete);
+    });
+    document.querySelectorAll(".now-chip").forEach(chip => {
+      chip.addEventListener("click", e => {
+        e.preventDefault(); // keep the label from popping the time picker
+        const input = $(chip.dataset.now);
+        if (input && !input.disabled) {
+          input.value = nowTimeValue();
+          formDirty = true;
+          updateLivePreview();
+        }
+      });
+    });
     els.resetBtn.addEventListener("click", resetForm);
     els.prevWeekBtn.addEventListener("click", () => { viewOffset--; render(); });
     els.nextWeekBtn.addEventListener("click", () => { if (viewOffset < 0) { viewOffset++; render(); } });
