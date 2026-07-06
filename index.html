@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Work Log" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#070b14" />
   <title>Work Log Dashboard</title>
   <style>
     :root {
@@ -29,6 +32,7 @@
       min-height: 100vh;
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
+      font-variant-numeric: tabular-nums;
       background:
         radial-gradient(circle at 0% 0%, rgba(56,189,248,0.34), transparent 32%),
         radial-gradient(circle at 100% 5%, rgba(167,139,250,0.30), transparent 32%),
@@ -53,6 +57,49 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(24px);
       overflow: hidden;
+    }
+
+    /* ── Backup banner ── */
+    .banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 12px;
+      padding: 11px 13px;
+      border-radius: 20px;
+      background: rgba(250,204,21,0.12);
+      border: 1px solid rgba(250,204,21,0.38);
+    }
+    .banner-text { min-width: 0; }
+    .banner-text strong {
+      display: block;
+      color: var(--yellow);
+      font-size: 0.82rem;
+      font-weight: 950;
+    }
+    .banner-text span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+    .banner-actions { display: flex; gap: 7px; flex: 0 0 auto; }
+    .banner-btn {
+      min-height: 44px;
+      padding: 0 13px;
+      border-radius: 14px;
+      color: #221300;
+      background: linear-gradient(135deg, #facc15, #f59e0b);
+      font-size: 0.78rem;
+      font-weight: 950;
+    }
+    .banner-btn.ghost {
+      color: var(--muted);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
     }
 
     /* ── Hero ── */
@@ -113,18 +160,18 @@
       letter-spacing: -0.01em;
     }
     .week-nav button {
-      width: 36px; height: 36px;
-      border-radius: 12px;
+      width: 44px; height: 44px;
+      border-radius: 14px;
       background: rgba(56,189,248,0.14);
       border: 1px solid rgba(56,189,248,0.28);
       color: var(--blue);
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       display: grid; place-items: center;
       flex: 0 0 auto;
     }
     .week-nav button:active { background: rgba(56,189,248,0.28); }
     .week-nav .now-btn {
-      padding: 0 10px;
+      padding: 0 12px;
       width: auto;
       font-size: 0.72rem;
       font-weight: 950;
@@ -188,16 +235,17 @@
       background: var(--card2);
       box-shadow: 0 14px 32px rgba(0,0,0,0.24);
     }
-    .stat.blue  { background: linear-gradient(145deg, #2563eb, #22d3ee); }
-    .stat.green { background: linear-gradient(145deg, #16a34a, #a3e635); }
-    .stat.amber { background: linear-gradient(145deg, #b45309, #facc15); }
+    /* Darkened gradients so white text stays readable */
+    .stat.blue  { background: linear-gradient(145deg, #1d4ed8, #0891b2); }
+    .stat.green { background: linear-gradient(145deg, #15803d, #16a34a); }
+    .stat.amber { background: linear-gradient(145deg, #92400e, #d97706); }
     .stat span, .stat small {
       display: block;
-      color: rgba(255,255,255,0.88);
-      font-size: 0.63rem;
+      color: rgba(255,255,255,0.92);
+      font-size: 0.66rem;
       font-weight: 950;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.07em;
     }
     .stat strong {
       display: block;
@@ -241,6 +289,7 @@
       font-size: 0.82rem;
       font-weight: 850;
       color: var(--muted);
+      min-height: 44px;
     }
     .rate-row label b { color: var(--green); }
     .rate-row input {
@@ -253,6 +302,15 @@
       background: transparent;
       border: 0;
       outline: 0;
+    }
+    #saveStatus {
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: var(--green);
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(34,197,94,0.10);
+      border: 1px solid rgba(34,197,94,0.25);
     }
 
     /* ── Form grid ── */
@@ -278,7 +336,7 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-    .field.disabled-field { opacity: 0.38; pointer-events: none; }
+    .field.disabled-field { opacity: 0.45; pointer-events: none; }
     .money-field { display: flex; align-items: center; gap: 7px; }
     .money-field b { color: var(--green); }
 
@@ -316,7 +374,7 @@
     .segmented span {
       display: grid;
       place-items: center;
-      min-height: 42px;
+      min-height: 46px;
       border-radius: 15px;
       color: var(--muted);
       font-size: 0.80rem;
@@ -361,10 +419,10 @@
 
     /* ── Buttons ── */
     button { border: 0; cursor: pointer; font-weight: 950; }
-    .primary, .secondary, .soft, .danger, .small { min-height: 46px; border-radius: 18px; }
+    .primary, .secondary, .soft, .danger, .small { min-height: 48px; border-radius: 18px; }
     .primary {
       width: 100%;
-      min-height: 52px;
+      min-height: 54px;
       color: white;
       background: linear-gradient(135deg, #2563eb, #22d3ee 48%, #7c3aed);
       box-shadow: 0 15px 32px rgba(37,99,235,0.34);
@@ -379,14 +437,14 @@
       border: 1px solid rgba(255,255,255,0.14);
     }
     .soft {
-      padding: 0 13px;
+      padding: 0 14px;
       color: var(--blue);
       background: rgba(56,189,248,0.12);
       border: 1px solid rgba(56,189,248,0.26);
       white-space: nowrap;
     }
     .danger {
-      padding: 0 13px;
+      padding: 0 14px;
       color: #fecdd3;
       background: rgba(251,113,133,0.13);
       border: 1px solid rgba(251,113,133,0.30);
@@ -421,19 +479,26 @@
     }
     .entry-title { font-size: 1rem; font-weight: 950; letter-spacing: -0.025em; }
     .entry-date  { margin-top: 3px; color: var(--muted); font-size: 0.82rem; font-weight: 750; }
-    .payday-tag {
+    .payday-tag, .weekend-tag {
       display: inline-block;
       margin-left: 6px;
       padding: 2px 7px;
       border-radius: 999px;
-      background: rgba(34,197,94,0.18);
-      border: 1px solid rgba(34,197,94,0.35);
-      color: var(--green);
       font-size: 0.62rem;
       font-weight: 950;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       vertical-align: middle;
+    }
+    .payday-tag {
+      background: rgba(34,197,94,0.18);
+      border: 1px solid rgba(34,197,94,0.35);
+      color: var(--green);
+    }
+    .weekend-tag {
+      background: rgba(167,139,250,0.16);
+      border: 1px solid rgba(167,139,250,0.35);
+      color: var(--purple);
     }
     .pill {
       flex: 0 0 auto;
@@ -531,6 +596,18 @@
 <main class="page">
   <div class="app">
 
+    <!-- ── Backup overdue banner ── -->
+    <div id="backupBanner" class="banner" hidden>
+      <div class="banner-text">
+        <strong>⚠️ Backup overdue</strong>
+        <span>Export a copy to Files so a storage wipe can't take your logs.</span>
+      </div>
+      <div class="banner-actions">
+        <button id="bannerExportBtn" class="banner-btn" type="button">Export</button>
+        <button id="bannerSnoozeBtn" class="banner-btn ghost" type="button">Later</button>
+      </div>
+    </div>
+
     <!-- ── Hero ── -->
     <header class="hero">
       <div class="hero-top">
@@ -546,10 +623,10 @@
       <div class="rate-row">
         <label>
           <b>$</b>
-          <input id="hourlyRate" type="number" min="0" step="0.01" value="18.00" />
+          <input id="hourlyRate" type="number" inputmode="decimal" min="0" step="0.01" value="18.00" />
           <span>/ hr</span>
         </label>
-        <div id="saveStatus" style="font-size:0.75rem;font-weight:900;color:var(--green);padding:8px 10px;border-radius:12px;background:rgba(34,197,94,0.10);border:1px solid rgba(34,197,94,0.25);">Saved</div>
+        <div id="saveStatus" role="status">Saved</div>
       </div>
 
       <!-- Week nav -->
@@ -610,7 +687,6 @@
       <input id="status" type="hidden" value="worked" />
 
       <div class="grid">
-        <!-- Date display (not a full date picker — just today's date, tappable to change) -->
         <label class="field full">
           <span>Date</span>
           <input id="workDate" type="date" required />
@@ -629,11 +705,11 @@
         </label>
         <label class="field full" id="breakField">
           <span>Unpaid Break (minutes)</span>
-          <input id="breakMinutes" type="number" min="0" step="5" value="30" />
+          <input id="breakMinutes" type="number" inputmode="numeric" min="0" step="5" value="30" />
         </label>
         <label class="field full" id="milesField">
           <span>Miles Driven Today</span>
-          <input id="milesInput" type="number" min="0" step="1" placeholder="0" />
+          <input id="milesInput" type="number" inputmode="decimal" min="0" step="1" placeholder="0" />
         </label>
         <label class="field full" id="noteField">
           <span>Day Note (optional)</span>
@@ -686,17 +762,20 @@
         <button id="importBtn" class="secondary" type="button">Import Backup</button>
       </div>
       <input id="backupFile" type="file" accept="application/json,.json" hidden />
-      <p class="backup-note">Data saves privately on this device only. Tap Export Backup every Friday after sending Dean your report — just in case Safari storage ever gets cleared.</p>
+      <p class="backup-note">Data saves on this device in two places (localStorage + IndexedDB). Export to Files (iCloud Drive) at least weekly — the banner will remind you when a backup is overdue.</p>
     </section>
 
-    <footer class="footer">Private · Local storage only · Built for iPhone Safari</footer>
+    <footer class="footer">Private · Saved on-device twice · Best used from the Home Screen icon</footer>
   </div>
 </main>
 
 <script>
-  const STORAGE_KEY  = "work_log_dashboard_entries_v2";
-  const SETTINGS_KEY = "work_log_dashboard_settings_v2";
-  const FULL_WEEK_PAY = 40; // hours for a full week
+  const STORAGE_KEY   = "work_log_dashboard_entries_v2";
+  const SETTINGS_KEY  = "work_log_dashboard_settings_v2";
+  const DB_NAME       = "work_log_dashboard_db";
+  const DB_STORE      = "kv";
+  const FULL_WEEK_HOURS   = 40;   // hours in a full pay week
+  const BACKUP_STALE_DAYS = 7;    // banner shows after this many days without an export
   const $ = id => document.getElementById(id);
 
   const els = {
@@ -737,15 +816,27 @@
     deleteWeekBtn:   $("deleteWeekBtn"),
     exportBtn:       $("exportBtn"),
     importBtn:       $("importBtn"),
-    backupFile:      $("backupFile")
+    backupFile:      $("backupFile"),
+    backupBanner:    $("backupBanner"),
+    bannerExportBtn: $("bannerExportBtn"),
+    bannerSnoozeBtn: $("bannerSnoozeBtn")
   };
 
-  let entries = {};
+  let entries  = {};
+  let settings = { hourlyRate: 18, lastExportAt: null, bannerSnoozeUntil: 0 };
   let editingDate = null;
-  // viewOffset: 0 = current week, -1 = last week, etc.
-  let viewOffset = 0;
+  let viewOffset  = 0;        // 0 = current week, -1 = last week, etc.
+  let formDirty   = false;    // has the user touched the form since last reset/save?
+  let lastDayKey  = null;     // detects midnight rollover in a long-lived tab
 
-  // ── Storage ──────────────────────────────────────────────────
+  // ── HTML escaping (job site / notes go through innerHTML) ────
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, c => (
+      { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]
+    ));
+  }
+
+  // ── Storage: localStorage (primary) + IndexedDB (redundant) ──
   function storageOK() {
     try {
       localStorage.setItem("__t__","1");
@@ -772,29 +863,86 @@
   }
 
   function writeJSON(key, value) {
-    if (!storageOK()) {
-      setSaveStatus(false, "Blocked — use normal Safari");
-      return false;
-    }
+    if (!storageOK()) return false;
     try {
       localStorage.setItem(key, JSON.stringify(value));
       return true;
-    } catch {
-      setSaveStatus(false, "Storage full");
-      return false;
-    }
+    } catch { return false; }
   }
 
-  function saveEntries() {
-    const ok = writeJSON(STORAGE_KEY, entries);
-    if (ok) setSaveStatus(true);
-    return ok;
-  }
-
-  function saveSettings() {
-    writeJSON(SETTINGS_KEY, {
-      hourlyRate: parseFloat(els.hourlyRate.value) || 18
+  function idbOpen() {
+    return new Promise((resolve, reject) => {
+      if (!("indexedDB" in window)) { reject(new Error("no idb")); return; }
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = () => req.result.createObjectStore(DB_STORE);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror   = () => reject(req.error);
     });
+  }
+
+  async function idbSet(key, value) {
+    try {
+      const db = await idbOpen();
+      return await new Promise(resolve => {
+        const tx = db.transaction(DB_STORE, "readwrite");
+        tx.objectStore(DB_STORE).put(value, key);
+        tx.oncomplete = () => { db.close(); resolve(true); };
+        tx.onerror    = () => { db.close(); resolve(false); };
+        tx.onabort    = () => { db.close(); resolve(false); };
+      });
+    } catch { return false; }
+  }
+
+  async function idbGet(key) {
+    try {
+      const db = await idbOpen();
+      return await new Promise(resolve => {
+        const tx = db.transaction(DB_STORE, "readonly");
+        const rq = tx.objectStore(DB_STORE).get(key);
+        rq.onsuccess = () => { db.close(); resolve(rq.result); };
+        rq.onerror   = () => { db.close(); resolve(undefined); };
+      });
+    } catch { return undefined; }
+  }
+
+  // Per-day merge: whichever copy of a day was saved more recently wins
+  function mergeEntries(a, b) {
+    const out = { ...a };
+    for (const k in b) {
+      const cur = out[k], inc = b[k];
+      if (!cur) { out[k] = inc; continue; }
+      const curT = Date.parse(cur.savedAt || "") || 0;
+      const incT = Date.parse(inc.savedAt || "") || 0;
+      if (incT > curT) out[k] = inc;
+    }
+    return out;
+  }
+
+  // Write everything to BOTH stores; report worst case honestly
+  async function persistAll() {
+    const okE = writeJSON(STORAGE_KEY, entries);
+    const okS = writeJSON(SETTINGS_KEY, settings);
+    const okIdb = await idbSet("entries", entries);
+    await idbSet("settings", settings);
+    if (okE && okS)      setSaveStatus(true);
+    else if (okIdb)      setSaveStatus(true, "Saved (backup store)");
+    else                 setSaveStatus(false, "Save failed — export now!");
+    return (okE && okS) || okIdb;
+  }
+
+  async function loadState() {
+    const lsEntries  = readJSON(STORAGE_KEY, {});
+    const lsSettings = readJSON(SETTINGS_KEY, {});
+    let idbEntries  = await idbGet("entries");
+    let idbSettings = await idbGet("settings");
+    if (!idbEntries  || typeof idbEntries  !== "object") idbEntries  = {};
+    if (!idbSettings || typeof idbSettings !== "object") idbSettings = {};
+    entries  = mergeEntries(idbEntries, lsEntries);
+    settings = Object.assign(
+      { hourlyRate: 18, lastExportAt: null, bannerSnoozeUntil: 0 },
+      idbSettings, lsSettings
+    );
+    await persistAll(); // heal whichever store was missing or behind
   }
 
   // ── Date helpers ─────────────────────────────────────────────
@@ -822,11 +970,9 @@
     return parseLocal(val).toLocaleDateString(undefined, { weekday:"long" });
   }
 
-  function isFriday(val) {
-    return parseLocal(val).getDay() === 5;
-  }
+  function isFriday(val)  { return parseLocal(val).getDay() === 5; }
+  function isWeekend(val) { const d = parseLocal(val).getDay(); return d === 0 || d === 6; }
 
-  // Get Monday of the current viewing week (offset from today's week)
   function getViewMonday() {
     const today = new Date();
     const dow = today.getDay();
@@ -837,28 +983,42 @@
     return monday;
   }
 
-  function weekDates() {
+  // Mon–Fri keys (always shown)
+  function weekKeys() {
     const monday = getViewMonday();
     return Array.from({length:5}, (_,i) => {
       const d = new Date(monday);
       d.setDate(monday.getDate() + i);
-      return d;
+      return toKey(d);
     });
   }
 
-  function weekKeys() {
-    return weekDates().map(toKey);
+  // Sat + Sun keys for the viewed week
+  function weekendKeys() {
+    const monday = getViewMonday();
+    return [5,6].map(i => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      return toKey(d);
+    });
+  }
+
+  // Mon–Fri plus any weekend days that actually have entries
+  function displayKeys() {
+    return [...weekKeys(), ...weekendKeys().filter(k => entries[k])];
   }
 
   function minutesFrom(val) {
     if (!val) return null;
     const [h,m] = val.split(":").map(Number);
+    if (isNaN(h) || isNaN(m)) return null;
     return h*60 + m;
   }
 
   function fmtTime(val) {
-    if (!val) return "";
+    if (!val) return "—";
     const [hRaw, m] = val.split(":").map(Number);
+    if (isNaN(hRaw) || isNaN(m)) return "—";
     const suffix = hRaw >= 12 ? "PM" : "AM";
     const h = hRaw % 12 || 12;
     return `${h}:${pad(m)} ${suffix}`;
@@ -866,7 +1026,10 @@
 
   function money(v) { return `$${Number(v||0).toFixed(2)}`; }
 
-  function getRate() { return parseFloat(els.hourlyRate.value) || 0; }
+  function getRate() {
+    const v = parseFloat(els.hourlyRate.value);
+    return (!isNaN(v) && v >= 0) ? v : (Number(settings.hourlyRate) || 0);
+  }
 
   // ── Calculations ─────────────────────────────────────────────
   function calcHours(entry) {
@@ -887,7 +1050,7 @@
 
   // ── Week label ───────────────────────────────────────────────
   function updateWeekLabel() {
-    const keys = weekKeys();
+    const keys  = weekKeys();
     const start = displayDate(keys[0]);
     const end   = displayDate(keys[4]);
     if (viewOffset === 0) {
@@ -900,22 +1063,19 @@
       els.weekLabel.textContent = `${start} – ${end}`;
     }
     els.weekViewTitle.textContent = `${start} – ${end}`;
-    // Dim next button if at current week
     els.nextWeekBtn.style.opacity = viewOffset >= 0 ? "0.35" : "1";
     els.nextWeekBtn.disabled = viewOffset >= 0;
   }
 
   // ── Form state ───────────────────────────────────────────────
   function setFieldDisabled(fieldEl, disabled) {
-    if (disabled) {
-      fieldEl.classList.add("disabled-field");
-    } else {
-      fieldEl.classList.remove("disabled-field");
-    }
+    fieldEl.classList.toggle("disabled-field", disabled);
     const inp = fieldEl.querySelector("input");
     if (inp) inp.disabled = disabled;
   }
 
+  // Non-destructive: toggling to Day Off / Rain Day no longer wipes
+  // what you typed. Non-worked saves store blank fields regardless.
   function updateFormState() {
     const worked = els.status.value === "worked";
     setFieldDisabled(els.jobSiteField,   !worked);
@@ -924,23 +1084,16 @@
     setFieldDisabled(els.breakField,     !worked);
     setFieldDisabled(els.milesField,     !worked);
     setFieldDisabled(els.noteField,      !worked);
-    if (!worked) {
-      els.jobSite.value = "";
-      els.endTime.value = "";
-      els.breakMinutes.value = "0";
-      els.milesInput.value = "";
-      els.dayNote.value = "";
-    } else {
-      // Always restore break to 30 when switching back to Worked
-      if (!els.breakMinutes.value || Number(els.breakMinutes.value) === 0) {
-        els.breakMinutes.value = "30";
-      }
+    if (worked && els.breakMinutes.value === "") {
+      els.breakMinutes.value = "30";
     }
     updateLivePreview();
   }
 
   function resetForm() {
     editingDate = null;
+    formDirty = false;
+    els.saveBtn.textContent = "Save Day";
     els.workDate.value = todayValue();
     els.status.value = "worked";
     document.querySelectorAll("input[name='statusRadio']").forEach(r => {
@@ -960,7 +1113,7 @@
     const miles  = els.milesInput.value.trim();
     return {
       date:         els.workDate.value,
-      day:          dayName(els.workDate.value),
+      day:          els.workDate.value ? dayName(els.workDate.value) : "",
       status,
       jobSite:      status === "worked" ? els.jobSite.value.trim() : "",
       startTime:    status === "worked" ? els.startTime.value : "",
@@ -990,19 +1143,22 @@
   }
 
   // ── Save ─────────────────────────────────────────────────────
-  function saveForm() {
+  async function saveForm() {
     const entry = formEntry();
     if (!entry.date) { alert("Choose a date first."); return; }
     if (entry.status === "worked") {
       if (!entry.endTime) { alert("Enter a clock-out time before saving."); return; }
-      if (calcHours(entry) <= 0) { alert("Check clock-in, clock-out, and break minutes — hours came out to zero."); return; }
+      if (calcHours(entry) <= 0) {
+        alert("Check clock-in, clock-out, and break minutes — hours came out to zero. (Clock-out must be later than clock-in, same day.)");
+        return;
+      }
     }
     if (editingDate && editingDate !== entry.date) delete entries[editingDate];
     entries[entry.date] = entry;
-    const ok = saveEntries();
-    saveSettings();
+    const ok = await persistAll();
     if (!ok) return;
-    // Jump view to the week of the saved entry
+
+    // Jump the view to the week of the saved entry
     const saved = parseLocal(entry.date);
     const todayMonday = (() => {
       const t = new Date();
@@ -1016,8 +1172,8 @@
     const sdow = saved.getDay();
     savedMonday.setDate(saved.getDate() + (sdow === 0 ? -6 : 1 - sdow));
     savedMonday.setHours(0,0,0,0);
-    const diffWeeks = Math.round((savedMonday - todayMonday) / (7*24*3600*1000));
-    viewOffset = diffWeeks;
+    viewOffset = Math.round((savedMonday - todayMonday) / (7*24*3600*1000));
+
     resetForm();
     render();
   }
@@ -1027,6 +1183,8 @@
     const entry = entries[dateKey];
     if (!entry) return;
     editingDate = dateKey;
+    formDirty = true;
+    els.saveBtn.textContent = `Update ${dayName(dateKey)}`;
     els.workDate.value    = entry.date;
     els.status.value      = entry.status;
     document.querySelectorAll("input[name='statusRadio']").forEach(r => {
@@ -1046,24 +1204,27 @@
   function deleteEntry(dateKey) {
     if (!confirm(`Delete entry for ${displayDate(dateKey)}?`)) return;
     delete entries[dateKey];
-    saveEntries();
+    if (editingDate === dateKey) resetForm();
+    persistAll();
     render();
   }
 
   // ── Render entries ───────────────────────────────────────────
   function renderEntries() {
     els.entriesList.innerHTML = "";
-    weekKeys().forEach(dateKey => {
+    displayKeys().forEach(dateKey => {
       const entry = entries[dateKey];
       const row = document.createElement("div");
+      const tags =
+        (isFriday(dateKey)  ? `<span class="payday-tag">💰 Payday</span>` : "") +
+        (isWeekend(dateKey) ? `<span class="weekend-tag">Weekend</span>`  : "");
 
       if (!entry) {
         row.className = "entry";
-        const fri = isFriday(dateKey) ? `<span class="payday-tag">💰 Payday</span>` : "";
         row.innerHTML = `
           <div class="entry-top">
             <div>
-              <div class="entry-title">${dayName(dateKey)}${fri}</div>
+              <div class="entry-title">${dayName(dateKey)}${tags}</div>
               <div class="entry-date">${displayDate(dateKey)}</div>
             </div>
             <span class="pill missing">Not logged</span>
@@ -1076,29 +1237,28 @@
       const hours    = calcHours(entry);
       const pay      = hours * getRate();
       const hasMiles = entry.miles !== null && entry.miles !== undefined;
-      const fri      = isFriday(dateKey) ? `<span class="payday-tag">💰 Payday</span>` : "";
 
       row.className = `entry ${entry.status}`;
       row.innerHTML = `
         <div class="entry-top">
           <div>
-            <div class="entry-title">${entry.day}${fri}</div>
-            <div class="entry-date">${displayDate(entry.date)}</div>
+            <div class="entry-title">${dayName(dateKey)}${tags}</div>
+            <div class="entry-date">${displayDate(dateKey)}</div>
           </div>
           <span class="pill ${entry.status}">${statusLabel(entry.status)}</span>
         </div>
         <div class="entry-details">
           ${entry.status === "worked" ? `
-            <strong>${entry.jobSite || "No job site"}</strong><br>
-            ${fmtTime(entry.startTime)} – ${fmtTime(entry.endTime)} · Break: ${entry.breakMinutes} min<br>
+            <strong>${esc(entry.jobSite) || "No job site"}</strong><br>
+            ${fmtTime(entry.startTime)} – ${fmtTime(entry.endTime)} · Break: ${Number(entry.breakMinutes) || 0} min<br>
             Paid hours: <strong>${hours.toFixed(2)}</strong> · Pay: <strong>${money(pay)}</strong>
-            ${hasMiles ? `<br>Miles driven: <strong>${entry.miles} mi</strong>` : ""}
+            ${hasMiles ? `<br>Miles driven: <strong>${esc(entry.miles)} mi</strong>` : ""}
           ` : `${statusLabel(entry.status)} · 0.00 hrs · $0.00`}
         </div>
-        ${entry.note ? `<div class="entry-note">📝 ${entry.note}</div>` : ""}
+        ${entry.note ? `<div class="entry-note">📝 ${esc(entry.note)}</div>` : ""}
         <div class="entry-actions">
-          <button class="small" type="button" data-edit="${entry.date}">Edit</button>
-          <button class="small delete" type="button" data-delete="${entry.date}">Delete</button>
+          <button class="small" type="button" data-edit="${dateKey}">Edit</button>
+          <button class="small delete" type="button" data-delete="${dateKey}">Delete</button>
         </div>`;
       els.entriesList.appendChild(row);
     });
@@ -1109,10 +1269,10 @@
       btn.addEventListener("click", () => deleteEntry(btn.dataset.delete)));
   }
 
-  // ── Summary + progress ───────────────────────────────────────
+  // ── Summary + progress (includes weekend entries) ────────────
   function renderSummary() {
     let totalHours = 0, totalPay = 0, totalMiles = 0;
-    weekKeys().forEach(key => {
+    displayKeys().forEach(key => {
       const e = entries[key];
       if (!e || e.status !== "worked") return;
       const h = calcHours(e);
@@ -1124,17 +1284,17 @@
     els.summaryPay.textContent   = money(totalPay);
     els.summaryMiles.textContent = totalMiles;
 
-    const fullPay = FULL_WEEK_PAY * getRate();
+    const fullPay = FULL_WEEK_HOURS * getRate();
     const pct     = Math.min(100, fullPay > 0 ? (totalPay / fullPay) * 100 : 0);
     els.payProgressFill.style.width  = pct.toFixed(1) + "%";
     els.payProgressLabel.textContent = `${money(totalPay)} of ${money(fullPay)}`;
   }
 
-  // ── Report ───────────────────────────────────────────────────
+  // ── Report (includes weekend entries) ────────────────────────
   function buildReport() {
-    const keys = weekKeys();
+    const keys = displayKeys();
     const weekStart = displayDate(keys[0]);
-    const weekEnd   = displayDate(keys[4]);
+    const weekEnd   = displayDate(keys[keys.length - 1]);
     let totalHours = 0, totalPay = 0, totalMiles = 0, workedDays = 0;
     let report = `Work Hours Report — Dean\nWeek: ${weekStart} through ${weekEnd}\n\n`;
 
@@ -1153,7 +1313,7 @@
         totalPay   += pay;
         report += `  Job site: ${e.jobSite || "Not entered"}\n`;
         report += `  Time: ${fmtTime(e.startTime)} to ${fmtTime(e.endTime)}\n`;
-        report += `  Unpaid break: ${e.breakMinutes} min\n`;
+        report += `  Unpaid break: ${Number(e.breakMinutes) || 0} min\n`;
         report += `  Paid hours: ${hours.toFixed(2)}\n`;
         report += `  Estimated pay: ${money(pay)}\n`;
         if (e.miles !== null && e.miles !== undefined) {
@@ -1182,22 +1342,46 @@
     els.reportOutput.value = buildReport();
   }
 
+  // ── Backup banner ────────────────────────────────────────────
+  function backupStale() {
+    const last = settings.lastExportAt ? Date.parse(settings.lastExportAt) : 0;
+    return (Date.now() - last) > BACKUP_STALE_DAYS * 86400000;
+  }
+
+  function updateBackupBanner() {
+    const hasEntries = Object.keys(entries).length > 0;
+    const snoozed = Date.now() < (Number(settings.bannerSnoozeUntil) || 0);
+    els.backupBanner.hidden = !(hasEntries && backupStale() && !snoozed);
+  }
+
   function render() {
     updateWeekLabel();
     renderEntries();
     renderSummary();
     renderReport();
+    updateBackupBanner();
   }
 
   // ── Copy ─────────────────────────────────────────────────────
   async function copyReport() {
     const text = buildReport();
     els.reportOutput.value = text;
+    let copied = false;
     try {
       await navigator.clipboard.writeText(text);
+      copied = true;
+    } catch {}
+    if (copied) {
       els.copyWeekBtn.textContent = "✅ Copied!";
       setTimeout(() => { els.copyWeekBtn.textContent = "📋 Copy Weekly Report"; }, 2200);
-    } catch {
+      if (backupStale() && Object.keys(entries).length > 0) {
+        setTimeout(() => {
+          if (confirm("Report copied ✅\n\nYour backup is overdue — export a copy to Files now?")) {
+            exportBackup();
+          }
+        }, 350);
+      }
+    } else {
       els.reportOutput.focus();
       els.reportOutput.select();
       alert("Report selected — copy it manually (press and hold → Copy All).");
@@ -1206,23 +1390,49 @@
 
   // ── Delete week ──────────────────────────────────────────────
   function deleteWeek() {
-    if (!confirm("Delete all entries for this week?")) return;
-    weekKeys().forEach(k => delete entries[k]);
-    saveEntries();
+    if (!confirm("Delete all entries for this week (including weekend)?")) return;
+    [...weekKeys(), ...weekendKeys()].forEach(k => delete entries[k]);
+    persistAll();
     render();
   }
 
-  // ── Backup ───────────────────────────────────────────────────
-  function exportBackup() {
-    const blob = new Blob([JSON.stringify({ app:"work-log-dashboard", version:2, exportedAt:new Date().toISOString(), entries }, null, 2)], { type:"application/json" });
-    const url = URL.createObjectURL(blob);
-    const a   = document.createElement("a");
-    a.href = url;
-    a.download = `work-log-backup-${todayValue()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+  // ── Backup: export via share sheet (Files/iCloud), fallback download ──
+  async function exportBackup() {
+    const payload = JSON.stringify(
+      { app:"work-log-dashboard", version:3, exportedAt:new Date().toISOString(), entries },
+      null, 2
+    );
+    const fileName = `work-log-backup-${todayValue()}.json`;
+    let delivered = false;
+
+    if (navigator.canShare && typeof File === "function") {
+      try {
+        const file = new File([payload], fileName, { type: "application/json" });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file] });
+          delivered = true;
+        }
+      } catch (e) {
+        if (e && e.name === "AbortError") return; // user cancelled — don't mark as backed up
+      }
+    }
+
+    if (!delivered) {
+      const blob = new Blob([payload], { type: "application/json" });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    }
+
+    settings.lastExportAt = new Date().toISOString();
+    settings.bannerSnoozeUntil = 0;
+    await persistAll();
+    updateBackupBanner();
   }
 
   function importBackup(file) {
@@ -1230,11 +1440,18 @@
     reader.onload = () => {
       try {
         const data = JSON.parse(reader.result);
-        const imp  = data.entries && typeof data.entries === "object" ? data.entries : data;
-        if (!imp || typeof imp !== "object") throw new Error("bad");
-        if (!confirm("Merge this backup with your current entries?")) return;
-        entries = { ...entries, ...imp };
-        saveEntries();
+        const raw  = (data && typeof data === "object" && data.entries && typeof data.entries === "object")
+          ? data.entries : data;
+        if (!raw || typeof raw !== "object" || Array.isArray(raw)) throw new Error("bad");
+        const valid = {};
+        for (const k in raw) {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(k) && raw[k] && typeof raw[k] === "object") valid[k] = raw[k];
+        }
+        const n = Object.keys(valid).length;
+        if (!n) { alert("No valid entries found in that file."); return; }
+        if (!confirm(`Merge ${n} day(s) from this backup? For any day that exists in both, the more recently saved version is kept.`)) return;
+        entries = mergeEntries(entries, valid);
+        persistAll();
         render();
         alert("Backup imported.");
       } catch { alert("Could not read that backup file."); }
@@ -1242,23 +1459,39 @@
     reader.readAsText(file);
   }
 
-  // ── Init ─────────────────────────────────────────────────────
-  function init() {
-    entries = readJSON(STORAGE_KEY, {});
-    const settings = readJSON(SETTINGS_KEY, {});
+  // ── Long-lived tab: handle midnight / week rollover ──────────
+  function handleDayChange() {
+    const nowKey = todayValue();
+    if (nowKey === lastDayKey) return;
+    lastDayKey = nowKey;
+    // Only auto-refresh the form if the user hasn't typed anything
+    if (!formDirty && !editingDate) resetForm();
+    render(); // week view/totals roll over automatically
+  }
 
+  // ── Init ─────────────────────────────────────────────────────
+  async function init() {
     if (!storageOK()) {
       setSaveStatus(false, "Use normal Safari (not Private)");
     }
+    // Ask the browser to treat our storage as persistent (best-effort)
+    try {
+      if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist().catch(() => {});
+      }
+    } catch {}
 
-    // Use saved hourly rate, fall back to 18
-    els.hourlyRate.value = (settings.hourlyRate != null) ? settings.hourlyRate : "18.00";
+    await loadState();
+    lastDayKey = todayValue();
+
+    els.hourlyRate.value = Number(settings.hourlyRate).toFixed(2);
 
     // Radio buttons
     document.querySelectorAll("input[name='statusRadio']").forEach(r => {
       r.addEventListener("change", () => {
         if (!r.checked) return;
         els.status.value = r.value;
+        formDirty = true;
         updateFormState();
       });
     });
@@ -1272,10 +1505,29 @@
     els.prevWeekBtn.addEventListener("click", () => { viewOffset--; render(); });
     els.nextWeekBtn.addEventListener("click", () => { if (viewOffset < 0) { viewOffset++; render(); } });
     els.nowWeekBtn.addEventListener("click",  () => { viewOffset = 0; render(); });
-    els.hourlyRate.addEventListener("input",  () => { saveSettings(); renderSummary(); renderReport(); updateLivePreview(); });
+
+    els.hourlyRate.addEventListener("input", () => {
+      const v = parseFloat(els.hourlyRate.value);
+      if (!isNaN(v) && v >= 0) {
+        settings.hourlyRate = v;
+        persistAll();
+      }
+      renderSummary(); renderReport(); updateLivePreview();
+    });
+    els.hourlyRate.addEventListener("blur", () => {
+      const v = parseFloat(els.hourlyRate.value);
+      if (isNaN(v) || v < 0) els.hourlyRate.value = Number(settings.hourlyRate).toFixed(2);
+    });
+
     els.copyWeekBtn.addEventListener("click", copyReport);
     els.deleteWeekBtn.addEventListener("click", deleteWeek);
     els.exportBtn.addEventListener("click", exportBackup);
+    els.bannerExportBtn.addEventListener("click", exportBackup);
+    els.bannerSnoozeBtn.addEventListener("click", () => {
+      settings.bannerSnoozeUntil = Date.now() + 86400000; // 24h
+      persistAll();
+      updateBackupBanner();
+    });
     els.importBtn.addEventListener("click", () => els.backupFile.click());
     els.backupFile.addEventListener("change", () => {
       const f = els.backupFile.files && els.backupFile.files[0];
@@ -1283,14 +1535,17 @@
       els.backupFile.value = "";
     });
 
-    [els.workDate, els.startTime, els.endTime, els.breakMinutes].forEach(el =>
-      el.addEventListener("input", updateLivePreview));
+    [els.workDate, els.startTime, els.endTime, els.breakMinutes,
+     els.jobSite, els.milesInput, els.dayNote].forEach(el =>
+      el.addEventListener("input", () => { formDirty = true; updateLivePreview(); }));
 
-    // Auto-save on leave
-    ["pagehide","beforeunload"].forEach(ev => window.addEventListener(ev, () => { saveEntries(); saveSettings(); }));
+    // Save on leave + refresh on return (long-lived tab)
+    window.addEventListener("pagehide", () => { persistAll(); });
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden") { saveEntries(); saveSettings(); }
+      if (document.visibilityState === "hidden") persistAll();
+      else handleDayChange();
     });
+    setInterval(handleDayChange, 60000); // catches midnight while tab stays open
   }
 
   init();
