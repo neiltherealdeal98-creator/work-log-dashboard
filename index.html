@@ -583,6 +583,35 @@
     }
     .small.delete { color: #fecdd3; background: rgba(251,113,133,0.11); }
 
+    /* ── Tap-to-edit rows ── */
+    .week-hint {
+      margin: 0 0 11px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 750;
+    }
+    .entry-summary { cursor: pointer; }
+    .entry-right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+    .chev {
+      color: var(--muted);
+      font-size: 1.2rem;
+      line-height: 1;
+      transition: transform 0.18s ease;
+    }
+    .entry.editing { border-color: rgba(56,189,248,0.55); box-shadow: 0 0 0 3px rgba(56,189,248,0.15); }
+    .entry.editing .chev { transform: rotate(90deg); color: var(--blue); }
+
+    /* ── Inline day editor (moves into the tapped row) ── */
+    .day-editor {
+      margin-top: 13px;
+      padding-top: 13px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .day-editor[hidden] { display: none; }
+    .editor-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .editor-actions .secondary { flex: 1; }
+    .editor-actions .editor-delete { flex: 0 0 auto; }
+
     /* ── Report textarea ── */
     textarea {
       margin-top: 12px;
@@ -706,71 +735,7 @@
       </div>
     </header>
 
-    <!-- ── Daily Entry ── -->
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <p class="kicker">Daily Entry</p>
-          <h2>Log Work Day</h2>
-        </div>
-        <button id="resetBtn" class="soft" type="button">Reset</button>
-      </div>
-
-      <!-- Status selector -->
-      <div class="segmented">
-        <label><input type="radio" name="statusRadio" value="worked" checked /><span>Worked</span></label>
-        <label><input type="radio" name="statusRadio" value="off" /><span>Day Off</span></label>
-        <label><input type="radio" name="statusRadio" value="canceled" /><span>Rain Day</span></label>
-      </div>
-      <input id="status" type="hidden" value="worked" />
-
-      <div class="grid">
-        <label class="field full">
-          <span>Date</span>
-          <input id="workDate" type="date" required />
-        </label>
-        <label class="field full" id="jobSiteField">
-          <span>Job Site</span>
-          <input id="jobSite" type="text" list="siteList" maxlength="40" placeholder="e.g. Lake job" />
-          <datalist id="siteList"></datalist>
-        </label>
-        <label class="field" id="startTimeField">
-          <span>Clock In</span>
-          <div class="time-wrap">
-            <input id="startTime" type="time" value="08:00" />
-            <button type="button" class="now-chip" data-now="startTime">Now</button>
-          </div>
-        </label>
-        <label class="field" id="endTimeField">
-          <span>Clock Out</span>
-          <div class="time-wrap">
-            <input id="endTime" type="time" />
-            <button type="button" class="now-chip" data-now="endTime">Now</button>
-          </div>
-        </label>
-        <label class="field full" id="breakField">
-          <span>Unpaid Break (minutes)</span>
-          <input id="breakMinutes" type="number" inputmode="numeric" min="0" step="5" value="30" />
-        </label>
-        <label class="field full" id="milesField">
-          <span>Miles Driven Today</span>
-          <input id="milesInput" type="number" inputmode="decimal" min="0" step="1" placeholder="0" />
-        </label>
-        <label class="field full" id="noteField">
-          <span>Day Note (optional)</span>
-          <input id="dayNote" type="text" maxlength="60" placeholder="Short note about today..." />
-        </label>
-      </div>
-
-      <div class="calc" id="calcRow">
-        <div><span>Paid Hours</span><strong id="liveHours">—</strong></div>
-        <div><span>Today's Pay</span><strong id="livePay">—</strong></div>
-      </div>
-
-      <button class="primary" id="saveBtn" type="button">Save Day</button>
-    </section>
-
-    <!-- ── Week View ── -->
+    <!-- ── Week View · tap a day to log or edit it ── -->
     <section class="panel">
       <div class="panel-head">
         <div>
@@ -779,7 +744,69 @@
         </div>
         <button id="deleteWeekBtn" class="danger" type="button">Delete Week</button>
       </div>
+      <p class="week-hint">Tap any day to log or edit it.</p>
       <div id="entriesList" class="entries"></div>
+
+      <!-- Home for the tap-to-edit day editor. On open, JS moves this whole
+           block into the tapped day's row so you log everything right there. -->
+      <div id="dayEditorHome">
+        <div id="dayEditor" class="day-editor" hidden>
+          <!-- Status selector -->
+          <div class="segmented">
+            <label><input type="radio" name="statusRadio" value="worked" checked /><span>Worked</span></label>
+            <label><input type="radio" name="statusRadio" value="off" /><span>Day Off</span></label>
+            <label><input type="radio" name="statusRadio" value="canceled" /><span>Rain Day</span></label>
+          </div>
+          <input id="status" type="hidden" value="worked" />
+          <!-- Date is set by which day row you tapped -->
+          <input id="workDate" type="hidden" />
+
+          <div class="grid">
+            <label class="field full" id="jobSiteField">
+              <span>Job Site</span>
+              <input id="jobSite" type="text" list="siteList" maxlength="40" placeholder="e.g. Lake job" />
+              <datalist id="siteList"></datalist>
+            </label>
+            <label class="field" id="startTimeField">
+              <span>Clock In</span>
+              <div class="time-wrap">
+                <input id="startTime" type="time" value="08:00" />
+                <button type="button" class="now-chip" data-now="startTime">Now</button>
+              </div>
+            </label>
+            <label class="field" id="endTimeField">
+              <span>Clock Out</span>
+              <div class="time-wrap">
+                <input id="endTime" type="time" />
+                <button type="button" class="now-chip" data-now="endTime">Now</button>
+              </div>
+            </label>
+            <label class="field full" id="breakField">
+              <span>Unpaid Break (minutes)</span>
+              <input id="breakMinutes" type="number" inputmode="numeric" min="0" step="5" value="30" />
+            </label>
+            <label class="field full" id="milesField">
+              <span>Miles Driven (optional)</span>
+              <input id="milesInput" type="number" inputmode="decimal" min="0" step="1" placeholder="0" />
+            </label>
+            <label class="field full" id="noteField">
+              <span>Day Note (optional)</span>
+              <input id="dayNote" type="text" maxlength="60" placeholder="Short note about today..." />
+            </label>
+          </div>
+
+          <div class="calc" id="calcRow">
+            <div><span>Paid Hours</span><strong id="liveHours">—</strong></div>
+            <div><span>Today's Pay</span><strong id="livePay">—</strong></div>
+          </div>
+
+          <button class="primary" id="saveBtn" type="button">Save Day</button>
+          <div class="editor-actions">
+            <button class="secondary" id="cancelBtn" type="button">Cancel</button>
+            <button class="danger editor-delete" id="deleteDayBtn" type="button" hidden>Delete</button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ── Friday Report ── -->
@@ -854,7 +881,10 @@
     liveHours:       $("liveHours"),
     livePay:         $("livePay"),
     saveBtn:         $("saveBtn"),
-    resetBtn:        $("resetBtn"),
+    cancelBtn:       $("cancelBtn"),
+    deleteDayBtn:    $("deleteDayBtn"),
+    dayEditor:       $("dayEditor"),
+    dayEditorHome:   $("dayEditorHome"),
     entriesList:     $("entriesList"),
     reportOutput:    $("reportOutput"),
     copyWeekBtn:     $("copyWeekBtn"),
@@ -1024,7 +1054,6 @@
   }
 
   function isFriday(val)  { return parseLocal(val).getDay() === 5; }
-  function isWeekend(val) { const d = parseLocal(val).getDay(); return d === 0 || d === 6; }
 
   function getViewMonday() {
     const today = new Date();
@@ -1046,19 +1075,9 @@
     });
   }
 
-  // Sat + Sun keys for the viewed week
-  function weekendKeys() {
-    const monday = getViewMonday();
-    return [5,6].map(i => {
-      const d = new Date(monday);
-      d.setDate(monday.getDate() + i);
-      return toKey(d);
-    });
-  }
-
-  // Mon–Fri plus any weekend days that actually have entries
+  // Weekdays only — Mon–Fri. (Weekend work is paid same-day, so it isn't logged here.)
   function displayKeys() {
-    return [...weekKeys(), ...weekendKeys().filter(k => entries[k])];
+    return weekKeys();
   }
 
   function minutesFrom(val) {
@@ -1143,22 +1162,51 @@
     updateLivePreview();
   }
 
-  function resetForm() {
+  function setRadios(status) {
+    document.querySelectorAll("input[name='statusRadio']").forEach(r => {
+      r.checked = r.value === status;
+    });
+  }
+
+  // Open the inline editor for a given day. renderEntries() moves the editor
+  // DOM node into that day's row; here we just prime its fields.
+  function openDayEditor(dateKey) {
+    editingDate = dateKey;
+    formDirty = false;
+    const entry = entries[dateKey];
+    els.workDate.value = dateKey;
+    if (entry) {
+      els.saveBtn.textContent = `Update ${dayName(dateKey)}`;
+      els.status.value        = entry.status;
+      setRadios(entry.status);
+      els.jobSite.value       = entry.jobSite || "";
+      els.startTime.value     = entry.startTime || "08:00";
+      els.endTime.value       = entry.endTime || "";
+      els.breakMinutes.value  = String(entry.breakMinutes ?? 30);
+      els.milesInput.value    = (entry.miles !== null && entry.miles !== undefined) ? String(entry.miles) : "";
+      els.dayNote.value       = entry.note || "";
+      els.deleteDayBtn.hidden = false;
+    } else {
+      els.saveBtn.textContent = `Save ${dayName(dateKey)}`;
+      els.status.value        = "worked";
+      setRadios("worked");
+      els.jobSite.value       = settings.lastJobSite || ""; // prefill last site (judgment call)
+      els.startTime.value     = "08:00";
+      els.endTime.value       = "";
+      els.breakMinutes.value  = "30";
+      els.milesInput.value    = "";
+      els.dayNote.value       = "";
+      els.deleteDayBtn.hidden = true;
+    }
+    updateFormState(); // also refreshes the live preview
+    render();          // places the editor inside the day's row
+    els.dayEditor.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function closeDayEditor() {
     editingDate = null;
     formDirty = false;
-    els.saveBtn.textContent = "Save Day";
-    els.workDate.value = todayValue();
-    els.status.value = "worked";
-    document.querySelectorAll("input[name='statusRadio']").forEach(r => {
-      r.checked = r.value === "worked";
-    });
-    els.jobSite.value = settings.lastJobSite || ""; // prefill yesterday's site (judgment call)
-    els.startTime.value = "08:00";
-    els.endTime.value = "";
-    els.breakMinutes.value = "30";
-    els.milesInput.value = "";
-    els.dayNote.value = "";
-    updateFormState();
+    render(); // renderEntries() returns the editor to its hidden home
   }
 
   function formEntry() {
@@ -1216,116 +1264,94 @@
     if (!ok) return;
     refreshSiteList();
 
-    // Jump the view to the week of the saved entry
-    const saved = parseLocal(entry.date);
-    const todayMonday = (() => {
-      const t = new Date();
-      const dow = t.getDay();
-      const d = new Date(t);
-      d.setDate(t.getDate() + (dow === 0 ? -6 : 1 - dow));
-      d.setHours(0,0,0,0);
-      return d;
-    })();
-    const savedMonday = new Date(saved);
-    const sdow = saved.getDay();
-    savedMonday.setDate(saved.getDate() + (sdow === 0 ? -6 : 1 - sdow));
-    savedMonday.setHours(0,0,0,0);
-    viewOffset = Math.round((savedMonday - todayMonday) / (7*24*3600*1000));
-
-    resetForm();
-    render();
+    // Editing happens on a day row within the week you're viewing, so the
+    // saved day is already on screen — just close the editor and refresh.
+    closeDayEditor();
   }
 
-  // ── Edit / Delete ────────────────────────────────────────────
-  function editEntry(dateKey) {
-    const entry = entries[dateKey];
-    if (!entry) return;
-    editingDate = dateKey;
-    formDirty = true;
-    els.saveBtn.textContent = `Update ${dayName(dateKey)}`;
-    els.workDate.value    = entry.date;
-    els.status.value      = entry.status;
-    document.querySelectorAll("input[name='statusRadio']").forEach(r => {
-      r.checked = r.value === entry.status;
-    });
-    els.jobSite.value     = entry.jobSite || "";
-    els.startTime.value   = entry.startTime || "08:00";
-    els.endTime.value     = entry.endTime || "";
-    els.breakMinutes.value= String(entry.breakMinutes ?? 30);
-    els.milesInput.value  = (entry.miles !== null && entry.miles !== undefined) ? String(entry.miles) : "";
-    els.dayNote.value     = entry.note || "";
-    updateFormState();
-    updateLivePreview();
-    window.scrollTo({ top:0, behavior:"smooth" });
-  }
-
+  // ── Delete ───────────────────────────────────────────────────
   function deleteEntry(dateKey) {
     if (!confirm(`Delete entry for ${displayDate(dateKey)}?`)) return;
     delete entries[dateKey];
-    if (editingDate === dateKey) resetForm();
+    editingDate = null; // close the editor if it was open on this day
     persistAll();
     render();
   }
 
-  // ── Render entries ───────────────────────────────────────────
+  // ── Render entries (tap a row to open the inline editor) ─────
   function renderEntries() {
     els.entriesList.innerHTML = "";
+    let editorPlaced = false;
+
     displayKeys().forEach(dateKey => {
       const entry = entries[dateKey];
       const row = document.createElement("div");
-      const today = dateKey === todayValue();
+      const today   = dateKey === todayValue();
+      const editing = editingDate === dateKey;
+      row.dataset.day = dateKey;
       const tags =
-        (today              ? `<span class="today-tag">Today</span>`      : "") +
-        (isFriday(dateKey)  ? `<span class="payday-tag">💰 Payday</span>` : "") +
-        (isWeekend(dateKey) ? `<span class="weekend-tag">Weekend</span>`  : "");
+        (today             ? `<span class="today-tag">Today</span>`      : "") +
+        (isFriday(dateKey) ? `<span class="payday-tag">💰 Payday</span>` : "");
 
       if (!entry) {
-        row.className = "entry" + (today ? " today" : "");
+        row.className = "entry" + (today ? " today" : "") + (editing ? " editing" : "");
         row.innerHTML = `
-          <div class="entry-top">
+          <div class="entry-top entry-summary">
             <div>
               <div class="entry-title">${dayName(dateKey)}${tags}</div>
               <div class="entry-date">${displayDate(dateKey)}</div>
             </div>
-            <span class="pill missing">Not logged</span>
+            <div class="entry-right">
+              <span class="pill missing">Not logged</span>
+              <span class="chev">›</span>
+            </div>
           </div>
-          <div class="entry-details">No entry saved yet.</div>`;
-        els.entriesList.appendChild(row);
-        return;
+          <div class="entry-details entry-summary">Tap to log this day.</div>`;
+      } else {
+        const hours    = calcHours(entry);
+        const pay      = hours * getRate();
+        const hasMiles = entry.miles !== null && entry.miles !== undefined;
+
+        row.className = `entry ${entry.status}` + (today ? " today" : "") + (editing ? " editing" : "");
+        row.innerHTML = `
+          <div class="entry-top entry-summary">
+            <div>
+              <div class="entry-title">${dayName(dateKey)}${tags}</div>
+              <div class="entry-date">${displayDate(dateKey)}</div>
+            </div>
+            <div class="entry-right">
+              <span class="pill ${entry.status}">${statusLabel(entry.status)}</span>
+              <span class="chev">›</span>
+            </div>
+          </div>
+          <div class="entry-details entry-summary">
+            ${entry.status === "worked" ? `
+              <strong>${esc(entry.jobSite) || "No job site"}</strong><br>
+              ${fmtTime(entry.startTime)} – ${fmtTime(entry.endTime)} · Break: ${Number(entry.breakMinutes) || 0} min<br>
+              Paid hours: <strong>${hours.toFixed(2)}</strong> · Pay: <strong>${money(pay)}</strong>
+              ${hasMiles ? `<br>Miles driven: <strong>${esc(entry.miles)} mi</strong>` : ""}
+            ` : `${statusLabel(entry.status)} · 0.00 hrs · $0.00`}
+          </div>
+          ${entry.note ? `<div class="entry-note entry-summary">📝 ${esc(entry.note)}</div>` : ""}`;
       }
 
-      const hours    = calcHours(entry);
-      const pay      = hours * getRate();
-      const hasMiles = entry.miles !== null && entry.miles !== undefined;
-
-      row.className = `entry ${entry.status}` + (today ? " today" : "");
-      row.innerHTML = `
-        <div class="entry-top">
-          <div>
-            <div class="entry-title">${dayName(dateKey)}${tags}</div>
-            <div class="entry-date">${displayDate(dateKey)}</div>
-          </div>
-          <span class="pill ${entry.status}">${statusLabel(entry.status)}</span>
-        </div>
-        <div class="entry-details">
-          ${entry.status === "worked" ? `
-            <strong>${esc(entry.jobSite) || "No job site"}</strong><br>
-            ${fmtTime(entry.startTime)} – ${fmtTime(entry.endTime)} · Break: ${Number(entry.breakMinutes) || 0} min<br>
-            Paid hours: <strong>${hours.toFixed(2)}</strong> · Pay: <strong>${money(pay)}</strong>
-            ${hasMiles ? `<br>Miles driven: <strong>${esc(entry.miles)} mi</strong>` : ""}
-          ` : `${statusLabel(entry.status)} · 0.00 hrs · $0.00`}
-        </div>
-        ${entry.note ? `<div class="entry-note">📝 ${esc(entry.note)}</div>` : ""}
-        <div class="entry-actions">
-          <button class="small" type="button" data-edit="${dateKey}">Edit</button>
-          <button class="small delete" type="button" data-delete="${dateKey}">Delete</button>
-        </div>`;
       els.entriesList.appendChild(row);
+
+      if (editing) {
+        row.appendChild(els.dayEditor); // move the editor into this row
+        els.dayEditor.hidden = false;
+        editorPlaced = true;
+      }
     });
 
+    // No open day (or its row isn't visible): park the editor back home, hidden.
+    if (!editorPlaced) {
+      els.dayEditorHome.appendChild(els.dayEditor);
+      els.dayEditor.hidden = true;
+    }
   }
 
-  // ── Summary + progress (includes weekend entries) ────────────
+  // ── Summary + progress (Mon–Fri) ─────────────────────────────
   function renderSummary() {
     let totalHours = 0, totalPay = 0, totalMiles = 0;
     displayKeys().forEach(key => {
@@ -1346,7 +1372,7 @@
     els.payProgressLabel.textContent = `${money(totalPay)} of ${money(fullPay)}`;
   }
 
-  // ── Report (includes weekend entries) ────────────────────────
+  // ── Report (Mon–Fri) ─────────────────────────────────────────
   function buildReport() {
     const keys = displayKeys();
     const weekStart = displayDate(keys[0]);
@@ -1389,8 +1415,10 @@
     report += `  Days worked: ${workedDays}\n`;
     report += `  Total paid hours: ${totalHours.toFixed(2)}\n`;
     report += `  Avg hours/day: ${avg.toFixed(2)}\n`;
-    report += `  Estimated gross pay: ${money(totalPay)}\n`;
-    report += `  Total miles driven: ${totalMiles} mi`;
+    report += `  Estimated gross pay: ${money(totalPay)}`;
+    // Only mention mileage when miles were actually logged, so a normal
+    // week's report never shows "Total miles driven: 0 mi" to Dean.
+    if (totalMiles > 0) report += `\n  Total miles driven: ${totalMiles} mi`;
     return report;
   }
 
@@ -1451,8 +1479,8 @@
 
   // ── Delete week ──────────────────────────────────────────────
   function deleteWeek() {
-    if (!confirm("Delete all entries for this week (including weekend)?")) return;
-    [...weekKeys(), ...weekendKeys()].forEach(k => delete entries[k]);
+    if (!confirm("Delete all entries for this week (Monday–Friday)?")) return;
+    weekKeys().forEach(k => delete entries[k]);
     persistAll();
     render();
   }
@@ -1525,8 +1553,6 @@
     const nowKey = todayValue();
     if (nowKey === lastDayKey) return;
     lastDayKey = nowKey;
-    // Only auto-refresh the form if the user hasn't typed anything
-    if (!formDirty && !editingDate) resetForm();
     render(); // week view/totals roll over automatically
   }
 
@@ -1558,16 +1584,20 @@
     });
 
     refreshSiteList();
-    resetForm();
     render();
 
     // Listeners
     els.saveBtn.addEventListener("click", saveForm);
+    els.cancelBtn.addEventListener("click", closeDayEditor);
+    els.deleteDayBtn.addEventListener("click", () => { if (editingDate) deleteEntry(editingDate); });
+    // Tap a day row to open its editor; tapping the open day again closes it.
     els.entriesList.addEventListener("click", e => {
-      const eb = e.target.closest("[data-edit]");
-      if (eb) { editEntry(eb.dataset.edit); return; }
-      const db = e.target.closest("[data-delete]");
-      if (db) deleteEntry(db.dataset.delete);
+      if (e.target.closest("#dayEditor")) return; // clicks inside the editor
+      const row = e.target.closest("[data-day]");
+      if (!row) return;
+      const key = row.dataset.day;
+      if (editingDate === key) closeDayEditor();
+      else openDayEditor(key);
     });
     document.querySelectorAll(".now-chip").forEach(chip => {
       chip.addEventListener("click", e => {
@@ -1580,7 +1610,6 @@
         }
       });
     });
-    els.resetBtn.addEventListener("click", resetForm);
     els.prevWeekBtn.addEventListener("click", () => { viewOffset--; render(); });
     els.nextWeekBtn.addEventListener("click", () => { if (viewOffset < 0) { viewOffset++; render(); } });
     els.nowWeekBtn.addEventListener("click",  () => { viewOffset = 0; render(); });
