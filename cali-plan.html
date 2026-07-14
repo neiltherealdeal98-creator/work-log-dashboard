@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Cali Plan" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#070b14" />
+<title>My Plan for Cali</title>
+<style>
+  :root {
+    --bg1: #070b14;
+    --bg2: #131c2e;
+    --card: rgba(15, 23, 42, 0.72);
+    --line: rgba(255,255,255,0.13);
+    --text: #f8fafc;
+    --muted: #a7b2c3;
+    --blue: #38bdf8;
+    --green: #22c55e;
+    --purple: #a78bfa;
+    --yellow: #facc15;
+    --red: #fb7185;
+    --shadow: 0 16px 45px rgba(0,0,0,0.42);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(56,189,248,0.30), transparent 34%),
+      radial-gradient(circle at 100% 4%, rgba(167,139,250,0.28), transparent 32%),
+      radial-gradient(circle at 50% 100%, rgba(34,197,94,0.20), transparent 38%),
+      linear-gradient(150deg, var(--bg1), var(--bg2));
+    background-attachment: fixed;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .page {
+    width: min(100%, 600px);
+    margin: 0 auto;
+    padding: max(10px, env(safe-area-inset-top)) 12px 16px;
+  }
+
+  /* Header */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.11), rgba(255,255,255,0.03));
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+  }
+  .hero .titles { flex: 1; min-width: 0; }
+  .hero .kicker {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .hero h1 {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.15;
+    font-weight: 800;
+  }
+  .countdown {
+    flex: none;
+    text-align: center;
+    padding: 8px 14px;
+    border-radius: 16px;
+    background: rgba(251,113,133,0.16);
+    border: 1px solid rgba(251,113,133,0.42);
+    min-width: 78px;
+  }
+  .countdown .num {
+    font-size: 26px;
+    font-weight: 850;
+    line-height: 1;
+    color: #ffd4dc;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown .lbl {
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffb3c1;
+    font-weight: 700;
+    margin-top: 3px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .toolbar button {
+    flex: 1;
+    padding: 9px;
+    border-radius: 13px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .toolbar button:active { transform: scale(0.97); background: rgba(255,255,255,0.15); }
+
+  /* Cards */
+  .card {
+    border-radius: 18px;
+    padding: 0 16px;
+    margin-bottom: 8px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(14px);
+    overflow: hidden;
+    border-left: 5px solid var(--accent, var(--blue));
+  }
+  .card.blue   { --accent: var(--blue); }
+  .card.red    { --accent: var(--red); }
+  .card.green  { --accent: var(--green); }
+  .card.purple { --accent: var(--purple); }
+  .card.yellow { --accent: var(--yellow); }
+
+  .card > button.head {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 0;
+    background: none;
+    border: none;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+  }
+  .card .icon {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    font-size: 17px;
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+  .card .head h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    flex: 1;
+    line-height: 1.15;
+  }
+  .card .chev {
+    flex: none;
+    color: var(--muted);
+    font-size: 19px;
+    transition: transform 0.28s ease;
+  }
+  .card.open .chev { transform: rotate(90deg); }
+
+  .body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .card.open .body { max-height: 1600px; }
+  .body-inner { padding: 0 0 15px; }
+
+  .body p { margin: 0 0 11px; font-size: 14.5px; line-height: 1.52; color: #e6ebf3; }
+
+  ul.clean { list-style: none; margin: 0 0 4px; padding: 0; }
+  ul.clean li {
+    position: relative;
+    padding: 8px 0 8px 28px;
+    font-size: 14.5px;
+    line-height: 1.44;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  ul.clean li:last-child { border-bottom: none; }
+  ul.clean li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent, var(--blue));
+    box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  ul.clean li b { color: #fff; }
+
+  .subhead {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 15px 0 3px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent, var(--blue));
+  }
+
+  .star-note {
+    margin-top: 12px;
+    padding: 13px 15px;
+    border-radius: 15px;
+    background: rgba(250,204,21,0.10);
+    border: 1px solid rgba(250,204,21,0.35);
+    font-size: 14px;
+    line-height: 1.5;
+    color: #fdf0c4;
+  }
+  .star-note b { color: #fff; }
+
+  /* Next step banner */
+  .next {
+    margin-top: 4px;
+    padding: 16px 16px;
+    border-radius: 20px;
+    text-align: center;
+    background: linear-gradient(160deg, rgba(56,189,248,0.20), rgba(167,139,250,0.16));
+    border: 1px solid rgba(56,189,248,0.4);
+    box-shadow: var(--shadow);
+  }
+  .next .step-tag {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .next p { margin: 0; font-size: 15px; line-height: 1.5; }
+  .next b { color: #fff; }
+
+  .foot {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="titles">
+      <div class="kicker">My Plan for Cali</div>
+      <h1>Protecting My Rights, Keeping Cali Stable</h1>
+    </div>
+    <div class="countdown">
+      <div class="num" id="cd-num">–</div>
+      <div class="lbl" id="cd-lbl">days to hearing</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="toggleAll(true)">Expand All</button>
+    <button onclick="toggleAll(false)">Collapse All</button>
+  </div>
+
+  <!-- Situation -->
+  <div class="card red">
+    <button class="head" onclick="toggleCard(this)">
+      <span class="icon">📍</span>
+      <h2>Where Things Stand</h2>
+      <span class="chev">›</span>
+    </button>
+    <div class="body"><div class="body-inner">
+      <ul class="clean">
+        <li>Selena (Nicole's mom) filed for <b>full guardianship</b> of Cali. The hearing is on <b>the 22nd</b>.</li>
+        <li>Right now I only get <b>parenting time once a week</b> — no legal or physical custody.</li>
+        <li>If I do nothing, Selena gets full guardianship and <b>I lose my say in Cali's life</b>.</li>
+      </ul>
+    </div></div>
+  </div>
+
+  <!-- Not doing -->
+  <div class="card yellow">
+    <button class="head" onclick="toggleCard(this)">
+      <span class="icon">🛑</span>
+      <h2>Why I'm NOT Going for Full Custody (Yet)</h2>
+      <span class="chev">›</span>
+    </button>
+    <div class="body"><div class="body-inner">
+      <p>Cali's whole life has been at her grandparents' — with her sister, grandma, grandpa, and Selena. Moving her into my place full-time right now would be a huge, disruptive change for her.</p>
+      <p>Between the three of them, they can give her more day-to-day support than I can right now. <b>That's not me giving up — it's me putting her first.</b></p>
+    </div></div>
+  </div>
+
+  <!-- Plan -->
+  <div class="card blue">
+    <button class="head" onclick="toggleCard(this)">
+      <span class="icon">🎯</span>
+      <h2>What I AM Doing</h2>
+      <span class="chev">›</span>
+    </button>
+    <div class="body"><div class="body-inner">
+      <p>Instead of fighting the guardianship or going for full custody right now, I'm asking the court to <b>allow the guardianship — but with conditions attached</b> that protect my rights and my relationship with Cali.</p>
+    </div></div>
+  </div>
+
+  <!-- Law -->
+  <div class="card green">
+    <button class="head" onclick="toggleCard(this)">
+      <span class="icon">⚖️</span>
+      <h2>What Michigan Law Allows</h2>
+      <span class="chev">›</span>
+    </button>
+    <div class="body"><div class="body-inner">
+      <ul class="clean">
+        <li><b>Guardianship doesn't erase my parental rights.</b> A guardian doesn't automatically cancel my rights — I can keep visitation, contact, and a say in decisions.</li>
+        <li><b>The court can add conditions.</b> A judge can require parenting time, give me a say in decisions, and set other specific terms. It's common.</li>
+        <li><b>It can be changed later.</b> If my situation improves, I can ask the court to adjust or end it — based on what's best for Cali, just like a regular custody case. <b>I'm not locked in forever.</b></li>
+      </ul>
+    </div></div>
+  </div>
+
+  <!-- Stipulations -->
+  <div class="card purple">
+    <button class="head" onclick="toggleCard(this)">
+      <span class="icon">📋</span>
+      <h2>The Conditions I'll Ask For</h2>
+      <span class="chev">›</span>
+    </button>
+    <div class="body"><div class="body-inner">
+
+      <div class="subhead">🕐 Parenting Time</div>
+      <ul class="clean">
+        <li>Increase from once a week to <b>2–3 days a week</b>, with regular overnights.</li>
+        <li>Guaranteed <b>holiday and birthday time</b> on a set schedule.</li>
+        <li>Guaranteed <b>makeup time</b> when a visit gets missed or canceled.</li>
+      </ul>
+
+      <div class="subhead">🏥 Medical</div>
+      <ul class="clean">
+        <li>Advance notice of any non-emergency appointments.</li>
+        <li>The right to <b>attend</b> appointments.</li>
+        <li>Full access to her <b>medical records</b> and providers.</li>
+        <li>Being consulted before any major procedure or ongoing treatment.</li>
+      </ul>
+
+      <div class="subhead">🎓 Schooling</div>
+      <ul class="clean">
+        <li>Involved in <b>enrollment</b> and any school changes.</li>
+        <li>Listed on school records — access to <b>report cards and teacher contact</b>.</li>
+        <li>The right to attend <b>conferences and school events</b>.</li>
+      </ul>
+
+      <div class="subhead">📜 Legal &amp; Religious</div>
+      <ul class="clean">
+        <li>Input on any <b>legal matters</b> involving Cali.</li>
+        <li>A say in her <b>religious upbringing</b>.</li>
+      </ul>
+
+      <div class="subhead">📱 Communication &amp; Access</div>
+      <ul class="clean">
+        <li>Regular <b>phone and video calls</b> on scheduled days.</li>
+        <li>Notified of major events — emergencies, moves, out-of-state travel.</li>
+        <li>Advance notice if the guardian wants to <b>relocate</b> Cali.</li>
+      </ul>
+
+      <div class="star-note">
+        ⭐ <b>The most important one:</b> wording in the court order saying the guardianship is <b>not permanent</b>, and that I keep the right to ask for <b>full or joint custody later</b> — when I'm ready — without starting over from scratch.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Why smart -->
+  <div class="card green">
+    <button class="head" onclick="toggleCard(this)">
+      <span class="icon">💡</span>
+      <h2>Why This Is the Smart Move</h2>
+      <span class="chev">›</span>
+    </button>
+    <div class="body"><div class="body-inner">
+      <ul class="clean">
+        <li><b>Cali stays stable</b> where she's comfortable.</li>
+        <li><b>I get real access and a real voice</b> — not just visits.</li>
+        <li><b>I keep my rights.</b> The door stays open for full custody later.</li>
+      </ul>
+    </div></div>
+  </div>
+
+  <!-- Next step -->
+  <div class="next">
+    <div class="step-tag">Next Step</div>
+    <p>Call my <b>lawyer</b> (already paid) and have him <b>ask the court for these conditions</b> before the hearing on the 22nd.</p>
+  </div>
+
+  <div class="foot">
+    Tap any section to open or close it.<br>
+    This is my plan — a starting point for my lawyer, not legal advice.
+  </div>
+
+</div>
+
+<script>
+  function toggleCard(btn){
+    btn.closest('.card').classList.toggle('open');
+  }
+  function toggleAll(open){
+    document.querySelectorAll('.card').forEach(function(c){
+      c.classList.toggle('open', open);
+    });
+  }
+
+  // Dynamic countdown to the 22nd (rolls to next month once it passes)
+  function updateCountdown(){
+    var now = new Date();
+    var target = new Date(now.getFullYear(), now.getMonth(), 22);
+    target.setHours(0,0,0,0);
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (today > target){ target = new Date(now.getFullYear(), now.getMonth()+1, 22); }
+    var days = Math.round((target - today) / 86400000);
+    var numEl = document.getElementById('cd-num');
+    var lblEl = document.getElementById('cd-lbl');
+    if (days === 0){ numEl.textContent = "Today"; numEl.style.fontSize = "17px"; lblEl.textContent = "hearing day"; }
+    else if (days === 1){ numEl.textContent = "1"; lblEl.textContent = "day to hearing"; }
+    else { numEl.textContent = days; lblEl.textContent = "days to hearing"; }
+  }
+  updateCountdown();
+</script>
+</body>
+</html>
