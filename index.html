@@ -590,7 +590,16 @@
       font-size: 0.76rem;
       font-weight: 750;
     }
-    .entry-summary { cursor: pointer; }
+    .entry-summary {
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+    .entry-summary:focus-visible {
+      outline: 2px solid rgba(56,189,248,0.7);
+      outline-offset: 2px;
+    }
     .entry-right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
     .chev {
       color: var(--muted);
@@ -611,6 +620,18 @@
     .editor-actions { display: flex; gap: 8px; margin-top: 8px; }
     .editor-actions .secondary { flex: 1; }
     .editor-actions .editor-delete { flex: 0 0 auto; }
+    .editor-msg {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: #fecdd3;
+      background: rgba(251,113,133,0.13);
+      border: 1px solid rgba(251,113,133,0.30);
+      font-size: 0.82rem;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+    .editor-msg[hidden] { display: none; }
 
     /* ── Report textarea ── */
     textarea {
@@ -800,6 +821,7 @@
             <div><span>Today's Pay</span><strong id="livePay">—</strong></div>
           </div>
 
+          <div id="editorMsg" class="editor-msg" role="alert" hidden></div>
           <button class="primary" id="saveBtn" type="button">Save Day</button>
           <div class="editor-actions">
             <button class="secondary" id="cancelBtn" type="button">Cancel</button>
@@ -881,6 +903,7 @@
     liveHours:       $("liveHours"),
     livePay:         $("livePay"),
     saveBtn:         $("saveBtn"),
+    editorMsg:       $("editorMsg"),
     cancelBtn:       $("cancelBtn"),
     deleteDayBtn:    $("deleteDayBtn"),
     dayEditor:       $("dayEditor"),
@@ -1162,6 +1185,10 @@
     updateLivePreview();
   }
 
+  // Inline validation notice inside the editor (replaces blocking alerts)
+  function showEditorMsg(text) { els.editorMsg.textContent = text; els.editorMsg.hidden = false; }
+  function clearEditorMsg()    { els.editorMsg.hidden = true; els.editorMsg.textContent = ""; }
+
   function setRadios(status) {
     document.querySelectorAll("input[name='statusRadio']").forEach(r => {
       r.checked = r.value === status;
@@ -1173,6 +1200,7 @@
   function openDayEditor(dateKey) {
     editingDate = dateKey;
     formDirty = false;
+    clearEditorMsg();
     const entry = entries[dateKey];
     els.workDate.value = dateKey;
     if (entry) {
@@ -1245,12 +1273,13 @@
 
   // ── Save ─────────────────────────────────────────────────────
   async function saveForm() {
+    clearEditorMsg();
     const entry = formEntry();
-    if (!entry.date) { alert("Choose a date first."); return; }
+    if (!entry.date) { showEditorMsg("Pick a day first."); return; }
     if (entry.status === "worked") {
-      if (!entry.endTime) { alert("Enter a clock-out time before saving."); return; }
+      if (!entry.endTime) { showEditorMsg("Add a clock-out time to save this day."); return; }
       if (calcHours(entry) <= 0) {
-        alert("Check clock-in, clock-out, and break minutes — hours came out to zero. (Clock-out must be later than clock-in, same day.)");
+        showEditorMsg("Clock-out must be later than clock-in — check the times and break minutes.");
         return;
       }
     }
@@ -1296,14 +1325,14 @@
       if (!entry) {
         row.className = "entry" + (today ? " today" : "") + (editing ? " editing" : "");
         row.innerHTML = `
-          <div class="entry-top entry-summary">
+          <div class="entry-top entry-summary" role="button" tabindex="0" aria-expanded="${editing}">
             <div>
               <div class="entry-title">${dayName(dateKey)}${tags}</div>
               <div class="entry-date">${displayDate(dateKey)}</div>
             </div>
             <div class="entry-right">
               <span class="pill missing">Not logged</span>
-              <span class="chev">›</span>
+              <span class="chev" aria-hidden="true">›</span>
             </div>
           </div>
           <div class="entry-details entry-summary">Tap to log this day.</div>`;
@@ -1314,14 +1343,14 @@
 
         row.className = `entry ${entry.status}` + (today ? " today" : "") + (editing ? " editing" : "");
         row.innerHTML = `
-          <div class="entry-top entry-summary">
+          <div class="entry-top entry-summary" role="button" tabindex="0" aria-expanded="${editing}">
             <div>
               <div class="entry-title">${dayName(dateKey)}${tags}</div>
               <div class="entry-date">${displayDate(dateKey)}</div>
             </div>
             <div class="entry-right">
               <span class="pill ${entry.status}">${statusLabel(entry.status)}</span>
-              <span class="chev">›</span>
+              <span class="chev" aria-hidden="true">›</span>
             </div>
           </div>
           <div class="entry-details entry-summary">
@@ -1579,6 +1608,7 @@
         if (!r.checked) return;
         els.status.value = r.value;
         formDirty = true;
+        clearEditorMsg();
         updateFormState();
       });
     });
@@ -1591,13 +1621,21 @@
     els.cancelBtn.addEventListener("click", closeDayEditor);
     els.deleteDayBtn.addEventListener("click", () => { if (editingDate) deleteEntry(editingDate); });
     // Tap a day row to open its editor; tapping the open day again closes it.
+    const toggleDay = key => { if (editingDate === key) closeDayEditor(); else openDayEditor(key); };
     els.entriesList.addEventListener("click", e => {
       if (e.target.closest("#dayEditor")) return; // clicks inside the editor
       const row = e.target.closest("[data-day]");
-      if (!row) return;
-      const key = row.dataset.day;
-      if (editingDate === key) closeDayEditor();
-      else openDayEditor(key);
+      if (row) toggleDay(row.dataset.day);
+    });
+    // Keyboard support for the day-header buttons (Enter / Space)
+    els.entriesList.addEventListener("keydown", e => {
+      if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+      if (e.target.closest("#dayEditor")) return;
+      const btn = e.target.closest(".entry-summary[role='button']");
+      if (!btn) return;
+      e.preventDefault(); // Space would otherwise scroll
+      const row = btn.closest("[data-day]");
+      if (row) toggleDay(row.dataset.day);
     });
     document.querySelectorAll(".now-chip").forEach(chip => {
       chip.addEventListener("click", e => {
@@ -1645,7 +1683,7 @@
 
     [els.workDate, els.startTime, els.endTime, els.breakMinutes,
      els.jobSite, els.milesInput, els.dayNote].forEach(el =>
-      el.addEventListener("input", () => { formDirty = true; updateLivePreview(); }));
+      el.addEventListener("input", () => { formDirty = true; clearEditorMsg(); updateLivePreview(); }));
 
     // Save on leave + refresh on return (long-lived tab)
     window.addEventListener("pagehide", () => { persistAll(); });
